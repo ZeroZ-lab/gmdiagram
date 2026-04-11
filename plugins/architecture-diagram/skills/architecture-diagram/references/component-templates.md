@@ -2,6 +2,10 @@
 
 Copy and adapt these SVG snippets when generating diagram HTML. All coordinates are examples — replace with computed values from layout rules.
 
+**CRITICAL**: Every `<text>` element MUST include `text-anchor="middle" dominant-baseline="central"` (except left-aligned labels like layer names, which use `text-anchor="start"`). See `references/design-system.md` → "Text Alignment (MANDATORY)" for details.
+
+**PREFERRED**: Use the `<g transform="translate(x,y)">` group pattern to position elements. This reduces coordinate calculation errors and makes centering trivial.
+
 ## 1. Layer Card (Container for a horizontal band)
 
 ```svg
@@ -11,80 +15,94 @@ Copy and adapt these SVG snippets when generating diagram HTML. All coordinates 
 <!-- Styled layer card -->
 <rect x="40" y="40" width="920" height="100" rx="8"
       fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
-<!-- Layer label -->
+<!-- Layer label (left-aligned, offset 20px from left edge) -->
 <text x="60" y="62" font-size="14" font-weight="600" fill="white"
-      font-family="JetBrains Mono, monospace">Browser Process</text>
+      font-family="JetBrains Mono, monospace"
+      text-anchor="start" dominant-baseline="central">Browser Process</text>
 ```
 
-## 2. Module Box (Inside a layer)
+## 2. Module Box (Inside a layer) — Group Pattern
 
 ```svg
-<!-- Module: V8 Engine (module type) -->
-<!-- Masking rect -->
-<rect x="80" y="75" width="140" height="50" rx="6" fill="#0f172a"/>
-<!-- Styled module box -->
-<rect x="80" y="75" width="140" height="50" rx="6"
-      fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
-<!-- Module label -->
-<text x="150" y="100" font-size="12" font-weight="500" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">V8 Engine</text>
-<!-- Optional annotation -->
-<text x="150" y="115" font-size="9" fill="#94a3b8"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">JavaScript Runtime</text>
+<!-- Module: V8 Engine (module type) at position (80, 75), size 140x50 -->
+<g transform="translate(80, 75)">
+  <!-- Masking rect -->
+  <rect width="140" height="50" rx="6" fill="#0f172a"/>
+  <!-- Styled module box -->
+  <rect width="140" height="50" rx="6"
+        fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+  <!-- Module label — centered at (width/2, height/2) = (70, 25) -->
+  <text x="70" y="25" font-size="12" font-weight="500" fill="white"
+        font-family="JetBrains Mono, monospace"
+        text-anchor="middle" dominant-baseline="central">V8 Engine</text>
+</g>
 ```
 
-## 3. Module with Tech Badges
+## 3. Module with Annotation + Tech Badges — Group Pattern
 
 ```svg
-<!-- Module: API Server with tech badges -->
-<rect x="80" y="75" width="160" height="58" rx="6" fill="#0f172a"/>
-<rect x="80" y="75" width="160" height="58" rx="6"
-      fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
-<text x="160" y="98" font-size="12" font-weight="500" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">API Server</text>
-<!-- Tech badge: Node.js -->
-<rect x="100" y="108" width="52" height="16" rx="4"
-      fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
-<text x="126" y="119" font-size="8" fill="#94a3b8"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">Node.js</text>
-<!-- Tech badge: Express -->
-<rect x="158" y="108" width="52" height="16" rx="4"
-      fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
-<text x="184" y="119" font-size="8" fill="#94a3b8"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">Express</text>
+<!-- Module: API Server with tech badges at position (80, 75), size 160x58 -->
+<g transform="translate(80, 75)">
+  <rect width="160" height="58" rx="6" fill="#0f172a"/>
+  <rect width="160" height="58" rx="6"
+        fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+  <!-- Main label — centered at (80, 20) -->
+  <text x="80" y="20" font-size="12" font-weight="500" fill="white"
+        font-family="JetBrains Mono, monospace"
+        text-anchor="middle" dominant-baseline="central">API Server</text>
+  <!-- Tech badges — centered row at y=42 -->
+  <rect x="24" y="34" width="52" height="16" rx="4"
+        fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+  <text x="50" y="42" font-size="8" fill="#94a3b8"
+        font-family="JetBrains Mono, monospace"
+        text-anchor="middle" dominant-baseline="central">Node.js</text>
+  <rect x="84" y="34" width="52" height="16" rx="4"
+        fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+  <text x="110" y="42" font-size="8" fill="#94a3b8"
+        font-family="JetBrains Mono, monospace"
+        text-anchor="middle" dominant-baseline="central">Express</text>
+</g>
 ```
 
-## 4. Data Store (Cylinder-like)
+## 4. Data Store (Cylinder-like) — Group Pattern
 
 ```svg
-<!-- Data store: PostgreSQL (data type) -->
-<rect x="80" y="75" width="140" height="50" rx="6" fill="#0f172a"/>
-<rect x="80" y="75" width="140" height="50" rx="6"
-      fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
-<!-- Cylinder top ellipse hint -->
-<ellipse cx="150" cy="80" rx="50" ry="5" fill="none"
-         stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="3,2"/>
-<text x="150" y="105" font-size="12" font-weight="500" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">PostgreSQL</text>
+<!-- Data store: PostgreSQL (data type) at position (80, 75), size 140x50 -->
+<g transform="translate(80, 75)">
+  <rect width="140" height="50" rx="6" fill="#0f172a"/>
+  <rect width="140" height="50" rx="6"
+        fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <!-- Cylinder top ellipse hint -->
+  <ellipse cx="70" cy="5" rx="50" ry="5" fill="none"
+           stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="3,2"/>
+  <!-- Label — centered -->
+  <text x="70" y="30" font-size="12" font-weight="500" fill="white"
+        font-family="JetBrains Mono, monospace"
+        text-anchor="middle" dominant-baseline="central">PostgreSQL</text>
+</g>
 ```
 
 ## 5. Connection: Unidirectional Arrow
 
 ```svg
-<!-- Arrow from component A to component B -->
-<!-- The arrowhead marker must be defined in <defs> -->
+<!-- Arrow from component A center-bottom to component B center-top -->
+<!-- Connection endpoint rules:
+     - Vertical down: x = target_center_x, y1 = source_bottom, y2 = target_top
+     - Diagonal: compute midpoint, then offset -->
 <line x1="300" y1="90" x2="400" y2="200"
       stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowhead)"/>
-<!-- Connection label -->
-<rect x="320" y="130" width="36" height="16" rx="3" fill="#0f172a" opacity="0.9"/>
-<text x="338" y="142" font-size="10" fill="#94a3b8"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">IPC</text>
+<!-- Connection label — centered at midpoint -->
+<g transform="translate(350, 140)">
+  <rect x="-22" y="-10" width="44" height="18" rx="3" fill="#020617" opacity="0.9"/>
+  <text x="0" y="0" font-size="10" fill="#94a3b8"
+        font-family="JetBrains Mono, monospace"
+        text-anchor="middle" dominant-baseline="central">IPC</text>
+</g>
 ```
 
 ## 6. Connection: Bidirectional Arrow
 
 ```svg
-<!-- Bidirectional arrow -->
 <line x1="300" y1="90" x2="400" y2="200"
       stroke="#64748b" stroke-width="1.5"
       marker-start="url(#arrowhead-rev)" marker-end="url(#arrowhead)"/>
@@ -93,7 +111,6 @@ Copy and adapt these SVG snippets when generating diagram HTML. All coordinates 
 ## 7. Connection: Dashed Line
 
 ```svg
-<!-- Dashed connection (async/optional) -->
 <line x1="300" y1="90" x2="400" y2="200"
       stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,4"
       marker-end="url(#arrowhead)"/>
@@ -102,45 +119,46 @@ Copy and adapt these SVG snippets when generating diagram HTML. All coordinates 
 ## 8. Security Group Boundary
 
 ```svg
-<!-- Security group wrapping components -->
 <rect x="60" y="170" width="400" height="120" rx="8"
       fill="none" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="6,4"/>
-<!-- Group label -->
 <text x="75" y="188" font-size="11" fill="#fb7185"
-      font-family="JetBrains Mono, monospace">Security Group</text>
+      font-family="JetBrains Mono, monospace"
+      text-anchor="start" dominant-baseline="central">Security Group</text>
 ```
 
 ## 9. Region Boundary
 
 ```svg
-<!-- Region boundary -->
 <rect x="30" y="30" width="940" height="400" rx="12"
       fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="8,4"/>
 <text x="48" y="50" font-size="11" fill="#fbbf24"
-      font-family="JetBrains Mono, monospace">AWS Region: us-east-1</text>
+      font-family="JetBrains Mono, monospace"
+      text-anchor="start" dominant-baseline="central">AWS Region: us-east-1</text>
 ```
 
-## 10. Legend
+## 10. Legend — Group Pattern
 
 ```svg
 <!-- Legend, positioned below all diagram content -->
 <g transform="translate(40, 600)">
   <text x="0" y="0" font-size="11" font-weight="600" fill="#cbd5e1"
-        font-family="JetBrains Mono, monospace">Legend</text>
+        font-family="JetBrains Mono, monospace"
+        text-anchor="start" dominant-baseline="central">Legend</text>
 
-  <!-- Legend item: Process -->
-  <rect x="0" y="12" width="14" height="14" rx="3"
-        fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
-  <text x="20" y="23" font-size="11" fill="#cbd5e1"
-        font-family="JetBrains Mono, monospace">Process</text>
-
-  <!-- Legend item: Module -->
-  <rect x="100" y="12" width="14" height="14" rx="3"
-        fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1"/>
-  <text x="120" y="23" font-size="11" fill="#cbd5e1"
-        font-family="JetBrains Mono, monospace">Module</text>
-
-  <!-- Legend items continue horizontally with 100px spacing -->
+  <!-- Legend items row at y=22, spaced 100px apart -->
+  <g transform="translate(0, 16)">
+    <rect width="14" height="14" rx="3" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee"/>
+    <text x="20" y="7" font-size="11" fill="#cbd5e1"
+          font-family="JetBrains Mono, monospace"
+          text-anchor="start" dominant-baseline="central">Process</text>
+  </g>
+  <g transform="translate(100, 16)">
+    <rect width="14" height="14" rx="3" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399"/>
+    <text x="20" y="7" font-size="11" fill="#cbd5e1"
+          font-family="JetBrains Mono, monospace"
+          text-anchor="start" dominant-baseline="central">Module</text>
+  </g>
+  <!-- More items with 100px spacing -->
 </g>
 ```
 

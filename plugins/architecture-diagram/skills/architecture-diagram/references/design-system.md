@@ -35,6 +35,55 @@ All semi-transparent component boxes MUST have an opaque background rect underne
 - Connection label: 10px, fill #94a3b8 (slate-400)
 - Legend text: 11px, fill #cbd5e1 (slate-300)
 
+## Text Alignment (MANDATORY)
+
+Every `<text>` element in the SVG MUST include these two attributes for proper alignment:
+
+```svg
+text-anchor="middle" dominant-baseline="central"
+```
+
+This eliminates the need to manually calculate text offsets. Instead:
+
+- **Horizontal centering**: Set `x` to the center of the parent container. `text-anchor="middle"` handles the rest.
+- **Vertical centering**: Set `y` to the center of the parent container. `dominant-baseline="central"` handles the rest.
+
+**Module label center calculation:**
+```
+text_x = module_x + module_width / 2
+text_y = module_y + module_height / 2
+```
+
+**Example (correct):**
+```svg
+<!-- Module box at (80, 75), size 140x50 -->
+<rect x="80" y="75" width="140" height="50" rx="6" fill="#0f172a"/>
+<rect x="80" y="75" width="140" height="50" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399"/>
+<text x="150" y="100" font-size="12" font-weight="500" fill="white"
+      font-family="JetBrains Mono, monospace"
+      text-anchor="middle" dominant-baseline="central">V8 Engine</text>
+```
+
+**Exception**: Layer labels and legend items that are left-aligned use `text-anchor="start"` instead.
+
+## Group Positioning Pattern
+
+Use `<g transform="translate(x,y)">` to position groups of elements. This reduces coordinate calculation errors:
+
+```svg
+<!-- Good: group pattern — compute position ONCE -->
+<g transform="translate(80, 75)">
+  <rect width="140" height="50" rx="6" fill="#0f172a"/>
+  <rect width="140" height="50" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399"/>
+  <text x="70" y="25" font-size="12" text-anchor="middle" dominant-baseline="central"
+        fill="white" font-family="JetBrains Mono, monospace">V8 Engine</text>
+</g>
+```
+
+All inner coordinates are relative to the group origin (0,0), making centering trivial:
+- `text_x = width / 2`
+- `text_y = height / 2`
+
 ## Spacing
 
 - Layer vertical gap: 50px

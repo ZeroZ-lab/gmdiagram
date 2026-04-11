@@ -128,10 +128,12 @@ After generating the initial diagram, the user may request changes:
 
 Before delivering, verify:
 - [ ] JSON validates against the diagram type's schema
-- [ ] All text is readable (no overlapping labels)
-- [ ] Connection lines don't pass through unrelated components
-- [ ] Layout is symmetric and balanced
-- [ ] ViewBox fits all content (no clipping, no excessive whitespace)
+- [ ] Every `<text>` has `text-anchor` and `dominant-baseline` attributes (see `references/design-system.md`)
+- [ ] Text is visually centered inside its parent box (text_x = box_x + box_w/2, text_y = box_y + box_h/2)
+- [ ] Connection lines end exactly at component edges, not floating or crossing borders
+- [ ] All components of the same type/level share identical y-coordinates (horizontal alignment)
+- [ ] Spacing between same-level components is consistent (same gap everywhere)
+- [ ] ViewBox fits all content with no clipping and no more than 40px whitespace margin
 - [ ] Legend matches the component types used
 - [ ] Title and subtitle are accurate
 - [ ] Icons (if used) are correctly colored and positioned
