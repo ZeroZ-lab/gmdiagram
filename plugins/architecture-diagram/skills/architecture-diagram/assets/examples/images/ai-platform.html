@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise AI Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #020617;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .pulse-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #94a3b8;
+      box-shadow: 0 0 8px rgba(148, 163, 184, 0.6);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    h1 { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+    .subtitle { font-size: 13px; color: #64748b; margin-top: 4px; }
+    .diagram-container {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+    .diagram-container svg {
+      width: 100%;
+      min-width: 700px;
+      height: auto;
+      display: block;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .card-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .card-dot.slate { background: #94a3b8; }
+    .card-dot.cyan { background: #22d3ee; }
+    .card-dot.violet { background: #a78bfa; }
+    .card-title { font-size: 13px; font-weight: 600; color: #f1f5f9; }
+    .card-content { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+    .footer {
+      font-size: 11px;
+      color: #475569;
+      text-align: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="pulse-dot"></div>
+      <div>
+        <h1>Enterprise AI Platform</h1>
+        <div class="subtitle">End-to-end architecture from channel integration to model serving</div>
+      </div>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1000 930" xmlns="http://www.w3.org/2000/svg">
+        <!-- Defs -->
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(51, 65, 85, 0.3)" stroke-width="0.5"/>
+          </pattern>
+          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+          </marker>
+          <marker id="arrowhead-rev" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+            <polygon points="8 0, 0 3, 8 6" fill="#64748b"/>
+          </marker>
+          <marker id="arrowhead-orange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#fb923c"/>
+          </marker>
+        </defs>
+
+        <!-- Grid background -->
+        <rect width="1000" height="930" fill="url(#grid)"/>
+
+        <!-- ================================================================== -->
+        <!-- CONNECTIONS (drawn first, behind components)                       -->
+        <!-- ================================================================== -->
+
+        <!-- Connection 1: Channel Layer -> Application Layer (unidirectional, "Request") -->
+        <!-- Source: bottom_center of Layer1 (500, 149), Target: top_center of Layer2 (500, 199) -->
+        <line x1="500" y1="149" x2="500" y2="199"
+              stroke="#64748b" stroke-width="1.5"
+              marker-end="url(#arrowhead)"/>
+        <rect x="474" y="161" width="52" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="500" y="173" font-size="10" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Request</text>
+
+        <!-- Connection 2: Application Layer -> Orchestration Layer (unidirectional, "Task") -->
+        <!-- Source: bottom_center of Layer2 (500, 300), Target: top_center of Layer3 (500, 350) -->
+        <line x1="500" y1="300" x2="500" y2="350"
+              stroke="#64748b" stroke-width="1.5"
+              marker-end="url(#arrowhead)"/>
+        <rect x="483" y="312" width="34" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="500" y="324" font-size="10" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Task</text>
+
+        <!-- Connection 3: Orchestration Layer -> Model Layer (bidirectional, "Inference") -->
+        <!-- Source: bottom_center of Layer3 (500, 466), Target: top_center of Layer4 (500, 516) -->
+        <line x1="500" y1="466" x2="500" y2="516"
+              stroke="#64748b" stroke-width="1.5"
+              marker-start="url(#arrowhead-rev)" marker-end="url(#arrowhead)"/>
+        <rect x="469" y="478" width="62" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="500" y="490" font-size="10" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Inference</text>
+
+        <!-- Connection 4: Model Layer -> Data Layer (bidirectional, "Query") -->
+        <!-- Source: bottom_center of Layer4 (500, 632), Target: top_center of Layer5 (500, 682) -->
+        <line x1="500" y1="632" x2="500" y2="682"
+              stroke="#64748b" stroke-width="1.5"
+              marker-start="url(#arrowhead-rev)" marker-end="url(#arrowhead)"/>
+        <rect x="478" y="644" width="44" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="500" y="656" font-size="10" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Query</text>
+
+        <!-- Connection 5: Orchestration Layer -> Data Layer (unidirectional, dashed, "Context") -->
+        <!-- Offset to x=650 to avoid overlap with Connection 3 -->
+        <!-- Source: bottom of Layer3 at x=650 (650, 466), Target: top of Layer5 at x=650 (650, 682) -->
+        <line x1="650" y1="466" x2="650" y2="682"
+              stroke="#fb923c" stroke-width="1.5" stroke-dasharray="6,4"
+              marker-end="url(#arrowhead-orange)"/>
+        <rect x="624" y="561" width="52" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="650" y="573" font-size="10" fill="#fb923c" font-family="JetBrains Mono, monospace" text-anchor="middle">Context</text>
+
+        <!-- ================================================================== -->
+        <!-- LAYER 1: Channel Layer (external)                                  -->
+        <!-- y=40, h=109 (35 + max(50,58,50) + 16)                             -->
+        <!-- Children: Web Chat(104w), API Gateway(120w,tech), Mobile App(112w)  -->
+        <!-- total_mod_w = 104+120+112 + 20*2 = 376                             -->
+        <!-- start_x = 40 + (920-376)/2 = 312                                   -->
+        <!-- module_y = 40 + 35 + 8 = 83 (no badge), 75 (badge, 8px taller)     -->
+        <!-- ================================================================== -->
+        <g>
+          <rect x="40" y="40" width="920" height="109" rx="8" fill="#0f172a"/>
+          <rect x="40" y="40" width="920" height="109" rx="8"
+                fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1"/>
+          <text x="60" y="62" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Channel Layer</text>
+
+          <!-- Module: Web Chat -->
+          <rect x="312" y="83" width="104" height="50" rx="6" fill="#0f172a"/>
+          <rect x="312" y="83" width="104" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="364" y="113" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Web Chat</text>
+
+          <!-- Module: API Gateway (tech: REST, WebSocket) -->
+          <rect x="436" y="75" width="120" height="58" rx="6" fill="#0f172a"/>
+          <rect x="436" y="75" width="120" height="58" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="496" y="98" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">API Gateway</text>
+          <!-- Tech badge: REST -->
+          <rect x="449" y="108" width="40" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="469" y="119" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">REST</text>
+          <!-- Tech badge: WebSocket -->
+          <rect x="495" y="108" width="52" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="521" y="119" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">WebSocket</text>
+
+          <!-- Module: Mobile App -->
+          <rect x="576" y="83" width="112" height="50" rx="6" fill="#0f172a"/>
+          <rect x="576" y="83" width="112" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="632" y="113" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Mobile App</text>
+        </g>
+
+        <!-- ================================================================== -->
+        <!-- LAYER 2: Application Layer (process)                               -->
+        <!-- y=199, h=101 (35 + 50 + 16)                                       -->
+        <!-- Children: Session Manager(160w), Intent Parser(136w), Task Router(120w) -->
+        <!-- total_mod_w = 160+136+120 + 20*2 = 456                             -->
+        <!-- start_x = 40 + (920-456)/2 = 272                                   -->
+        <!-- module_y = 199 + 35 + 8 = 242                                      -->
+        <!-- ================================================================== -->
+        <g>
+          <rect x="40" y="199" width="920" height="101" rx="8" fill="#0f172a"/>
+          <rect x="40" y="199" width="920" height="101" rx="8"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+          <text x="60" y="221" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Application Layer</text>
+
+          <!-- Module: Session Manager -->
+          <rect x="272" y="242" width="160" height="50" rx="6" fill="#0f172a"/>
+          <rect x="272" y="242" width="160" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="352" y="272" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Session Manager</text>
+
+          <!-- Module: Intent Parser -->
+          <rect x="452" y="242" width="136" height="50" rx="6" fill="#0f172a"/>
+          <rect x="452" y="242" width="136" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="520" y="272" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Intent Parser</text>
+
+          <!-- Module: Task Router -->
+          <rect x="608" y="242" width="120" height="50" rx="6" fill="#0f172a"/>
+          <rect x="608" y="242" width="120" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="668" y="272" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Task Router</text>
+        </g>
+
+        <!-- ================================================================== -->
+        <!-- LAYER 3: Orchestration Layer (process)                             -->
+        <!-- y=350, h=116 (35 + max(58,50,50) + 16 = 119... use 116 as max(95,55+1*70)) -->
+        <!-- h=116 per layout spec: max(95, 55+3*70=265) -> use actual calc      -->
+        <!-- Actual: 35 + 58 + 16 = 109 -> round to 116 for spec compliance      -->
+        <!-- Children: Agent Engine(128w,tech), Workflow Engine(152w), Tool Scheduler(144w) -->
+        <!-- total_mod_w = 128+152+144 + 20*2 = 464                             -->
+        <!-- start_x = 40 + (920-464)/2 = 268                                   -->
+        <!-- module_y = 350 + 35 + 8 = 393                                      -->
+        <!-- ================================================================== -->
+        <g>
+          <rect x="40" y="350" width="920" height="116" rx="8" fill="#0f172a"/>
+          <rect x="40" y="350" width="920" height="116" rx="8"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+          <text x="60" y="372" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Orchestration Layer</text>
+
+          <!-- Module: Agent Engine (tech: LangChain, Dify) -->
+          <rect x="268" y="393" width="128" height="58" rx="6" fill="#0f172a"/>
+          <rect x="268" y="393" width="128" height="58" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="332" y="416" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Agent Engine</text>
+          <!-- Tech badge: LangChain -->
+          <rect x="280" y="426" width="52" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="306" y="437" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">LangChain</text>
+          <!-- Tech badge: Dify -->
+          <rect x="338" y="426" width="40" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="358" y="437" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Dify</text>
+
+          <!-- Module: Workflow Engine -->
+          <rect x="416" y="393" width="152" height="50" rx="6" fill="#0f172a"/>
+          <rect x="416" y="393" width="152" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="492" y="423" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Workflow Engine</text>
+
+          <!-- Module: Tool Scheduler -->
+          <rect x="588" y="393" width="144" height="50" rx="6" fill="#0f172a"/>
+          <rect x="588" y="393" width="144" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="660" y="423" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Tool Scheduler</text>
+        </g>
+
+        <!-- ================================================================== -->
+        <!-- LAYER 4: Model Layer (infra)                                       -->
+        <!-- y=516, h=116                                                       -->
+        <!-- Children: LLM Service(120w,tech), Embedding Service(176w), RAG Engine(112w) -->
+        <!-- total_mod_w = 120+176+112 + 20*2 = 448                             -->
+        <!-- start_x = 40 + (920-448)/2 = 276                                   -->
+        <!-- module_y = 516 + 35 + 8 = 559                                      -->
+        <!-- ================================================================== -->
+        <g>
+          <rect x="40" y="516" width="920" height="116" rx="8" fill="#0f172a"/>
+          <rect x="40" y="516" width="920" height="116" rx="8"
+                fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1"/>
+          <text x="60" y="538" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Model Layer</text>
+
+          <!-- Module: LLM Service (tech: GPT-4, Claude) -->
+          <rect x="276" y="559" width="120" height="58" rx="6" fill="#0f172a"/>
+          <rect x="276" y="559" width="120" height="58" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="336" y="582" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">LLM Service</text>
+          <!-- Tech badge: GPT-4 -->
+          <rect x="289" y="592" width="36" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="307" y="603" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">GPT-4</text>
+          <!-- Tech badge: Claude -->
+          <rect x="331" y="592" width="44" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="353" y="603" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Claude</text>
+
+          <!-- Module: Embedding Service -->
+          <rect x="416" y="559" width="176" height="50" rx="6" fill="#0f172a"/>
+          <rect x="416" y="559" width="176" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="504" y="589" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Embedding Service</text>
+
+          <!-- Module: RAG Engine -->
+          <rect x="612" y="559" width="112" height="50" rx="6" fill="#0f172a"/>
+          <rect x="612" y="559" width="112" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="668" y="589" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">RAG Engine</text>
+        </g>
+
+        <!-- ================================================================== -->
+        <!-- LAYER 5: Data Layer (data)                                         -->
+        <!-- y=682, h=116                                                       -->
+        <!-- Children: Vector Database(152w,tech), Knowledge Base(144w), Log&Trace(160w) -->
+        <!-- total_mod_w = 152+144+160 + 20*2 = 496                             -->
+        <!-- start_x = 40 + (920-496)/2 = 252                                   -->
+        <!-- module_y = 682 + 35 + 8 = 725                                      -->
+        <!-- ================================================================== -->
+        <g>
+          <rect x="40" y="682" width="920" height="116" rx="8" fill="#0f172a"/>
+          <rect x="40" y="682" width="920" height="116" rx="8"
+                fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="60" y="704" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Data Layer</text>
+
+          <!-- Module: Vector Database (data, tech: Pinecone, Milvus) -->
+          <rect x="252" y="725" width="152" height="58" rx="6" fill="#0f172a"/>
+          <rect x="252" y="725" width="152" height="58" rx="6"
+                fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+          <!-- Cylinder top ellipse hint -->
+          <ellipse cx="328" cy="730" rx="50" ry="5" fill="none"
+                   stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <text x="328" y="755" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Vector Database</text>
+          <!-- Tech badge: Pinecone -->
+          <rect x="268" y="760" width="52" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="294" y="771" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Pinecone</text>
+          <!-- Tech badge: Milvus -->
+          <rect x="326" y="760" width="44" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="348" y="771" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Milvus</text>
+
+          <!-- Module: Knowledge Base (data) -->
+          <rect x="424" y="725" width="144" height="50" rx="6" fill="#0f172a"/>
+          <rect x="424" y="725" width="144" height="50" rx="6"
+                fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+          <!-- Cylinder top ellipse hint -->
+          <ellipse cx="496" cy="730" rx="48" ry="5" fill="none"
+                   stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <text x="496" y="755" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Knowledge Base</text>
+
+          <!-- Module: Log & Trace Store (data) -->
+          <rect x="588" y="725" width="160" height="50" rx="6" fill="#0f172a"/>
+          <rect x="588" y="725" width="160" height="50" rx="6"
+                fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+          <!-- Cylinder top ellipse hint -->
+          <ellipse cx="668" cy="730" rx="52" ry="5" fill="none"
+                   stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <text x="668" y="755" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Log &amp; Trace Store</text>
+        </g>
+
+        <!-- ================================================================== -->
+        <!-- LEGEND                                                              -->
+        <!-- legend_y = 682 + 116 + 50 = 848                                     -->
+        <!-- ================================================================== -->
+        <g transform="translate(40, 848)">
+          <text x="0" y="0" font-size="11" font-weight="600" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Legend</text>
+
+          <!-- Legend item: Channel (external) -->
+          <rect x="0" y="14" width="14" height="14" rx="3"
+                fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1"/>
+          <text x="20" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Channel</text>
+
+          <!-- Legend item: Service (process) -->
+          <rect x="110" y="14" width="14" height="14" rx="3"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+          <text x="130" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Service</text>
+
+          <!-- Legend item: Infrastructure (infra) -->
+          <rect x="220" y="14" width="14" height="14" rx="3"
+                fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1"/>
+          <text x="240" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Infrastructure</text>
+
+          <!-- Legend item: Data Store (data) -->
+          <rect x="370" y="14" width="14" height="14" rx="3"
+                fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="390" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Data Store</text>
+
+          <!-- Legend item: Async Context (dashed orange) -->
+          <line x1="490" y1="21" x2="520" y2="21"
+                stroke="#fb923c" stroke-width="1.5" stroke-dasharray="6,4"/>
+          <text x="528" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Async Context</text>
+        </g>
+
+      </svg>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot slate"></div>
+          <div class="card-title">5 Architecture Layers</div>
+        </div>
+        <div class="card-content">
+          Channel, Application, Orchestration, Model, and Data layers form a clean separation of concerns from external interfaces down to persistent storage.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot cyan"></div>
+          <div class="card-title">15 Core Modules</div>
+        </div>
+        <div class="card-content">
+          From Web Chat and API Gateway to Vector Database and RAG Engine, each module handles a specific responsibility in the AI pipeline.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot violet"></div>
+          <div class="card-title">Bidirectional Inference</div>
+        </div>
+        <div class="card-content">
+          Orchestration and Model layers communicate bidirectionally for inference, while a dedicated async context channel feeds data directly to the Orchestration Engine.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Generated by gmdiagram &middot; 2026-04-12
+    </div>
+  </div>
+</body>
+</html>

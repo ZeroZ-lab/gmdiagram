@@ -1,0 +1,6 @@
+docs/SPEC.md
+tasks/
+.playwright-mcp/
+.DS_Store
+warm-cozy-full.png
+warm-cozy-preview.png

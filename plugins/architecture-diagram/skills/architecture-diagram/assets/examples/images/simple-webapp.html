@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Web Application</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf9f6;
+      color: #1a1a2e;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .sketch-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #f87171;
+      border: 2px solid #2c3e50;
+    }
+    h1 { font-size: 24px; font-weight: 700; color: #2c3e50; letter-spacing: -0.5px; }
+    .subtitle { font-size: 14px; color: #7f8c8d; margin-top: 2px; }
+    .diagram-container {
+      background: white;
+      border: 2.5px solid #2c3e50;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    .diagram-container svg {
+      width: 100%;
+      min-width: 600px;
+      height: auto;
+      display: block;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .card {
+      background: white;
+      border: 2px solid #2c3e50;
+      border-radius: 6px;
+      padding: 16px;
+      box-shadow: 2px 2px 0px rgba(0,0,0,0.08);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .card-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      border: 1.5px solid #2c3e50;
+    }
+    .card-dot.blue { background: #60a5fa; }
+    .card-dot.green { background: #34d399; }
+    .card-dot.purple { background: #c084fc; }
+    .card-title { font-size: 13px; font-weight: 700; color: #2c3e50; }
+    .card-content { font-size: 12px; color: #7f8c8d; line-height: 1.5; }
+    .footer {
+      font-size: 11px;
+      color: #bdc3c7;
+      text-align: center;
+      padding-top: 14px;
+      border-top: 2px dashed #ecf0f1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="sketch-dot"></div>
+      <div>
+        <h1>Simple Web Application</h1>
+        <div class="subtitle">Frontend + Backend + Database three-tier architecture</div>
+      </div>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1000 610" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Forward arrowhead -->
+          <marker id="arrowhead-sketch" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#2c3e50" stroke="none"/>
+          </marker>
+          <!-- Reverse arrowhead (for bidirectional) -->
+          <marker id="arrowhead-sketch-rev" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+            <polygon points="10 0, 0 3.5, 10 7" fill="#2c3e50" stroke="none"/>
+          </marker>
+          <!-- Sketch hatch pattern for module fills -->
+          <pattern id="sketch-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(15)">
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#2c3e50" stroke-width="0.15" opacity="0.08"/>
+          </pattern>
+        </defs>
+
+        <!-- ============================================ -->
+        <!-- CONNECTIONS (drawn first, behind components) -->
+        <!-- ============================================ -->
+
+        <!-- Connection: Frontend -> Backend (unidirectional) -->
+        <!-- Source: Frontend layer bottom_center = (500, 156) -->
+        <!-- Target: Backend layer top_center = (500, 206) -->
+        <path d="M 500 156 L 500 206" stroke="#2c3e50" stroke-width="2.5"
+              fill="none" marker-end="url(#arrowhead-sketch)"
+              stroke-linecap="round"/>
+        <!-- Connection label: REST API -->
+        <rect x="468" y="168" width="64" height="18" rx="4" fill="white"/>
+        <text x="500" y="181" font-size="10" fill="#2c3e50" font-family="Segoe UI, sans-serif"
+              text-anchor="middle" font-weight="600">REST API</text>
+
+        <!-- Connection: Backend <-> Database (bidirectional) -->
+        <!-- Source: Backend layer bottom_center = (500, 322) -->
+        <!-- Target: Database layer top_center = (500, 372) -->
+        <path d="M 500 322 L 500 372" stroke="#2c3e50" stroke-width="2.5"
+              fill="none" marker-start="url(#arrowhead-sketch-rev)" marker-end="url(#arrowhead-sketch)"
+              stroke-linecap="round"/>
+        <!-- Connection label: SQL -->
+        <rect x="484" y="335" width="32" height="18" rx="4" fill="white"/>
+        <text x="500" y="348" font-size="10" fill="#2c3e50" font-family="Segoe UI, sans-serif"
+              text-anchor="middle" font-weight="600">SQL</text>
+
+        <!-- ========================== -->
+        <!-- LAYER 1: Frontend (module) -->
+        <!-- ========================== -->
+        <!-- layer_x=40, layer_y=40, w=920, h=116 -->
+        <!-- Colors: module -> #34d399 (emerald-400), layer bg=#ecfdf5 -->
+        <g>
+          <rect x="40" y="40" width="920" height="116" rx="4"
+                fill="#ecfdf5" stroke="#34d399" stroke-width="2.5"/>
+          <!-- Layer label -->
+          <text x="64" y="66" font-size="15" font-weight="700" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif">Frontend</text>
+
+          <!-- Module: React App -->
+          <!-- module_w=140, module_h=65 (has badges) -->
+          <!-- center in layer: start_x = 40 + (920 - 140)/2 = 430 -->
+          <!-- module_y = 40 + 35 + 8 = 83 -->
+          <rect x="430" y="75" width="140" height="65" rx="4"
+                fill="white" stroke="#34d399" stroke-width="1.5"/>
+          <!-- Sketch hatch overlay -->
+          <rect x="430" y="75" width="140" height="65" rx="4"
+                fill="url(#sketch-hatch)" stroke="none"/>
+          <text x="500" y="103" font-size="13" font-weight="600" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif" text-anchor="middle">React App</text>
+          <!-- Tech badge: React -->
+          <rect x="442" y="113" width="48" height="16" rx="3"
+                fill="#ecfdf5" stroke="#34d399" stroke-width="1"/>
+          <text x="466" y="124" font-size="8" fill="#34d399" font-family="Segoe UI, sans-serif"
+                text-anchor="middle">React</text>
+          <!-- Tech badge: TypeScript -->
+          <rect x="498" y="113" width="62" height="16" rx="3"
+                fill="#ecfdf5" stroke="#34d399" stroke-width="1"/>
+          <text x="529" y="124" font-size="8" fill="#34d399" font-family="Segoe UI, sans-serif"
+                text-anchor="middle">TypeScript</text>
+        </g>
+
+        <!-- ================================= -->
+        <!-- LAYER 2: Backend API (process)    -->
+        <!-- ================================= -->
+        <!-- layer_x=40, layer_y=206, w=920, h=116 -->
+        <!-- Colors: process -> #60a5fa (blue-400), layer bg=#eff6ff -->
+        <g>
+          <rect x="40" y="206" width="920" height="116" rx="4"
+                fill="#eff6ff" stroke="#60a5fa" stroke-width="2.5"/>
+          <!-- Layer label -->
+          <text x="64" y="232" font-size="15" font-weight="700" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif">Backend API</text>
+
+          <!-- Modules centered in layer -->
+          <!-- API Server: w=140, Auth Service: w=150 -->
+          <!-- total_modules_w = 140 + 150 + 20 = 310 -->
+          <!-- start_x = 40 + (920 - 310)/2 = 345 -->
+          <!-- module_y = 206 + 35 + 8 = 249 -->
+
+          <!-- Module: API Server (module type -> #34d399) -->
+          <!-- has tech badges -> h=65 -->
+          <rect x="345" y="241" width="140" height="65" rx="4"
+                fill="white" stroke="#34d399" stroke-width="1.5"/>
+          <rect x="345" y="241" width="140" height="65" rx="4"
+                fill="url(#sketch-hatch)" stroke="none"/>
+          <text x="415" y="269" font-size="13" font-weight="600" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif" text-anchor="middle">API Server</text>
+          <!-- Tech badge: Node.js -->
+          <rect x="383" y="279" width="52" height="16" rx="3"
+                fill="#ecfdf5" stroke="#34d399" stroke-width="1"/>
+          <text x="409" y="290" font-size="8" fill="#34d399" font-family="Segoe UI, sans-serif"
+                text-anchor="middle">Node.js</text>
+
+          <!-- Module: Auth Service (security type -> #f87171, dashed) -->
+          <!-- no badges -> h=50, but align with API Server row -> use y=249, h=57 to match -->
+          <rect x="505" y="241" width="150" height="65" rx="4"
+                fill="white" stroke="#f87171" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <rect x="505" y="241" width="150" height="65" rx="4"
+                fill="url(#sketch-hatch)" stroke="none"/>
+          <text x="580" y="269" font-size="13" font-weight="600" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif" text-anchor="middle">Auth Service</text>
+          <!-- Security badge -->
+          <rect x="555" y="279" width="50" height="16" rx="3"
+                fill="#fef2f2" stroke="#f87171" stroke-width="1"/>
+          <text x="580" y="290" font-size="8" fill="#f87171" font-family="Segoe UI, sans-serif"
+                text-anchor="middle">JWT</text>
+        </g>
+
+        <!-- ============================= -->
+        <!-- LAYER 3: Database (data)      -->
+        <!-- ============================= -->
+        <!-- layer_x=40, layer_y=372, w=920, h=101 -->
+        <!-- Colors: data -> #c084fc (purple-400), layer bg=#faf5ff -->
+        <g>
+          <rect x="40" y="372" width="920" height="101" rx="4"
+                fill="#faf5ff" stroke="#c084fc" stroke-width="2.5"/>
+          <!-- Layer label -->
+          <text x="64" y="398" font-size="15" font-weight="700" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif">Database</text>
+
+          <!-- Module: PostgreSQL (data type) -->
+          <!-- module_w=130, module_h=50 -->
+          <!-- center in layer: start_x = 40 + (920 - 130)/2 = 435 -->
+          <!-- module_y = 372 + 35 + 8 = 415 -->
+          <rect x="435" y="407" width="130" height="50" rx="4"
+                fill="white" stroke="#c084fc" stroke-width="1.5"/>
+          <rect x="435" y="407" width="130" height="50" rx="4"
+                fill="url(#sketch-hatch)" stroke="none"/>
+          <!-- Cylinder top ellipse hint for data store -->
+          <ellipse cx="500" cy="412" rx="45" ry="5" fill="none"
+                   stroke="#c084fc" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <text x="500" y="437" font-size="13" font-weight="600" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif" text-anchor="middle">PostgreSQL</text>
+        </g>
+
+        <!-- =================== -->
+        <!-- LEGEND              -->
+        <!-- =================== -->
+        <!-- legend_x=40, legend_y = 372 + 101 + 50 = 523 -->
+        <!-- Items spaced 130px apart -->
+        <g transform="translate(40, 523)">
+          <text x="0" y="0" font-size="11" font-weight="700" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif">Legend</text>
+
+          <!-- Legend item: Frontend (module) -->
+          <rect x="0" y="12" width="14" height="14" rx="2"
+                fill="#ecfdf5" stroke="#34d399" stroke-width="1.5"/>
+          <text x="20" y="23" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Frontend</text>
+
+          <!-- Legend item: Service (process) -->
+          <rect x="100" y="12" width="14" height="14" rx="2"
+                fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+          <text x="120" y="23" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Service</text>
+
+          <!-- Legend item: Auth (security) -->
+          <rect x="200" y="12" width="14" height="14" rx="2"
+                fill="white" stroke="#f87171" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <text x="220" y="23" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Auth</text>
+
+          <!-- Legend item: Database (data) -->
+          <rect x="280" y="12" width="14" height="14" rx="2"
+                fill="#faf5ff" stroke="#c084fc" stroke-width="1.5"/>
+          <text x="300" y="23" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Database</text>
+
+          <!-- Arrow legend -->
+          <line x1="392" y1="19" x2="422" y2="19" stroke="#2c3e50" stroke-width="2"
+                marker-end="url(#arrowhead-sketch)" stroke-linecap="round"/>
+          <text x="430" y="23" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Connection</text>
+
+          <!-- Bidirectional arrow legend -->
+          <line x1="530" y1="19" x2="560" y2="19" stroke="#2c3e50" stroke-width="2"
+                marker-start="url(#arrowhead-sketch-rev)" marker-end="url(#arrowhead-sketch)" stroke-linecap="round"/>
+          <text x="568" y="23" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Bidirectional</text>
+        </g>
+
+      </svg>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot blue"></div>
+          <div class="card-title">3 Tiers</div>
+        </div>
+        <div class="card-content">
+          Classic frontend-backend-database separation for maintainability and scalability.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot green"></div>
+          <div class="card-title">REST + Auth</div>
+        </div>
+        <div class="card-content">
+          Backend exposes REST API with JWT-based authentication service.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot purple"></div>
+          <div class="card-title">React + Node.js</div>
+        </div>
+        <div class="card-content">
+          TypeScript React frontend, Node.js API server, PostgreSQL for persistence.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Generated by gmdiagram &middot; Sketch Style &middot; 2026-04-12
+    </div>
+  </div>
+</body>
+</html>

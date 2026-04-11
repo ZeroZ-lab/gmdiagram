@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Web Application</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf9f6;
+      color: #1a1a2e;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .sketch-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #e74c3c;
+      border: 2px solid #2c3e50;
+    }
+    h1 { font-size: 24px; font-weight: 700; color: #2c3e50; letter-spacing: -0.5px; }
+    .subtitle { font-size: 14px; color: #7f8c8d; margin-top: 2px; }
+    .diagram-container {
+      background: white;
+      border: 2.5px solid #2c3e50;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    .diagram-container svg {
+      width: 100%;
+      min-width: 600px;
+      height: auto;
+      display: block;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .card {
+      background: white;
+      border: 2px solid #2c3e50;
+      border-radius: 6px;
+      padding: 16px;
+      box-shadow: 2px 2px 0px rgba(0,0,0,0.08);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .card-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      border: 1.5px solid #2c3e50;
+    }
+    .card-dot.blue { background: #3498db; }
+    .card-dot.green { background: #27ae60; }
+    .card-dot.orange { background: #e67e22; }
+    .card-title { font-size: 13px; font-weight: 700; color: #2c3e50; }
+    .card-content { font-size: 12px; color: #7f8c8d; line-height: 1.5; }
+    .footer {
+      font-size: 11px;
+      color: #bdc3c7;
+      text-align: center;
+      padding-top: 14px;
+      border-top: 2px dashed #ecf0f1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="sketch-dot"></div>
+      <div>
+        <h1>Simple Web Application</h1>
+        <div class="subtitle">Frontend + Backend + Database three-tier architecture</div>
+      </div>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowhead-sketch" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#2c3e50" stroke="none"/>
+          </marker>
+          <marker id="arrowhead-sketch-rev" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+            <polygon points="10 0, 0 3.5, 10 7" fill="#2c3e50" stroke="none"/>
+          </marker>
+        </defs>
+
+        <!-- === CONNECTIONS (drawn first, behind components) === -->
+
+        <!-- Frontend → Backend -->
+        <path d="M 400 130 L 400 180" stroke="#2c3e50" stroke-width="2.5"
+              fill="none" marker-end="url(#arrowhead-sketch)"
+              stroke-linecap="round"/>
+        <rect x="374" y="142" width="52" height="18" rx="2" fill="white"/>
+        <text x="400" y="155" font-size="10" fill="#2c3e50" font-family="Segoe UI, sans-serif" text-anchor="middle" font-weight="600">REST</text>
+
+        <!-- Backend ↔ Database -->
+        <path d="M 400 310 L 400 350" stroke="#2c3e50" stroke-width="2.5"
+              fill="none" marker-start="url(#arrowhead-sketch-rev)" marker-end="url(#arrowhead-sketch)"
+              stroke-linecap="round"/>
+        <rect x="382" y="320" width="36" height="18" rx="2" fill="white"/>
+        <text x="400" y="333" font-size="10" fill="#2c3e50" font-family="Segoe UI, sans-serif" text-anchor="middle" font-weight="600">SQL</text>
+
+        <!-- === LAYER 1: Frontend === -->
+        <g>
+          <!-- Hand-drawn style irregular rect -->
+          <rect x="120" y="30" width="560" height="100" rx="6"
+                fill="#ebf5fb" stroke="#3498db" stroke-width="2.5"/>
+          <text x="150" y="55" font-size="15" font-weight="700" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif">Frontend</text>
+
+          <!-- Module: React App -->
+          <rect x="265" y="62" width="200" height="52" rx="4"
+                fill="white" stroke="#3498db" stroke-width="2"/>
+          <text x="365" y="92" font-size="13" font-weight="600" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif" text-anchor="middle">React App</text>
+          <!-- Tech badges -->
+          <rect x="296" y="100" width="46" height="16" rx="3"
+                fill="#ebf5fb" stroke="#3498db" stroke-width="1"/>
+          <text x="319" y="112" font-size="8" fill="#3498db" font-family="Segoe UI, sans-serif" text-anchor="middle">React</text>
+          <rect x="350" y="100" width="68" height="16" rx="3"
+                fill="#ebf5fb" stroke="#3498db" stroke-width="1"/>
+          <text x="384" y="112" font-size="8" fill="#3498db" font-family="Segoe UI, sans-serif" text-anchor="middle">TypeScript</text>
+        </g>
+
+        <!-- === LAYER 2: Backend API === -->
+        <g>
+          <rect x="120" y="180" width="560" height="130" rx="6"
+                fill="#eafaf1" stroke="#27ae60" stroke-width="2.5"/>
+          <text x="150" y="207" font-size="15" font-weight="700" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif">Backend API</text>
+
+          <!-- Module: API Server -->
+          <rect x="165" y="220" width="170" height="52" rx="4"
+                fill="white" stroke="#27ae60" stroke-width="2"/>
+          <text x="250" y="250" font-size="13" font-weight="600" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif" text-anchor="middle">API Server</text>
+          <rect x="211" y="258" width="50" height="16" rx="3"
+                fill="#eafaf1" stroke="#27ae60" stroke-width="1"/>
+          <text x="236" y="270" font-size="8" fill="#27ae60" font-family="Segoe UI, sans-serif" text-anchor="middle">Node.js</text>
+
+          <!-- Module: Auth Service -->
+          <rect x="365" y="220" width="170" height="52" rx="4"
+                fill="white" stroke="#e74c3c" stroke-width="2" stroke-dasharray="6,3"/>
+          <text x="450" y="250" font-size="13" font-weight="600" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif" text-anchor="middle">Auth Service</text>
+          <rect x="425" y="258" width="36" height="16" rx="3"
+                fill="#fdedec" stroke="#e74c3c" stroke-width="1"/>
+          <text x="443" y="270" font-size="8" fill="#e74c3c" font-family="Segoe UI, sans-serif" text-anchor="middle">JWT</text>
+        </g>
+
+        <!-- === LAYER 3: Database === -->
+        <g>
+          <rect x="220" y="350" width="360" height="55" rx="6"
+                fill="#f5eef8" stroke="#8e44ad" stroke-width="2.5"/>
+          <text x="250" y="373" font-size="15" font-weight="700" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif">Database</text>
+
+          <!-- Module: PostgreSQL -->
+          <rect x="355" y="360" width="160" height="35" rx="4"
+                fill="white" stroke="#8e44ad" stroke-width="2"/>
+          <text x="435" y="383" font-size="13" font-weight="600" fill="#2c3e50"
+                font-family="Segoe UI, sans-serif" text-anchor="middle">PostgreSQL</text>
+        </g>
+
+        <!-- === LEGEND === -->
+        <g transform="translate(120, 410)">
+          <rect x="-8" y="-4" width="14" height="14" rx="2" fill="#ebf5fb" stroke="#3498db" stroke-width="1.5"/>
+          <text x="14" y="8" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Frontend</text>
+
+          <rect x="92" y="-4" width="14" height="14" rx="2" fill="#eafaf1" stroke="#27ae60" stroke-width="1.5"/>
+          <text x="114" y="8" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Service</text>
+
+          <rect x="176" y="-4" width="14" height="14" rx="2" fill="white" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <text x="198" y="8" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Auth</text>
+
+          <rect x="248" y="-4" width="14" height="14" rx="2" fill="#f5eef8" stroke="#8e44ad" stroke-width="1.5"/>
+          <text x="270" y="8" font-size="10" fill="#7f8c8d" font-family="Segoe UI, sans-serif">Database</text>
+        </g>
+
+      </svg>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot blue"></div>
+          <div class="card-title">3 Tiers</div>
+        </div>
+        <div class="card-content">
+          Classic frontend-backend-database separation for maintainability and scalability.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot green"></div>
+          <div class="card-title">REST + Auth</div>
+        </div>
+        <div class="card-content">
+          Backend exposes REST API with JWT-based authentication service.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot orange"></div>
+          <div class="card-title">React + Node.js</div>
+        </div>
+        <div class="card-content">
+          TypeScript React frontend, Node.js API server, PostgreSQL for persistence.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Generated by gmdiagram &middot; Sketch Style &middot; 2026-04-11
+    </div>
+  </div>
+</body>
+</html>
