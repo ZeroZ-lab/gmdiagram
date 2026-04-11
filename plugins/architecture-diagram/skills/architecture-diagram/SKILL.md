@@ -128,11 +128,12 @@ After generating the initial diagram, the user may request changes:
 
 Before delivering, verify:
 - [ ] JSON validates against the diagram type's schema
-- [ ] Every `<text>` has `text-anchor` and `dominant-baseline` attributes (see `references/design-system.md`)
-- [ ] Text is visually centered inside its parent box (text_x = box_x + box_w/2, text_y = box_y + box_h/2)
-- [ ] Connection lines end exactly at component edges, not floating or crossing borders
-- [ ] All components of the same type/level share identical y-coordinates (horizontal alignment)
-- [ ] Spacing between same-level components is consistent (same gap everywhere)
+- [ ] Every `<foreignObject>` has `xmlns="http://www.w3.org/1999/xhtml"` on the root HTML element
+- [ ] Component boxes use CSS classes from the template (`.module`, `.type-X`, `.module-label`)
+- [ ] SVG `<text>` (connection labels only) has `text-anchor="middle" dominant-baseline="central"`
+- [ ] Connection lines route around intermediate layers (never cross through layer cards)
+- [ ] Masking rects cover full layer area (hides arrows behind components)
+- [ ] Layer y-positions are correctly stacked: `layer_y[i] = layer_y[i-1] + h + gap`
 - [ ] ViewBox fits all content with no clipping and no more than 40px whitespace margin
 - [ ] Legend matches the component types used
 - [ ] Title and subtitle are accurate

@@ -28,6 +28,8 @@ entity_w = max(ENTITY_MIN_W, max(
 entity_h = HEADER_H + attributes.length * ROW_H
 ```
 
+Height formula is `30 + 22 * num_attributes` because the HTML table header is 30px and each attribute row is 22px. This value is used for both the `<foreignObject height="...">` and for computing SVG relationship line endpoints.
+
 ## Entity Positioning
 
 ### Grid Layout
@@ -48,6 +50,8 @@ Center entities horizontally within each column:
 entity[i].x = col_x[col] + (col_width - entity_w) / 2
 ```
 
+Note: Text centering within entities is NOT needed here. HTML tables handle text layout naturally via CSS (left-aligned attribute names, left-aligned types, right-aligned badges). No manual `text-anchor` or position math is required for entity content.
+
 ## Relationship Lines
 
 ### Route Calculation
@@ -65,11 +69,20 @@ path = M exit_x,exit_y L bend_x,exit_y L bend_x,enter_y L enter_x,enter_y
 path = M exit_x,exit_y L enter_x,enter_y
 ```
 
+### Edge Points
+Use `entity_h` (= 30 + 22 * num_attributes) to compute edge midpoints:
+- Right edge midpoint: `(entity.x + entity_w, entity.y + entity_h/2)`
+- Left edge midpoint: `(entity.x, entity.y + entity_h/2)`
+- Bottom edge midpoint: `(entity.x + entity_w/2, entity.y + entity_h)`
+- Top edge midpoint: `(entity.x + entity_w/2, entity.y)`
+
 ### Cardinality Labels
 ```
 fromCard text position: 15px from exit point, offset perpendicular to line
 toCard text position: 15px from enter point, offset perpendicular to line
 ```
+
+Cardinality labels remain SVG elements (not HTML) since they float near relationship lines.
 
 ## ViewBox Calculation
 
@@ -85,14 +98,14 @@ Where `LEGEND_H = 50` (if legend present).
 6 entities: User, Product, Order, OrderItem, Category, Review
 
 ### Entity dimensions
-| Entity | Attrs | Width | Height |
-|--------|-------|-------|--------|
-| User | 4 (id, email, name, created_at) | 200 | 118 |
-| Product | 5 (id, name, price, stock, category_id) | 220 | 140 |
-| Order | 4 (id, user_id, total, created_at) | 180 | 118 |
-| OrderItem | 4 (id, order_id, product_id, qty) | 200 | 118 |
-| Category | 3 (id, name, description) | 200 | 96 |
-| Review | 4 (id, user_id, product_id, rating) | 200 | 118 |
+| Entity | Attrs | Width | Height (= 30 + 22*N) |
+|--------|-------|-------|----------------------|
+| User | 4 (id, email, name, created_at) | 200 | 30+88=118 |
+| Product | 5 (id, name, price, stock, category_id) | 220 | 30+110=140 |
+| Order | 4 (id, user_id, total, created_at) | 180 | 30+88=118 |
+| OrderItem | 4 (id, order_id, product_id, qty) | 200 | 30+88=118 |
+| Category | 3 (id, name, description) | 200 | 30+66=96 |
+| Review | 4 (id, user_id, product_id, rating) | 200 | 30+88=118 |
 
 ### Grid layout (3 cols, 2 rows)
 ```
@@ -110,6 +123,9 @@ OrderItem: x=50,  y=260
 Category:  x=380, y=272  (centered: 260 + (140-96)/2 + 12)
 Review:    x=740, y=260
 ```
+
+### foreignObject dimensions
+Each entity uses `<foreignObject width="entity_w" height="entity_h">` matching the calculated dimensions above. The HTML table inside naturally fills the space via CSS `width: 100%`.
 
 ### ViewBox
 ```

@@ -16,6 +16,31 @@
     .diagram-container { background: #3b4252; border: 1px solid #4c566a; border-radius: 2px; padding: 24px; margin-bottom: 32px; overflow-x: auto; }
     .diagram-container svg { width: 100%; min-width: 700px; height: auto; display: block; }
     .footer { font-size: 11px; color: #4c566a; text-align: center; padding-top: 16px; border-top: 1px solid #434c5e; }
+
+    /* === foreignObject component classes (blueprint) === */
+    .layer-card { width: 100%; border-radius: 2px; padding: 8px 0 12px; box-sizing: border-box; }
+    .layer-label { font-size: 14px; font-weight: 600; color: #88c0d0; padding: 0 16px; font-family: 'JetBrains Mono', monospace; }
+    .modules { display: flex; gap: 20px; justify-content: center; padding: 8px 16px 0; flex-wrap: wrap; }
+    .module { min-width: 100px; height: 50px; border-radius: 2px; display: flex; align-items: center; justify-content: center; padding: 0 16px; box-sizing: border-box; }
+    .module-label { font-size: 12px; font-weight: 500; color: #eceff4; text-align: center; white-space: nowrap; font-family: 'JetBrains Mono', monospace; }
+    .tech-badges { display: flex; gap: 4px; justify-content: center; padding-top: 4px; }
+    .tech-badge { font-size: 8px; padding: 2px 6px; border-radius: 2px; white-space: nowrap; background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.1); color: #d8dee9; font-family: 'JetBrains Mono', monospace; }
+    .module.has-badges { height: 58px; flex-direction: column; gap: 2px; }
+    .module.has-badges .module-label { height: 20px; }
+
+    /* Type-specific colors (Nord) */
+    .type-process { background: rgba(136,192,208,0.1); border: 0.8px solid #88c0d0; }
+    .type-module { background: rgba(163,190,140,0.1); border: 0.8px solid #a3be8c; }
+    .type-data { background: rgba(180,142,173,0.1); border: 0.8px solid #b48ead; }
+    .type-infra { background: rgba(235,203,139,0.1); border: 0.8px solid #ebcb8b; }
+    .type-security { background: rgba(191,97,106,0.1); border: 0.8px dashed #bf616a; }
+    .type-channel { background: rgba(208,135,112,0.1); border: 0.8px solid #d08770; }
+    .type-external { background: rgba(76,86,106,0.1); border: 0.8px solid #4c566a; }
+
+    .legend-container { display: flex; gap: 100px; align-items: center; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 2px; }
+    .legend-text { font-size: 11px; color: #d8dee9; font-family: 'JetBrains Mono', monospace; }
   </style>
 </head>
 <body>

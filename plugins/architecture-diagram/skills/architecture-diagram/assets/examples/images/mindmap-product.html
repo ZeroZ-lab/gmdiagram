@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>gmdiagram Product Features</title>
+  <title>Product Launch Plan</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -13,7 +13,7 @@
       min-height: 100vh;
       padding: 40px 20px;
     }
-    .container { max-width: 1100px; margin: 0 auto; }
+    .container { max-width: 960px; margin: 0 auto; }
     .header {
       display: flex;
       align-items: center;
@@ -67,395 +67,250 @@
     <div class="header">
       <div class="warm-dot"></div>
       <div>
-        <h1>gmdiagram Product Features</h1>
-        <div class="subtitle">Core capabilities and feature breakdown</div>
+        <h1>Product Launch Plan</h1>
+        <div class="subtitle">Feature roadmap and team responsibilities</div>
       </div>
     </div>
 
     <div class="diagram-container">
-      <svg viewBox="0 0 1200 832" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          /* Mind Map Node Styles */
+          .mindmap-node {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            font-family: Georgia, 'Times New Roman', serif;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .node-label {
+            display: inline-block;
+            line-height: 1.2;
+          }
 
-        <!-- === Decorative accents === -->
+          /* Central node */
+          .type-central {
+            width: 120px;
+            height: 50px;
+            border-radius: 25px;
+            background: rgba(180, 83, 9, 0.15);
+            border: 2.5px solid #b45309;
+            font-size: 13px;
+            font-weight: 700;
+            color: #3c3836;
+            padding: 0 12px;
+          }
+          .type-central .node-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #3c3836;
+          }
+
+          /* Branch node - Level 1 */
+          .type-branch {
+            height: 32px;
+            min-width: 60px;
+            padding: 0 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #3c3836;
+          }
+          .type-branch .node-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #3c3836;
+          }
+
+          /* Leaf node - Level 2+ */
+          .type-leaf {
+            height: 28px;
+            min-width: 50px;
+            padding: 0 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 400;
+            color: #3c3836;
+          }
+          .type-leaf .node-label {
+            font-size: 10px;
+            font-weight: 400;
+            color: #3c3836;
+          }
+
+          /* Warm-cozy color variants */
+          .color-emerald-l1 {
+            background: #dcfce7;
+            border: 1.8px solid #15803d;
+          }
+          .color-emerald-l2 {
+            background: #f0fdf4;
+            border: 1.2px solid #22c55e;
+          }
+
+          .color-amber-l1 {
+            background: #fef3c7;
+            border: 1.8px solid #b45309;
+          }
+          .color-amber-l2 {
+            background: #fefce8;
+            border: 1.2px solid #d97706;
+          }
+
+          .color-violet-l1 {
+            background: #f3e8ff;
+            border: 1.8px solid #7e22ce;
+          }
+          .color-violet-l2 {
+            background: #faf5ff;
+            border: 1.2px solid #a855f7;
+          }
+        </style>
+
+        <!-- Decorative accents -->
         <circle cx="30" cy="30" r="4" fill="#fef3c7" stroke="#d5c4a1" stroke-width="1"/>
-        <circle cx="1170" cy="30" r="3" fill="#dcfce7" stroke="#d5c4a1" stroke-width="1"/>
-        <circle cx="30" cy="802" r="3" fill="#f3e8ff" stroke="#d5c4a1" stroke-width="1"/>
-        <circle cx="1170" cy="802" r="4" fill="#fefce8" stroke="#d5c4a1" stroke-width="1"/>
-        <circle cx="600" cy="30" r="2.5" fill="#fff7ed" stroke="#d5c4a1" stroke-width="0.8"/>
-        <circle cx="600" cy="802" r="2.5" fill="#fff1f2" stroke="#d5c4a1" stroke-width="0.8"/>
+        <circle cx="970" cy="30" r="3" fill="#dcfce7" stroke="#d5c4a1" stroke-width="1"/>
+        <circle cx="30" cy="570" r="3" fill="#f3e8ff" stroke="#d5c4a1" stroke-width="1"/>
+        <circle cx="970" cy="570" r="4" fill="#fefce8" stroke="#d5c4a1" stroke-width="1"/>
 
         <!-- ============================================= -->
         <!-- CONNECTIONS (drawn first, behind all nodes)   -->
         <!-- ============================================= -->
 
-        <!-- Central node -> Diagram Types (right, emerald) -->
-        <path d="M 650,416 C 690,416 730,230 770,230"
-              fill="none" stroke="#34d399" stroke-width="2" opacity="0.6"
+        <!-- Central -> Marketing (left branch) -->
+        <path d="M 440,300 C 400,300 360,180 320,180"
+              fill="none" stroke="#15803d" stroke-width="2" opacity="0.6"
               stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Central node -> Visual Styles (right, violet) -->
-        <path d="M 650,416 C 690,416 730,571 770,571"
-              fill="none" stroke="#a78bfa" stroke-width="2" opacity="0.6"
+        <!-- Central -> Development (top branch) -->
+        <path d="M 500,275 C 500,235 500,135 500,95"
+              fill="none" stroke="#b45309" stroke-width="2" opacity="0.6"
               stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Central node -> Output Formats (left, amber) -->
-        <path d="M 550,416 C 510,416 430,323 430,323"
-              fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.6"
+        <!-- Central -> Operations (right branch) -->
+        <path d="M 560,300 C 600,300 640,420 680,420"
+              fill="none" stroke="#7e22ce" stroke-width="2" opacity="0.6"
               stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Central node -> Icon System (left, rose) -->
-        <path d="M 550,416 C 510,416 430,540 430,540"
-              fill="none" stroke="#fb7185" stroke-width="2" opacity="0.6"
+        <!-- Marketing -> Social Media -->
+        <path d="M 228,180 C 188,180 148,140 108,140"
+              fill="none" stroke="#22c55e" stroke-width="1.5" opacity="0.5"
               stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Diagram Types -> Architecture -->
-        <path d="M 922,230 C 962,230 962,106 1002,106"
-              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Diagram Types -> Mind Map -->
-        <path d="M 922,230 C 962,230 962,168 1002,168"
-              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Diagram Types -> Flowchart -->
-        <path d="M 922,230 C 962,230 962,230 1002,230"
-              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Diagram Types -> Sequence -->
-        <path d="M 922,230 C 962,230 962,292 1002,292"
-              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Diagram Types -> ER Diagram -->
-        <path d="M 922,230 C 962,230 962,354 1002,354"
-              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
+        <!-- Marketing -> Email Campaign -->
+        <path d="M 228,180 C 188,180 148,220 108,220"
+              fill="none" stroke="#22c55e" stroke-width="1.5" opacity="0.5"
               stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Visual Styles -> Dark Professional -->
-        <path d="M 914,571 C 954,571 954,416 994,416"
-              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Visual Styles -> Hand-Drawn -->
-        <path d="M 914,571 C 954,571 954,478 994,478"
-              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Visual Styles -> Light Corporate -->
-        <path d="M 914,571 C 954,571 954,540 994,540"
-              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Visual Styles -> Cyberpunk Neon -->
-        <path d="M 914,571 C 954,571 954,602 994,602"
-              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Visual Styles -> Blueprint -->
-        <path d="M 914,571 C 954,571 954,664 994,664"
-              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Visual Styles -> Warm Cozy -->
-        <path d="M 914,571 C 954,571 954,726 994,726"
-              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
+        <!-- Development -> Frontend -->
+        <path d="M 500,79 C 500,39 440,20 400,20"
+              fill="none" stroke="#d97706" stroke-width="1.5" opacity="0.5"
               stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Output Formats -> HTML -->
-        <path d="M 430,323 C 390,323 290,288 238,288"
-              fill="none" stroke="#fcd34d" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Output Formats -> SVG -->
-        <path d="M 430,323 C 390,323 290,323 238,323"
-              fill="none" stroke="#fcd34d" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Output Formats -> PNG -->
-        <path d="M 430,323 C 390,323 290,358 238,358"
-              fill="none" stroke="#fcd34d" stroke-width="1.5" opacity="0.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Output Formats -> PDF -->
-        <path d="M 430,323 C 390,323 290,393 238,393"
-              fill="none" stroke="#fcd34d" stroke-width="1.5" opacity="0.5"
+        <!-- Development -> Backend -->
+        <path d="M 500,79 C 500,39 500,20 500,20"
+              fill="none" stroke="#d97706" stroke-width="1.5" opacity="0.5"
               stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Icon System -> DevIcons -->
-        <path d="M 430,540 C 390,540 286,524 246,524"
-              fill="none" stroke="#fda4af" stroke-width="1.5" opacity="0.5"
+        <!-- Development -> Testing -->
+        <path d="M 500,79 C 500,39 560,20 600,20"
+              fill="none" stroke="#d97706" stroke-width="1.5" opacity="0.5"
               stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Icon System -> Simple Icons -->
-        <path d="M 430,540 C 390,540 286,540 246,540"
-              fill="none" stroke="#fda4af" stroke-width="1.5" opacity="0.5"
+
+        <!-- Operations -> Infrastructure -->
+        <path d="M 772,420 C 812,420 852,380 892,380"
+              fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.5"
               stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Icon System -> Custom SVG -->
-        <path d="M 430,540 C 390,540 286,556 246,556"
-              fill="none" stroke="#fda4af" stroke-width="1.5" opacity="0.5"
+
+        <!-- Operations -> Monitoring -->
+        <path d="M 772,420 C 812,420 852,460 892,460"
+              fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.5"
               stroke-linecap="round" stroke-linejoin="round"/>
 
         <!-- ============================================= -->
-        <!-- CENTRAL NODE                                   -->
-        <!-- ============================================= -->
-        <g transform="translate(600, 416)">
-          <circle cx="0" cy="0" r="50"
-                  fill="#b45309" stroke="#92400e" stroke-width="2.5"
-                  style="filter: drop-shadow(3px 3px 0px rgba(180,83,9,0.2))"/>
-          <text x="0" y="0" font-size="15" font-weight="700" fill="#fffdf7"
-                font-family="Georgia, serif"
-                text-anchor="middle" dominant-baseline="central">gmdiagram</text>
-        </g>
-
-        <!-- ============================================= -->
-        <!-- RIGHT SIDE: LEVEL 1 BRANCHES                   -->
+        <!-- NODES (foreignObject + CSS)                   -->
         <!-- ============================================= -->
 
-        <!-- Diagram Types (w=152, x=770, y=214) -->
-        <g transform="translate(770, 214)">
-          <rect x="0" y="0" width="152" height="32" rx="12"
-                fill="#dcfce7" stroke="#15803d" stroke-width="2"
-                style="filter: drop-shadow(2px 2px 0px rgba(21,128,61,0.1))"/>
-          <text x="76" y="16" font-size="12" font-weight="600" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Diagram Types</text>
-        </g>
+        <!-- Central Node: Product Launch -->
+        <foreignObject x="440" y="275" width="120" height="50" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-central">
+            <span class="node-label">Product Launch</span>
+          </div>
+        </foreignObject>
 
-        <!-- Visual Styles (w=144, x=770, y=555) -->
-        <g transform="translate(770, 555)">
-          <rect x="0" y="0" width="144" height="32" rx="12"
-                fill="#f3e8ff" stroke="#7e22ce" stroke-width="2"
-                style="filter: drop-shadow(2px 2px 0px rgba(126,34,206,0.1))"/>
-          <text x="72" y="16" font-size="12" font-weight="600" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Visual Styles</text>
-        </g>
+        <!-- LEFT BRANCH: Marketing -->
+        <foreignObject x="228" y="164" width="92" height="32" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-branch color-emerald-l1">
+            <span class="node-label">Marketing</span>
+          </div>
+        </foreignObject>
 
-        <!-- ============================================= -->
-        <!-- RIGHT SIDE: LEVEL 2 (Diagram Types children)   -->
-        <!-- ============================================= -->
+        <!-- Marketing -> Social Media -->
+        <foreignObject x="30" y="126" width="108" height="28" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-leaf color-emerald-l2">
+            <span class="node-label">Social Media</span>
+          </div>
+        </foreignObject>
 
-        <!-- Architecture (w=120, x=1002, y=90) -->
-        <g transform="translate(1002, 90)">
-          <rect x="0" y="0" width="120" height="32" rx="10"
-                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
-          <text x="60" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Architecture</text>
-        </g>
+        <!-- Marketing -> Email Campaign -->
+        <foreignObject x="20" y="206" width="118" height="28" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-leaf color-emerald-l2">
+            <span class="node-label">Email Campaign</span>
+          </div>
+        </foreignObject>
 
-        <!-- Mind Map (w=96, x=1002, y=152) -->
-        <g transform="translate(1002, 152)">
-          <rect x="0" y="0" width="96" height="32" rx="10"
-                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
-          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Mind Map</text>
-        </g>
+        <!-- TOP BRANCH: Development -->
+        <foreignObject x="438" y="79" width="104" height="32" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-branch color-amber-l1">
+            <span class="node-label">Development</span>
+          </div>
+        </foreignObject>
 
-        <!-- Flowchart (w=96, x=1002, y=214) -->
-        <g transform="translate(1002, 214)">
-          <rect x="0" y="0" width="96" height="32" rx="10"
-                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
-          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Flowchart</text>
-        </g>
+        <!-- Development -> Frontend -->
+        <foreignObject x="330" y="6" width="80" height="28" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-leaf color-amber-l2">
+            <span class="node-label">Frontend</span>
+          </div>
+        </foreignObject>
 
-        <!-- Sequence (w=96, x=1002, y=276) -->
-        <g transform="translate(1002, 276)">
-          <rect x="0" y="0" width="96" height="32" rx="10"
-                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
-          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Sequence</text>
-        </g>
+        <!-- Development -> Backend -->
+        <foreignObject x="455" y="6" width="80" height="28" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-leaf color-amber-l2">
+            <span class="node-label">Backend</span>
+          </div>
+        </foreignObject>
 
-        <!-- ER Diagram (w=104, x=1002, y=338) -->
-        <g transform="translate(1002, 338)">
-          <rect x="0" y="0" width="104" height="32" rx="10"
-                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
-          <text x="52" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">ER Diagram</text>
-        </g>
+        <!-- Development -> Testing -->
+        <foreignObject x="560" y="6" width="70" height="28" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-leaf color-amber-l2">
+            <span class="node-label">Testing</span>
+          </div>
+        </foreignObject>
 
-        <!-- ============================================= -->
-        <!-- RIGHT SIDE: LEVEL 2 (Visual Styles children)   -->
-        <!-- ============================================= -->
+        <!-- RIGHT BRANCH: Operations -->
+        <foreignObject x="680" y="404" width="92" height="32" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-branch color-violet-l1">
+            <span class="node-label">Operations</span>
+          </div>
+        </foreignObject>
 
-        <!-- Dark Professional (w=144, x=994, y=400) -->
-        <g transform="translate(994, 400)">
-          <rect x="0" y="0" width="144" height="32" rx="10"
-                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
-          <text x="72" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Dark Professional</text>
-        </g>
+        <!-- Operations -> Infrastructure -->
+        <foreignObject x="862" y="366" width="108" height="28" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-leaf color-violet-l2">
+            <span class="node-label">Infrastructure</span>
+          </div>
+        </foreignObject>
 
-        <!-- Hand-Drawn (w=112, x=994, y=462) -->
-        <g transform="translate(994, 462)">
-          <rect x="0" y="0" width="112" height="32" rx="10"
-                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
-          <text x="56" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Hand-Drawn</text>
-        </g>
-
-        <!-- Light Corporate (w=128, x=994, y=524) -->
-        <g transform="translate(994, 524)">
-          <rect x="0" y="0" width="128" height="32" rx="10"
-                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
-          <text x="64" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Light Corporate</text>
-        </g>
-
-        <!-- Cyberpunk Neon (w=128, x=994, y=586) -->
-        <g transform="translate(994, 586)">
-          <rect x="0" y="0" width="128" height="32" rx="10"
-                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
-          <text x="64" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Cyberpunk Neon</text>
-        </g>
-
-        <!-- Blueprint (w=96, x=994, y=648) -->
-        <g transform="translate(994, 648)">
-          <rect x="0" y="0" width="96" height="32" rx="10"
-                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
-          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Blueprint</text>
-        </g>
-
-        <!-- Warm Cozy (w=96, x=994, y=710) -->
-        <g transform="translate(994, 710)">
-          <rect x="0" y="0" width="96" height="32" rx="10"
-                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
-          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Warm Cozy</text>
-        </g>
-
-        <!-- ============================================= -->
-        <!-- LEFT SIDE: LEVEL 1 BRANCHES                    -->
-        <!-- ============================================= -->
-
-        <!-- Output Formats (w=100, x=430, y=307) -->
-        <g transform="translate(430, 307)">
-          <rect x="0" y="0" width="100" height="32" rx="12"
-                fill="#fef3c7" stroke="#b45309" stroke-width="2"
-                style="filter: drop-shadow(2px 2px 0px rgba(180,83,9,0.1))"/>
-          <text x="50" y="16" font-size="12" font-weight="600" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Output Formats</text>
-        </g>
-
-        <!-- Icon System (w=96, x=430, y=524) -->
-        <g transform="translate(430, 524)">
-          <rect x="0" y="0" width="96" height="32" rx="12"
-                fill="#fff1f2" stroke="#be123c" stroke-width="2"
-                style="filter: drop-shadow(2px 2px 0px rgba(190,18,60,0.1))"/>
-          <text x="48" y="16" font-size="12" font-weight="600" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Icon System</text>
-        </g>
-
-        <!-- ============================================= -->
-        <!-- LEFT SIDE: LEVEL 2 (Output Formats children)   -->
-        <!-- ============================================= -->
-
-        <!-- HTML (w=60, x=178, y=272) -->
-        <g transform="translate(178, 272)">
-          <rect x="0" y="0" width="60" height="32" rx="10"
-                fill="#fffdf7" stroke="#fcd34d" stroke-width="1.5"/>
-          <text x="30" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">HTML</text>
-        </g>
-
-        <!-- SVG (w=60, x=178, y=307) -->
-        <g transform="translate(178, 307)">
-          <rect x="0" y="0" width="60" height="32" rx="10"
-                fill="#fffdf7" stroke="#fcd34d" stroke-width="1.5"/>
-          <text x="30" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">SVG</text>
-        </g>
-
-        <!-- PNG (w=60, x=178, y=342) -->
-        <g transform="translate(178, 342)">
-          <rect x="0" y="0" width="60" height="32" rx="10"
-                fill="#fffdf7" stroke="#fcd34d" stroke-width="1.5"/>
-          <text x="30" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">PNG</text>
-        </g>
-
-        <!-- PDF (w=60, x=178, y=377) -->
-        <g transform="translate(178, 377)">
-          <rect x="0" y="0" width="60" height="32" rx="10"
-                fill="#fffdf7" stroke="#fcd34d" stroke-width="1.5"/>
-          <text x="30" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">PDF</text>
-        </g>
-
-        <!-- ============================================= -->
-        <!-- LEFT SIDE: LEVEL 2 (Icon System children)      -->
-        <!-- ============================================= -->
-
-        <!-- DevIcons (w=80, x=166, y=508) -->
-        <g transform="translate(166, 508)">
-          <rect x="0" y="0" width="80" height="32" rx="10"
-                fill="#fffdf7" stroke="#fda4af" stroke-width="1.5"/>
-          <text x="40" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">DevIcons</text>
-        </g>
-
-        <!-- Simple Icons (w=104, x=142, y=524) -->
-        <g transform="translate(142, 524)">
-          <rect x="0" y="0" width="104" height="32" rx="10"
-                fill="#fffdf7" stroke="#fda4af" stroke-width="1.5"/>
-          <text x="52" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Simple Icons</text>
-        </g>
-
-        <!-- Custom SVG (w=104, x=142, y=540) -->
-        <g transform="translate(142, 540)">
-          <rect x="0" y="0" width="104" height="32" rx="10"
-                fill="#fffdf7" stroke="#fda4af" stroke-width="1.5"/>
-          <text x="52" y="16" font-size="11" font-weight="500" fill="#3c3836"
-                font-family="system-ui, sans-serif"
-                text-anchor="middle" dominant-baseline="central">Custom SVG</text>
-        </g>
-
-        <!-- ============================================= -->
-        <!-- LEGEND                                         -->
-        <!-- ============================================= -->
-        <g transform="translate(330, 790)">
-          <text x="0" y="0" font-size="11" font-weight="600" fill="#78716c"
-                font-family="system-ui, sans-serif">Legend</text>
-
-          <!-- Diagram Types -->
-          <rect x="0" y="12" width="14" height="14" rx="3"
-                fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
-          <text x="20" y="23" font-size="11" fill="#78716c"
-                font-family="system-ui, sans-serif"
-                text-anchor="start" dominant-baseline="central">Diagram Types</text>
-
-          <!-- Visual Styles -->
-          <rect x="130" y="12" width="14" height="14" rx="3"
-                fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.5"/>
-          <text x="150" y="23" font-size="11" fill="#78716c"
-                font-family="system-ui, sans-serif"
-                text-anchor="start" dominant-baseline="central">Visual Styles</text>
-
-          <!-- Output Formats -->
-          <rect x="260" y="12" width="14" height="14" rx="3"
-                fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
-          <text x="280" y="23" font-size="11" fill="#78716c"
-                font-family="system-ui, sans-serif"
-                text-anchor="start" dominant-baseline="central">Output Formats</text>
-
-          <!-- Icon System -->
-          <rect x="400" y="12" width="14" height="14" rx="3"
-                fill="#fff1f2" stroke="#be123c" stroke-width="1.5"/>
-          <text x="420" y="23" font-size="11" fill="#78716c"
-                font-family="system-ui, sans-serif"
-                text-anchor="start" dominant-baseline="central">Icon System</text>
-        </g>
+        <!-- Operations -> Monitoring -->
+        <foreignObject x="872" y="446" width="88" height="28" xmlns="http://www.w3.org/1999/xhtml">
+          <div class="mindmap-node type-leaf color-violet-l2">
+            <span class="node-label">Monitoring</span>
+          </div>
+        </foreignObject>
 
       </svg>
     </div>

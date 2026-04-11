@@ -2,62 +2,167 @@
 
 Copy and adapt these SVG snippets when generating flowchart diagram HTML. All coordinates are examples — replace with computed values from `layout-flowchart.md`.
 
+## Architecture: CSS+SVG Hybrid
+
+This template uses a **CSS+SVG hybrid approach**:
+- **Rectangular nodes** (start, end, process, io, document, subprocess) use `<foreignObject>` + CSS classes for styling and text layout. CSS handles sizing, colors, text centering, and padding.
+- **Diamond (decision) nodes** use pure SVG `<polygon>` because CSS cannot draw diamond shapes.
+- **Arrows, connections, and labels** on connections use pure SVG elements.
+
+## Required CSS Classes
+
+Include these styles in the `<style>` block of the SVG or in the enclosing HTML:
+
+```css
+/* Base flowchart node */
+.flow-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  font-family: "JetBrains Mono", monospace;
+  color: white;
+  text-align: center;
+}
+
+.flow-node .node-label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+
+.flow-node .node-desc {
+  display: block;
+  font-size: 9px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Type-specific styles */
+.type-start {
+  background: rgba(6, 78, 59, 0.4);
+  border: 1.5px solid #34d399;
+  border-radius: 20px;
+}
+.type-start .node-label {
+  font-weight: 600;
+}
+
+.type-end {
+  background: rgba(6, 78, 59, 0.4);
+  border: 1.5px solid #34d399;
+  border-radius: 20px;
+}
+.type-end .node-label {
+  font-weight: 600;
+}
+
+.type-process {
+  background: rgba(6, 78, 59, 0.4);
+  border: 1.5px solid #34d399;
+  border-radius: 4px;
+}
+
+.type-io {
+  background: rgba(8, 51, 68, 0.4);
+  border: 1.5px solid #22d3ee;
+  border-radius: 4px;
+}
+
+.type-subprocess {
+  background: rgba(6, 78, 59, 0.4);
+  border: 1.5px solid #34d399;
+  border-radius: 4px;
+  /* Double-border effect via box-shadow (inset) */
+  box-shadow: inset 3px 0 0 0 rgba(52, 211, 153, 0.6),
+              inset -3px 0 0 0 rgba(52, 211, 153, 0.6);
+}
+
+.type-document {
+  background: rgba(76, 29, 149, 0.4);
+  border: 1.5px solid #a78bfa;
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+  /* Wavy bottom via clip-path */
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 85%,
+    75% 100%, 50% 85%, 25% 100%,
+    0% 85%
+  );
+}
+```
+
 ## Node Type Color Mapping (Quick Reference)
 
-| Type | fill | stroke | stroke-width |
-|------|------|--------|-------------|
-| `start` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) | 1.5 |
-| `end` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) | 1.5 |
-| `process` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) | 1.5 |
-| `decision` | `rgba(120, 53, 15, 0.3)` | `#fbbf24` (amber) | 1.5 |
-| `io` | `rgba(8, 51, 68, 0.4)` | `#22d3ee` (cyan) | 1.5 |
-| `subprocess` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) | 1.5 |
-| `document` | `rgba(76, 29, 149, 0.4)` | `#a78bfa` (violet) | 1.5 |
+| Type | CSS class | background | border |
+|------|-----------|-----------|--------|
+| `start` | `.type-start` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) |
+| `end` | `.type-end` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) |
+| `process` | `.type-process` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) |
+| `decision` | *(SVG only)* | `rgba(120, 53, 15, 0.3)` | `#fbbf24` (amber) |
+| `io` | `.type-io` | `rgba(8, 51, 68, 0.4)` | `#22d3ee` (cyan) |
+| `subprocess` | `.type-subprocess` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) |
+| `document` | `.type-document` | `rgba(76, 29, 149, 0.4)` | `#a78bfa` (violet) |
 
 ---
 
-## 1. Start / End Terminal (Stadium Shape)
+## 1. Start / End Terminal (foreignObject + CSS)
 
 ```svg
-<!-- Start node: "Start" -->
+<!-- Start node: "Start" at position (450, 40), size 100x40 -->
 <!-- Masking rect (draw FIRST, before arrows) -->
 <rect x="450" y="40" width="100" height="40" rx="20" fill="#0f172a"/>
-<!-- Styled terminal -->
-<rect x="450" y="40" width="100" height="40" rx="20"
-      fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
-<!-- Label -->
-<text x="500" y="64" font-size="12" font-weight="600" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">Start</text>
+<!-- Node via foreignObject -->
+<foreignObject x="450" y="40" width="100" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-start">
+    <span class="node-label">Start</span>
+  </div>
+</foreignObject>
 ```
 
-End nodes use the same shape with potentially different label:
+End nodes use the same pattern with `.type-end`:
 ```svg
-<!-- End node: "End" -->
+<!-- End node: "End" at position (450, 1040), size 100x40 -->
 <rect x="450" y="1040" width="100" height="40" rx="20" fill="#0f172a"/>
-<rect x="450" y="1040" width="100" height="40" rx="20"
-      fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
-<text x="500" y="1064" font-size="12" font-weight="600" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">End</text>
+<foreignObject x="450" y="1040" width="100" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-end">
+    <span class="node-label">End</span>
+  </div>
+</foreignObject>
 ```
 
-## 2. Process Node (Rectangle)
+## 2. Process Node (foreignObject + CSS)
 
 ```svg
-<!-- Process node: "Build Application" -->
+<!-- Process node: "Build Application" at position (430, 240), size 140x40 -->
 <!-- Masking rect -->
 <rect x="430" y="240" width="140" height="40" rx="4" fill="#0f172a"/>
-<!-- Styled process box -->
-<rect x="430" y="240" width="140" height="40" rx="4"
-      fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
-<!-- Label -->
-<text x="500" y="264" font-size="12" font-weight="500" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">Build Application</text>
-<!-- Optional description -->
-<text x="500" y="278" font-size="9" fill="#94a3b8"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">Compile & package</text>
+<!-- Node via foreignObject -->
+<foreignObject x="430" y="240" width="140" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-process">
+    <span class="node-label">Build Application</span>
+  </div>
+</foreignObject>
 ```
 
-## 3. Decision Node (Diamond)
+With optional description (increase height to accommodate):
+```svg
+<!-- Process node with description, size 140x52 -->
+<rect x="430" y="240" width="140" height="52" rx="4" fill="#0f172a"/>
+<foreignObject x="430" y="240" width="140" height="52">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-process">
+    <span class="node-label">Build Application<span class="node-desc">Compile &amp; package</span></span>
+  </div>
+</foreignObject>
+```
+
+## 3. Decision Node (SVG Diamond — NOT foreignObject)
+
+Decision diamonds remain pure SVG because CSS cannot render diamond shapes.
 
 ```svg
 <!-- Decision node: "Tests Pass?" -->
@@ -82,22 +187,41 @@ bottom_vertex = (cx, cy + h/2)       // (500, 530)
 left_vertex   = (cx - w/2, cy)       // (430, 485)
 ```
 
-## 4. I/O Parallelogram
+## 4. I/O Parallelogram (foreignObject + CSS)
+
+I/O nodes use a rectangular foreignObject with CSS `transform: skewX()` for the parallelogram effect, or a CSS `clip-path` polygon.
 
 ```svg
-<!-- I/O node: "User Login" (parallelogram) -->
-<!-- Skew offset: 12px -->
-<!-- Masking polygon -->
-<polygon points="442,340 582,340 570,380 430,380" fill="#0f172a"/>
-<!-- Styled parallelogram -->
-<polygon points="442,340 582,340 570,380 430,380"
-         fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
-<!-- Label -->
-<text x="506" y="364" font-size="12" font-weight="500" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">User Login</text>
+<!-- I/O node: "User Login" at position (430, 340), size 140x40 -->
+<!-- Masking rect -->
+<rect x="430" y="340" width="140" height="40" rx="4" fill="#0f172a"/>
+<!-- Node via foreignObject with skew -->
+<foreignObject x="430" y="340" width="140" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml"
+       class="flow-node type-io"
+       style="clip-path: polygon(12px 0%, calc(100% - 0px) 0%, calc(100% - 12px) 100%, 0px 100%);">
+    <span class="node-label">User Login</span>
+  </div>
+</foreignObject>
 ```
 
-Parallelogram coordinate formula:
+For broader compatibility, the masking rect and border can also be done with an SVG `<polygon>` behind the foreignObject:
+```svg
+<!-- Background mask -->
+<polygon points="442,340 582,340 570,380 430,380" fill="#0f172a"/>
+<!-- Styled parallelogram border -->
+<polygon points="442,340 582,340 570,380 430,380"
+         fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<!-- Text via foreignObject (transparent background) -->
+<foreignObject x="430" y="340" width="140" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-io"
+       style="background: transparent; border: none;">
+    <span class="node-label">User Login</span>
+  </div>
+</foreignObject>
+```
+
+Parallelogram coordinate formula (for the polygon mask/border):
 ```
 // Given x, y, w, h, skew=12
 top_left     = (x + skew, y)
@@ -106,46 +230,68 @@ bottom_right = (x + w - skew, y + h)
 bottom_left  = (x - skew, y + h)
 ```
 
-## 5. Subprocess Node (Double-Border Rectangle)
+## 5. Subprocess Node (foreignObject + CSS)
+
+The double-border effect is handled by CSS `box-shadow: inset`.
 
 ```svg
-<!-- Subprocess node: "Build" (double-border) -->
+<!-- Subprocess node: "Build" at position (430, 240), size 140x40 -->
 <!-- Masking rect -->
 <rect x="430" y="240" width="140" height="40" rx="4" fill="#0f172a"/>
-<!-- Outer rect -->
-<rect x="430" y="240" width="140" height="40" rx="4"
-      fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
-<!-- Inner rect (inset 3px on left and right sides only) -->
+<!-- Node via foreignObject (CSS .type-subprocess provides double border via box-shadow) -->
+<foreignObject x="430" y="240" width="140" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-subprocess">
+    <span class="node-label">Build</span>
+  </div>
+</foreignObject>
+```
+
+If CSS `box-shadow` inset is not sufficient, fall back to an inner SVG rect:
+```svg
+<!-- Fallback: explicit inner rect for double-border -->
+<rect x="430" y="240" width="140" height="40" rx="4" fill="#0f172a"/>
+<foreignObject x="430" y="240" width="140" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-process">
+    <span class="node-label">Build</span>
+  </div>
+</foreignObject>
+<!-- Inner rect overlay for double-border (drawn on top) -->
 <rect x="436" y="240" width="128" height="40" rx="2"
       fill="none" stroke="#34d399" stroke-width="0.8"/>
-<!-- Label -->
-<text x="500" y="264" font-size="12" font-weight="500" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">Build</text>
 ```
 
-Inner rect formula:
-```
-inner_x = x + SUBPROCESS_INSET * 2  // 3px inset on left
-inner_w = w - SUBPROCESS_INSET * 4  // 3px inset on each side (left + right)
-inner_rx = max(2, rx - 2)
-```
+## 6. Document Node (foreignObject + CSS)
 
-## 6. Document Node (Wavy Bottom)
+The wavy bottom is handled by CSS `clip-path` on the `.type-document` class.
 
 ```svg
-<!-- Document node: "Log Audit Entry" (wavy bottom) -->
-<!-- Masking path -->
-<path d="M 430,600 L 570,600 L 570,635 Q 540,645 500,635 Q 460,625 430,635 Z"
-      fill="#0f172a"/>
-<!-- Styled document shape -->
-<path d="M 430,600 L 570,600 L 570,635 Q 540,645 500,635 Q 460,625 430,635 Z"
-      fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
-<!-- Label -->
-<text x="500" y="622" font-size="12" font-weight="500" fill="white"
-      font-family="JetBrains Mono, monospace" text-anchor="middle">Log Audit Entry</text>
+<!-- Document node: "Log Audit Entry" at position (430, 600), size 140x40 -->
+<!-- Masking rect -->
+<rect x="430" y="600" width="140" height="40" rx="4" fill="#0f172a"/>
+<!-- Node via foreignObject (CSS .type-document provides wavy bottom via clip-path) -->
+<foreignObject x="430" y="600" width="140" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-document">
+    <span class="node-label">Log Audit Entry</span>
+  </div>
+</foreignObject>
 ```
 
-Wavy bottom path formula:
+If CSS `clip-path` is not available, use an SVG path mask instead:
+```svg
+<!-- Fallback: SVG path for document shape -->
+<path d="M 430,600 L 570,600 L 570,635 Q 540,645 500,635 Q 460,625 430,635 Z"
+      fill="#0f172a"/>
+<path d="M 430,600 L 570,600 L 570,635 Q 540,645 500,635 Q 460,625 430,635 Z"
+      fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<foreignObject x="430" y="600" width="140" height="40">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node"
+       style="background: transparent; border: none;">
+    <span class="node-label">Log Audit Entry</span>
+  </div>
+</foreignObject>
+```
+
+Wavy bottom SVG path formula:
 ```
 // Given x, y, w, h, wave_amplitude=5
 path = "M {x},{y}                          // top-left
@@ -312,6 +458,30 @@ band_h = max(node_h for nodes in lane) + 40
 </defs>
 ```
 
+## foreignObject Pattern Summary
+
+For all rectangular node types (start, end, process, io, subprocess, document), use this pattern:
+
+```svg
+<!-- 1. Masking rect (same position/size as node, opaque background color) -->
+<rect x="X" y="Y" width="W" height="H" rx="RX" fill="#0f172a"/>
+<!-- 2. foreignObject containing a styled HTML div -->
+<foreignObject x="X" y="Y" width="W" height="H">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-TYPE">
+    <span class="node-label">LABEL TEXT</span>
+  </div>
+</foreignObject>
+```
+
+Where:
+- `X`, `Y` = top-left position from layout calculations
+- `W`, `H` = node dimensions from layout calculations
+- `RX` = corner radius (20 for start/end, 4 for process/io/subprocess/document)
+- `type-TYPE` = one of `type-start`, `type-end`, `type-process`, `type-io`, `type-subprocess`, `type-document`
+- CSS handles all visual styling (background, border, border-radius, text centering)
+
+For **decision (diamond)** nodes only, continue using SVG `<polygon>` with `<text>` labels.
+
 ## Rendering Order
 
 When composing the final SVG, draw elements in this order:
@@ -319,8 +489,8 @@ When composing the final SVG, draw elements in this order:
 1. Grid background (`<rect fill="url(#grid)" />`)
 2. Swimlane bands and separators
 3. All connection lines and arrows (behind nodes)
-4. All node shapes (on top of arrows) — masking rects first, then styled shapes
-5. All labels (text on top of everything)
+4. All node shapes (on top of arrows) — masking rects first, then foreignObject divs or SVG shapes
+5. All labels (text on top of everything) — connection labels and decision diamond text
 6. Legend
 
 This order ensures arrows go behind nodes and text is always readable.

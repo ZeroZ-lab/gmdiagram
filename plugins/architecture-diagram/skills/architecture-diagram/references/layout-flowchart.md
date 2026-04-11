@@ -2,6 +2,15 @@
 
 These rules compute SVG coordinates from the flowchart JSON schema. Follow them to position all elements deterministically — do NOT guess coordinates.
 
+## Architecture: CSS+SVG Hybrid
+
+This layout reference works with the CSS+SVG hybrid approach defined in `components-flowchart.md`:
+- **Rectangular nodes** (start, end, process, io, document, subprocess) use `<foreignObject>` + CSS. CSS handles node width, text centering, border styling, and padding. Layout only needs to compute `(x, y, width, height)` for the foreignObject container.
+- **Decision (diamond) nodes** use pure SVG `<polygon>`. Layout must compute the center `(cx, cy)` and half-dimensions to build the polygon points string.
+- **Connections** remain SVG `<line>` or `<path>` elements. Layout computes start/end points and control points.
+- **Connection labels** remain SVG `<text>`. Layout computes label positions.
+- **No text_x / text_y calculations** are needed for rectangular nodes — CSS flexbox centers text automatically.
+
 ## Constants
 
 | Name | Value | Purpose |
@@ -11,8 +20,8 @@ These rules compute SVG coordinates from the flowchart JSON schema. Follow them 
 | `NODE_GAP_H` | 40px | Horizontal gap for side-by-side branching |
 | `DIAMOND_W` | 140px | Decision diamond width |
 | `DIAMOND_H` | 90px | Decision diamond height |
-| `TERMINAL_RX` | 20px | Corner radius for start/end nodes |
-| `PROCESS_RX` | 4px | Corner radius for process nodes |
+| `TERMINAL_RX` | 20px | Corner radius for start/end masking rects |
+| `PROCESS_RX` | 4px | Corner radius for process masking rects |
 | `SVG_W` | 1000px | SVG viewBox width (fixed) |
 | `IO_SKEW` | 12px | Horizontal skew offset for parallelogram |
 | `SUBPROCESS_INSET` | 3px | Inner rect inset for subprocess double border |
@@ -21,13 +30,13 @@ These rules compute SVG coordinates from the flowchart JSON schema. Follow them 
 
 ## Step 1: Calculate Node Dimensions
 
-Each node type has different dimension rules:
+Each node type has different dimension rules. These dimensions set the `<foreignObject>` width/height (or `<polygon>` extents for diamonds). **CSS handles text centering within the node — do not compute text positions for rectangular nodes.**
 
 ### Start / End terminals
 ```
 node_w = max(100, label_length * 8 + 32)
 node_h = 40
-rx = TERMINAL_RX   // creates stadium/rounded pill shape
+rx = TERMINAL_RX   // for the masking rect only; CSS handles the visible border-radius
 ```
 
 ### Process nodes
@@ -37,19 +46,20 @@ node_h = max(40, description_lines * 14 + 28)
 rx = PROCESS_RX
 ```
 
-### Decision nodes (diamond)
+### Decision nodes (diamond) — SVG polygon
 ```
 node_w = max(DIAMOND_W, label_length * 7 + 40)
 node_h = max(DIAMOND_H, node_w * 0.65)
-// Adjust so text fits inside the diamond
 // Diamond is drawn as a polygon centered at (cx, cy)
+// Layout must compute polygon points, center position, and label text positions
 ```
 
 ### I/O nodes (parallelogram)
 ```
 node_w = max(120, label_length * 8 + 32 + IO_SKEW * 2)
 node_h = 40
-// Drawn as polygon with skew on left and right edges
+// The foreignObject uses the same (x, y, w, h) as a rectangular node
+// CSS clip-path or SVG polygon handles the parallelogram shape
 ```
 
 ### Subprocess nodes (double-border rect)
@@ -57,14 +67,16 @@ node_h = 40
 node_w = max(120, label_length * 8 + 32)
 node_h = max(40, description_lines * 14 + 28)
 rx = PROCESS_RX
-// Draw outer rect + inner rect inset by SUBPROCESS_INSET
+// CSS box-shadow: inset provides the double-border effect
+// No need to compute inner rect dimensions (CSS handles it)
 ```
 
 ### Document nodes (wavy bottom)
 ```
 node_w = max(120, label_length * 8 + 32)
 node_h = max(45, description_lines * 14 + 28)
-// Bottom edge is a sinusoidal wave path instead of straight line
+// CSS clip-path provides the wavy bottom
+// No need to compute wave path (CSS handles it)
 ```
 
 ## Step 2: Determine Flow Columns
@@ -126,6 +138,23 @@ node_x = main_column_x - node_w / 2
 Branch nodes are centered in their respective columns:
 ```
 branch_node_x = branch_column_x - branch_node_w / 2
+```
+
+**No additional text_x or text_y calculations needed for rectangular nodes.** The foreignObject div uses CSS flexbox to center text both horizontally and vertically within the node dimensions.
+
+### Diamond (decision) label positions — SVG text only
+
+For decision diamonds, label text positions must still be computed since diamonds use SVG `<text>`:
+```
+// Single-line label
+label_x = diamond_cx
+label_y = diamond_cy + 4    // slight offset for visual centering
+
+// Two-line label
+line1_x = diamond_cx
+line1_y = diamond_cy - 3
+line2_x = diamond_cx
+line2_y = diamond_cy + 11
 ```
 
 ### Swimlane positioning
@@ -203,9 +232,9 @@ path = "M start_x,start_y C cp1_x,cp1_y cp2_x,cp2_y end_x,end_y"
 
 The arrowhead marker is placed at the end point. The path is drawn with `stroke-dasharray` if the connection style is "dashed".
 
-### Branch labels
+### Branch labels (on connections)
 
-Place "Yes" and "No" labels near the decision output edges:
+Place "Yes" and "No" labels near the decision output edges. These remain SVG `<text>` elements:
 
 ```
 // "Yes" label — below the decision (down direction)
@@ -262,12 +291,12 @@ Legend items are placed horizontally, 120px apart.
 10 nodes, 2 decision points, 2 loop-back connections:
 
 ```
-Start → Code Commit → Build → Unit Tests → [Tests Pass?] ─yes→ Integration Tests
-                                     │                              │
+Start -> Code Commit -> Build -> Unit Tests -> [Tests Pass?] --yes-> Integration Tests
+                                     |                              |
                                     no (loop)                   Deploy Staging
-                                                                  │
-                                                           [Approved?] ─yes→ Deploy Prod → End
-                                                                │
+                                                                  |
+                                                           [Approved?] --yes-> Deploy Prod -> End
+                                                                |
                                                                no (loop to Code Commit)
 ```
 
@@ -326,9 +355,34 @@ node_x[deploy-prod]     = 500 - 168/2     = 416
 node_x[end]             = 500 - 100/2     = 450
 ```
 
+### Rendering Output per Node (foreignObject pattern for rectangular nodes)
+
+For rectangular nodes, the layout produces these values for the template:
+```
+// Example: "Start" node
+foreignObject_x = 450, foreignObject_y = 40, foreignObject_w = 100, foreignObject_h = 40
+mask_rx = 20, css_class = "type-start", label = "Start"
+// No text_x/text_y needed — CSS centers the label
+
+// Example: "Code Commit" node
+foreignObject_x = 440, foreignObject_y = 140, foreignObject_w = 120, foreignObject_h = 40
+mask_rx = 4, css_class = "type-process", label = "Code Commit"
+// No text_x/text_y needed — CSS centers the label
+```
+
+For decision diamonds, layout also computes the center and polygon points:
+```
+// "Tests Pass?" diamond
+diamond_cx = 500, diamond_cy = 440 + 45 = 485
+half_w = 70, half_h = 45
+polygon_points = "500,440 570,485 500,530 430,485"
+label_line1_x = 500, label_line1_y = 482
+label_line2_x = 500, label_line2_y = 496
+```
+
 ### Loop-back Paths
 
-**"No" from Tests Pass? → Code Commit:**
+**"No" from Tests Pass? -> Code Commit:**
 ```
 start: right vertex of diamond = (500 + 70, 485) = (570, 485)
 end: right edge of Code Commit = (440 + 120, 140) = (560, 140)
@@ -338,7 +392,7 @@ cp2 = (560 + 80, 140) = (640, 140)
 path = "M 570,485 C 650,485 640,140 560,140"
 ```
 
-**"No" from Approved? → Code Commit:**
+**"No" from Approved? -> Code Commit:**
 ```
 start: right vertex of diamond = (500 + 70, 835) = (570, 835)
 end: right edge of Code Commit = (560, 140)
@@ -379,6 +433,24 @@ Swimlane label column width: 120px. All node x-positions shifted right by 120px.
 
 ---
 
+## What Layout Does NOT Compute (Handled by CSS)
+
+The following are handled by CSS and do **not** need coordinate calculations:
+
+| Property | Handled by | Why |
+|----------|-----------|-----|
+| Node background color | CSS `.type-*` classes | Per-type color scheme |
+| Node border color/width | CSS `.type-*` classes | Per-type color scheme |
+| Node border-radius | CSS `.type-*` classes | 20px for start/end, 4px for process |
+| Text horizontal centering | CSS `justify-content: center` | Flexbox |
+| Text vertical centering | CSS `align-items: center` | Flexbox |
+| Text font/size/color | CSS `.node-label` | Monospace, white, 12px |
+| Subprocess double border | CSS `box-shadow: inset` | No inner rect needed |
+| Document wavy bottom | CSS `clip-path` | No SVG path needed |
+| I/O parallelogram skew | CSS `clip-path` or SVG polygon | Shape effect |
+| Node padding | CSS `padding: 4px 8px` | Consistent spacing |
+| Text wrapping | CSS `word-wrap: break-word` | Auto line breaking |
+
 ## Edge Cases
 
 ### Multiple loop-backs to the same node
@@ -395,17 +467,17 @@ Each subsequent curve routes further to the right to avoid overlap.
 
 If a decision only has a "no" branch, treat the default path as continuing down:
 ```
-// No explicit yes connection → straight down to next node
+// No explicit yes connection -> straight down to next node
 // "no" branch goes right
 ```
 
 ### Nodes with very long labels
 
-Cap node width at 250px and wrap text onto multiple lines:
+Cap node width at 250px — CSS will handle text wrapping:
 ```
 if node_w > 250:
   node_w = 250
-  // Split label into lines at word boundaries
+  // CSS word-wrap handles line breaking
   // Increase node_h by 14px per additional line
 ```
 
@@ -425,6 +497,6 @@ DIAMOND_H = max(90, DIAMOND_W * 0.65)
 ### Merge points (multiple arrows into one node)
 
 If two connections target the same node:
-- Main flow arrow enters from top (bottom_center → top_center)
+- Main flow arrow enters from top (bottom_center -> top_center)
 - Branch arrow enters from the right side (right_center or left offset)
 - Offset the second arrow's y slightly to avoid visual overlap

@@ -54,6 +54,33 @@
       padding-top: 16px;
       border-top: 1px solid rgba(255,255,255,0.04);
     }
+    /* === foreignObject component classes (dark-professional) === */
+    .layer-card { width: 100%; border-radius: 8px; padding: 8px 0 12px; box-sizing: border-box; }
+    .layer-label { font-size: 14px; font-weight: 600; color: #f1f5f9; padding: 0 16px; font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; }
+    .modules { display: flex; gap: 20px; justify-content: center; padding: 8px 16px 0; flex-wrap: wrap; }
+    .module { min-width: 100px; height: 50px; border-radius: 6px; display: flex; align-items: center; justify-content: center; padding: 0 16px; box-sizing: border-box; }
+    .module-label { font-size: 12px; font-weight: 500; color: white; text-align: center; white-space: nowrap; font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; }
+    .tech-badges { display: flex; gap: 4px; justify-content: center; padding-top: 4px; }
+    .tech-badge { font-size: 8px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; background: rgba(255,255,255,0.08); border: 0.5px solid rgba(255,255,255,0.15); color: #94a3b8; font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; }
+
+    /* Module with badge — taller to fit badge row */
+    .module.has-badges { height: 58px; flex-direction: column; gap: 2px; }
+    .module.has-badges .module-label { height: 20px; }
+
+    /* Type-specific colors */
+    .type-process { background: rgba(8,51,68,0.4); border: 1.5px solid #22d3ee; }
+    .type-module { background: rgba(6,78,59,0.4); border: 1.5px solid #34d399; }
+    .type-data { background: rgba(76,29,149,0.4); border: 1.5px solid #a78bfa; }
+    .type-infra { background: rgba(120,53,15,0.3); border: 1.5px solid #fbbf24; }
+    .type-security { background: rgba(136,19,55,0.4); border: 1.5px solid #fb7185; border-style: dashed; }
+    .type-channel { background: rgba(251,146,60,0.3); border: 1.5px solid #fb923c; }
+    .type-external { background: rgba(30,41,59,0.5); border: 1.5px solid #94a3b8; }
+
+    /* Legend */
+    .legend-container { display: flex; gap: 100px; align-items: center; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+    .legend-text { font-size: 11px; color: #cbd5e1; font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; }
   </style>
 </head>
 <body>

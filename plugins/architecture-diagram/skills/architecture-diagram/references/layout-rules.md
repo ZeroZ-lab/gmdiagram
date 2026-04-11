@@ -1,6 +1,20 @@
-# Layout Rules Reference
+# Layout Rules Reference (CSS + SVG Hybrid)
 
-These rules compute SVG coordinates from the JSON schema. Follow them to position all elements deterministically — do NOT guess coordinates.
+These rules compute SVG coordinates for the hybrid CSS+SVG approach. CSS handles module positioning and text centering — you only need to compute **layer y-positions** and **arrow endpoints**.
+
+## What CSS Handles (NO calculation needed)
+
+- Module width: auto-sized from label text via `min-width: 100px; padding: 0 16px`
+- Module horizontal centering: `justify-content: center` in `.modules` flexbox
+- Text centering: `display: flex; align-items: center; justify-content: center`
+- Module spacing: `gap: 20px` in `.modules` flexbox
+- Tech badge layout: auto-flowed below module label
+
+## What You Must Compute
+
+Only two things need coordinate math:
+1. **Layer y-positions** (vertical stacking)
+2. **Arrow start/end points** (SVG lines between layers)
 
 ## Constants
 
@@ -8,189 +22,192 @@ These rules compute SVG coordinates from the JSON schema. Follow them to positio
 |------|-------|---------|
 | `PAGE_MARGIN` | 40px | Space between SVG edge and first element |
 | `LAYER_GAP` | 50px | Vertical gap between layer cards |
-| `MODULE_GAP` | 20px | Horizontal gap between modules inside a layer |
-| `MODULE_MIN_W` | 100px | Minimum module width |
-| `MODULE_H` | 50px | Standard module height (no badges) |
-| `MODULE_H_BADGE` | 65px | Module height with tech badges |
-| `LAYER_PAD_H` | 16px | Layer card horizontal padding |
-| `LAYER_PAD_TOP` | 35px | Layer card top padding (for label) |
-| `LAYER_PAD_BOT` | 16px | Layer card bottom padding |
 | `SVG_W` | 1000px | SVG viewBox width (fixed) |
+| `LAYER_W` | 920px | Layer card width (= SVG_W - 2 * PAGE_MARGIN) |
 | `LEGEND_OFFSET` | 50px | Space below last layer before legend |
+| `LAYER_H_SIMPLE` | 101px | Layer height with simple modules |
+| `LAYER_H_BADGE` | 116px | Layer height with tech badge modules |
 
-## Step 1: Calculate Layer Dimensions
+## Step 1: Determine Layer Heights
 
-For each layer, calculate its content width and height:
+For each layer, choose a fixed height:
+- **`LAYER_H_SIMPLE` (101px)**: layers with standard modules (no tech badges)
+- **`LAYER_H_BADGE` (116px)**: layers where any module has tech badges
 
-```
-layer_content_h = max(module_h for each module)   // tallest module
-                  or MODULE_H if no children
-
-layer_card_h = LAYER_PAD_TOP + layer_content_h + LAYER_PAD_BOT
-```
-
-For width, compute the total module row width:
-```
-total_modules_w = sum(module_w for each module) + MODULE_GAP * (num_modules - 1)
-layer_card_w = max(total_modules_w + LAYER_PAD_H * 2, 300px)
-```
-
-Module width is determined by label length:
-```
-module_w = max(MODULE_MIN_W, label_length * 8 + 32)
-```
-- `label_length`: number of characters in the module label
-- Multiply by 8 (approximate monospace char width at 12px)
-- Add 32 for padding
-
-If the layer has tech badges, use `MODULE_H_BADGE` instead of `MODULE_H`.
+Do NOT try to compute height from content — CSS handles content layout. These fixed heights ensure arrow routing is predictable.
 
 ## Step 2: Position Layers Vertically
 
-Stack layers top-to-bottom with gaps:
-
 ```
-layer_y[0] = PAGE_MARGIN
+layer_y[0] = PAGE_MARGIN (= 40)
 layer_y[i] = layer_y[i-1] + layer_card_h[i-1] + LAYER_GAP
 ```
 
-All layers are centered horizontally at the same x position:
+All layers use the same x and width:
 ```
-layer_x = PAGE_MARGIN
-layer_card_w = SVG_W - PAGE_MARGIN * 2   // all layers span full width
+layer_x = PAGE_MARGIN (= 40)
+layer_w = LAYER_W (= 920)
 ```
 
-**Exception**: If layers have no children and few connections, reduce `layer_card_w` to the natural content width and center layers.
+## Step 3: Draw Layer Content (CSS Layout)
 
-## Step 3: Position Modules Inside Layers
+For each layer, output this pattern:
 
-Modules are horizontally centered within their layer card.
-
+```svg
+<g transform="translate(40, LAYER_Y)">
+  <!-- Masking rect (hides arrows behind this layer) -->
+  <rect width="920" height="LAYER_H" rx="8" fill="[background-color]"/>
+  <!-- CSS-styled content -->
+  <foreignObject width="920" height="LAYER_H">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="layer-card type-[LAYER_TYPE]">
+      <div class="layer-label">[LAYER_LABEL]</div>
+      <div class="modules">
+        <div class="module [type-X] [has-badges?]">
+          <span class="module-label">[MODULE_LABEL]</span>
+          <span class="tech-badges">
+            <span class="tech-badge">[BADGE_TEXT]</span>
+          </span>
+        </div>
+        <!-- more modules... -->
+      </div>
+    </div>
+  </foreignObject>
+</g>
 ```
-total_modules_w = sum of all module widths + MODULE_GAP * gaps
-start_x = layer_x + (layer_card_w - total_modules_w) / 2
 
-module_x[0] = start_x
-module_x[i] = module_x[i-1] + module_w[i-1] + MODULE_GAP
-module_y = layer_y + LAYER_PAD_TOP + 8   // 8px below layer label
+For `count: "multiple"` layers, add a stacked border:
+```svg
+<rect x="4" y="3" width="920" height="LAYER_H" rx="8"
+      fill="none" stroke="[color]" stroke-width="0.5" opacity="0.3"/>
 ```
 
 ## Step 4: Compute Connection Paths
 
-For each connection, draw a line from the source component to the target component.
+For each connection, compute SVG line endpoints from layer positions.
 
-### Source/Target Anchor Points
+### Arrow Anchor Points
 
-Each component has 4 anchor points:
 ```
-top_center    = (x + w/2, y)
-bottom_center = (x + w/2, y + h)
-left_center   = (x, y + h/2)
-right_center  = (x + w, y + h/2)
+source_bottom_center = (SVG_W/2, source_layer_y + source_layer_h)
+target_top_center    = (SVG_W/2, target_layer_y)
+```
+
+For connections between specific modules (not whole layers):
+```
+source_bottom = (estimated_module_center_x, source_layer_y + source_layer_h)
+target_top    = (estimated_module_center_x, target_layer_y)
 ```
 
 ### Connection Routing Rules
 
-1. **If source is above target**: Use `bottom_center` of source → `top_center` of target
-2. **If source is below target**: Use `top_center` of source → `bottom_center` of target
-3. **If source and target are in the same layer**: Use `right_center` of source → `left_center` of target
+1. **Adjacent layers** (directly above/below): straight vertical line
+   ```
+   <line x1="500" y1="source_bottom_y" x2="500" y2="target_top_y" .../>
+   ```
+
+2. **Skipping layers**: route along LEFT or RIGHT edge to avoid crossing intermediate layers
+   ```
+   <!-- Left edge route -->
+   <path d="M 60,SRC_Y L 20,SRC_Y L 20,TGT_Y L 60,TGT_Y" fill="none" .../>
+   <!-- Right edge route -->
+   <path d="M 940,SRC_Y L 980,SRC_Y L 980,TGT_Y L 940,TGT_Y" fill="none" .../>
+   ```
+
+3. **Same-layer connections**: horizontal line at module level
+   ```
+   <line x1="SOURCE_RIGHT_X" y1="MODULE_Y+25" x2="TARGET_LEFT_X" y2="MODULE_Y+25" .../>
+   ```
+
+**CRITICAL**: NEVER draw diagonal lines through intermediate layer cards. Always route around them.
 
 ### Connection Label Position
 
 ```
-label_x = (source_x + target_x) / 2
 label_y = (source_y + target_y) / 2
+label_x = midpoint of the line segment (or SVG_W/2 for vertical lines)
 ```
 
-Place a background rect behind the label text:
-```
-bg_rect_x = label_x - label_width/2 - 4
-bg_rect_y = label_y - 10
-bg_rect_w = label_width + 8
-bg_rect_h = 16
-```
+Use SVG `<text>` with `text-anchor="middle" dominant-baseline="central"` for labels.
 
 ## Step 5: Compute ViewBox
 
 ```
-viewBox_h = max(layer_y + layer_card_h for all layers)  // bottom of last layer
-            + LEGEND_OFFSET                               // gap before legend
-            + 50                                          // legend height
-            + 30                                          // bottom padding
+viewBox_h = last_layer_y + last_layer_h + LEGEND_OFFSET + 50 + 30
+viewBox = "0 0 1000 viewBox_h"
 ```
 
-```
-viewBox = "0 0 SVG_W viewBox_h"
-```
-
-Default: `"0 0 1000 620"`. Adjust `viewBox_h` based on actual content.
+Default: `"0 0 1000 620"`. Adjust based on actual content.
 
 ## Step 6: Position Legend
 
 ```
-legend_x = PAGE_MARGIN
-legend_y = max(layer_y + layer_card_h for all layers) + LEGEND_OFFSET
+legend_y = last_layer_y + last_layer_h + LEGEND_OFFSET
 ```
 
-Legend items are placed horizontally, 110px apart.
+Use foreignObject + CSS flexbox for legend layout:
+
+```svg
+<g transform="translate(40, LEGEND_Y)">
+  <foreignObject width="920" height="40">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <div style="font-size:11px; font-weight:600; color:[text-color]; margin-bottom:8px;">Legend</div>
+      <div class="legend-container">
+        <div class="legend-item">
+          <div class="legend-swatch type-process"></div>
+          <span class="legend-text">Process</span>
+        </div>
+        <!-- more items... -->
+      </div>
+    </div>
+  </foreignObject>
+</g>
+```
 
 ## Worked Example: Chrome Architecture
 
-### Input (simplified)
-- Layer 1: "Browser Process" → 3 modules (UI/Tabs, Network, Storage)
-- Layer 2: "Renderer Process" → 3 modules (Blink, V8, DOM/CSS)  
-- Layer 3: "GPU Process" → 1 module (OpenGL/Vulkan)
-- Layer 4: "Utility Process" → 2 modules (Audio, Plugin)
+### Layers
+| # | Label | Type | Has Badges? | Height |
+|---|-------|------|-------------|--------|
+| 0 | Browser Process | process | no | 101 |
+| 1 | Renderer Process | process | yes | 116 |
+| 2 | GPU Process | infra | no | 101 |
+| 3 | Utility Process | infra | no | 101 |
 
-### Calculation
-
-**Layer 1:**
-- Module widths: UI/Tabs=100, Network=100, Storage=100
-- Total modules w: 100+100+100 + 20*2 = 340
-- Layer card: w=920 (full width), h=35+50+16=101
-
-**Layer 2 (with badges):**
-- Module widths: Blink=100, V8=100, DOM/CSS=100
-- Total modules w: 100+100+100 + 20*2 = 340
-- Layer card: w=920, h=35+65+16=116
-- Stacked effect: extra 3px offset for duplicate border
-
-**Layer 3:**
-- Module width: OpenGL/Vulkan=130
-- Layer card: w=920, h=35+50+16=101
-
-**Layer 4:**
-- Module widths: Audio=100, Plugin/PPAPI=120
-- Layer card: w=920, h=35+50+16=101
-
-**Vertical positions:**
+### Y Positions
 ```
-layer_y[0] = 30
-layer_y[1] = 30 + 101 + 50 = 181
-layer_y[2] = 181 + 116 + 50 = 347
-layer_y[3] = 347 + 101 + 50 = 498
+layer_y[0] = 40
+layer_y[1] = 40 + 101 + 50 = 191
+layer_y[2] = 191 + 116 + 50 = 357
+layer_y[3] = 357 + 101 + 50 = 508
 ```
 
-**viewBox:** `"0 0 1000 620"` (620 = 498 + 101 + 50 + 30)
+### Connections
+| From → To | Type | Routing |
+|-----------|------|---------|
+| L0 → L1 | bidirectional IPC | straight: (500, 141) → (500, 191) |
+| L0 → L2 | dashed Command Buffer | left-edge route: skip L1 |
+| L1 → L2 | solid GPU Commands | straight: (500, 307) → (500, 357) |
+| L0 → L3 | bidirectional IPC | right-edge route: skip L1, L2 |
+
+### ViewBox
+```
+h = 508 + 101 + 50 + 50 + 30 = 739 → "0 0 1000 740"
+```
 
 ## Edge Cases
 
-### Multiple instances (`count: "multiple"`)
-- Draw a second border rect offset by (+4, +3) with lower opacity
-- This creates a stacked-card visual indicating multiplicity
-
-### Single module, wide label
-- Module width can exceed MODULE_MIN_W if the label is long
-- Cap at layer_card_w - LAYER_PAD_H * 2 to prevent overflow
-
 ### Too many modules in one layer (>5)
-- Reduce MODULE_GAP to 12px
-- If still overflowing, reduce module widths proportionally
+- Add class `module-compact` which reduces padding to `0 10px`
+- If still overflowing, split into two rows with a second `.modules` div
 
 ### No connections
 - Skip Step 4 entirely, layout is just stacked layers
 
-### Groups
-- Draw boundary rect around the bounding box of all children
+### Groups (security/region boundaries)
+- Draw SVG `<rect>` around the layers that belong to the group
 - Add 20px padding on each side
-- Position label at top-left of the boundary
+- Position SVG `<text>` label at top-left
+
+### Layer with no children
+- Set height to 60px (just the label)
+- Use `type-[layer_type]` for the border styling

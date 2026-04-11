@@ -35,54 +35,85 @@ All semi-transparent component boxes MUST have an opaque background rect underne
 - Connection label: 10px, fill #94a3b8 (slate-400)
 - Legend text: 11px, fill #cbd5e1 (slate-300)
 
-## Text Alignment (MANDATORY)
+## CSS Layout in SVG (MANDATORY)
 
-Every `<text>` element in the SVG MUST include these two attributes for proper alignment:
+Use `<foreignObject>` with CSS flexbox for all component layout. This eliminates coordinate arithmetic errors.
 
-```svg
-text-anchor="middle" dominant-baseline="central"
-```
+### Why CSS Layout
 
-This eliminates the need to manually calculate text offsets. Instead:
+LLMs cannot reliably compute pixel coordinates. CSS flexbox/grid handles:
+- **Module width**: `min-width: 100px; padding: 0 16px` → browser auto-sizes from label text
+- **Module centering**: `justify-content: center` → no `module_x` calculation needed
+- **Text centering**: `display: flex; align-items: center; justify-content: center` → no `text-anchor`/`dominant-baseline` math
+- **Equal spacing**: `gap: 20px` → guaranteed consistent gaps between modules
+- **Tech badges**: `display: inline-flex; gap: 4px` → auto-flow badges below labels
 
-- **Horizontal centering**: Set `x` to the center of the parent container. `text-anchor="middle"` handles the rest.
-- **Vertical centering**: Set `y` to the center of the parent container. `dominant-baseline="central"` handles the rest.
+### The foreignObject Pattern
 
-**Module label center calculation:**
-```
-text_x = module_x + module_width / 2
-text_y = module_y + module_height / 2
-```
-
-**Example (correct):**
-```svg
-<!-- Module box at (80, 75), size 140x50 -->
-<rect x="80" y="75" width="140" height="50" rx="6" fill="#0f172a"/>
-<rect x="80" y="75" width="140" height="50" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399"/>
-<text x="150" y="100" font-size="12" font-weight="500" fill="white"
-      font-family="JetBrains Mono, monospace"
-      text-anchor="middle" dominant-baseline="central">V8 Engine</text>
-```
-
-**Exception**: Layer labels and legend items that are left-aligned use `text-anchor="start"` instead.
-
-## Group Positioning Pattern
-
-Use `<g transform="translate(x,y)">` to position groups of elements. This reduces coordinate calculation errors:
+Every component box (layer card, module, legend) MUST use this pattern:
 
 ```svg
-<!-- Good: group pattern — compute position ONCE -->
-<g transform="translate(80, 75)">
-  <rect width="140" height="50" rx="6" fill="#0f172a"/>
-  <rect width="140" height="50" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399"/>
-  <text x="70" y="25" font-size="12" text-anchor="middle" dominant-baseline="central"
-        fill="white" font-family="JetBrains Mono, monospace">V8 Engine</text>
+<!-- Layer positioned via translate — only y-coordinate needs computing -->
+<g transform="translate(40, 40)">
+  <!-- Masking rect (required: hides arrows behind this layer) -->
+  <rect width="920" height="120" rx="8" fill="#0f172a"/>
+  <!-- foreignObject with HTML content -->
+  <foreignObject width="920" height="120">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="layer-card type-process">
+      <div class="layer-label">Browser Process</div>
+      <div class="modules">
+        <div class="module type-module"><span class="module-label">UI / Tabs</span></div>
+        <div class="module type-module"><span class="module-label">Network</span></div>
+        <div class="module type-data"><span class="module-label">Storage</span></div>
+      </div>
+    </div>
+  </foreignObject>
 </g>
 ```
 
-All inner coordinates are relative to the group origin (0,0), making centering trivial:
-- `text_x = width / 2`
-- `text_y = height / 2`
+**CRITICAL**: Every `<foreignObject>` MUST include `xmlns="http://www.w3.org/1999/xhtml"` on the root HTML element.
+
+### What CSS Handles vs What SVG Handles
+
+| Handled by CSS (no LLM math) | Handled by SVG (LLM computes) |
+|-------------------------------|-------------------------------|
+| Module width, height, padding | Arrow start/end x,y coordinates |
+| Text centering (flex) | Arrowhead markers (`<marker>`) |
+| Module spacing (flex gap) | Connection labels (SVG `<text>`) |
+| Module centering in layer | Grid background pattern |
+| Tech badge layout | Glow/filter effects |
+| Legend item spacing | Non-rectangular shapes (diamonds, etc.) |
+
+### CSS Classes (defined in each template's `<style>`)
+
+Each template defines these classes with style-appropriate colors:
+
+```css
+.layer-card { width:100%; border-radius:8px; padding:8px 0 12px; box-sizing:border-box; }
+.layer-label { font-size:14px; font-weight:600; padding:0 16px; }
+.modules { display:flex; gap:20px; justify-content:center; padding:8px 16px 0; flex-wrap:wrap; }
+.module { min-width:100px; height:50px; border-radius:6px; display:flex; align-items:center;
+          justify-content:center; padding:0 16px; box-sizing:border-box; }
+.module-label { font-size:12px; font-weight:500; text-align:center; white-space:nowrap; }
+.tech-badges { display:flex; gap:4px; justify-content:center; padding-top:4px; }
+.tech-badge { font-size:8px; padding:2px 6px; border-radius:4px; white-space:nowrap; }
+
+/* Type-specific colors (dark-professional example) */
+.type-process { background:rgba(8,51,68,0.4); border:1.5px solid #22d3ee; }
+.type-module { background:rgba(6,78,59,0.4); border:1.5px solid #34d399; }
+.type-data { background:rgba(76,29,149,0.4); border:1.5px solid #a78bfa; }
+.type-infra { background:rgba(120,53,15,0.3); border:1.5px solid #fbbf24; }
+.type-security { background:rgba(136,19,55,0.4); border:1.5px solid #fb7185; }
+.type-channel { background:rgba(251,146,60,0.3); border:1.5px solid #fb923c; }
+.type-external { background:rgba(30,41,59,0.5); border:1.5px solid #94a3b8; }
+```
+
+### When SVG `<text>` Is Still Needed
+
+For elements that cannot use foreignObject (connection labels, arrow labels), use SVG `<text>` with:
+```svg
+text-anchor="middle" dominant-baseline="central"
+```
 
 ## Spacing
 
