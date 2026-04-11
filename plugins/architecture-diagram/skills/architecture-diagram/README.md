@@ -2,6 +2,8 @@
 
 A Claude Code skill that generates professional diagrams from natural language descriptions. Supports 5 diagram types, 6 visual styles, and 4 output formats.
 
+Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
+
 ## Features
 
 - **5 diagram types**: Architecture, Flowchart, Mind Map, ER Diagram, Sequence Diagram
@@ -15,10 +17,15 @@ A Claude Code skill that generates professional diagrams from natural language d
 
 ### Install
 
-Add this repository as a local Claude Code marketplace, then install the `architecture-diagram` plugin from that marketplace:
+Clone this repository, add it as a local Claude Code marketplace, then install the `architecture-diagram` plugin from that marketplace:
 
 ```bash
-/plugin marketplace add .
+git clone https://github.com/ZeroZ-lab/gmdiagram.git
+cd gmdiagram
+```
+
+```bash
+/plugin marketplace add https://github.com/ZeroZ-lab/gmdiagram
 /plugin install architecture-diagram@gmdiagram-marketplace
 ```
 

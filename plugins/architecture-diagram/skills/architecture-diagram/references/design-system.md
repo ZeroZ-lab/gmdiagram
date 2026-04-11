@@ -119,15 +119,6 @@ All inner coordinates are relative to the group origin (0,0), making centering t
 - rx="4", height 16px
 - Text: 8px, fill #94a3b8
 
-## Summary Cards (bottom of page)
-
-Three cards in a row, each with:
-- Background: #0f172a (slate-900)
-- Border: 1px solid rgba(255,255,255,0.08)
-- Header dot: 8px circle, colored by primary type
-- Title: 13px, white, font-weight 500
-- Content: 11px, #94a3b8
-
 ## Page Structure
 
 ```
@@ -143,10 +134,6 @@ Three cards in a row, each with:
 │   │  Layer 3: [...]               │ │
 │   │  Legend                        │ │
 │   └───────────────────────────────┘ │
-│                                     │
-│ ┌─────┐  ┌─────┐  ┌─────┐         │
-│ │Card1│  │Card2│  │Card3│          │
-│ └─────┘  └─────┘  └─────┘         │
 │                                     │
 │ Footer                              │
 └─────────────────────────────────────┘

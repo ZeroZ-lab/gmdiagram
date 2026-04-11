@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chrome Multi-Process Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #020617;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .pulse-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #22d3ee;
+      box-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    h1 { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+    .subtitle { font-size: 13px; color: #64748b; margin-top: 4px; }
+    .diagram-container {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+    .diagram-container svg {
+      width: 100%;
+      min-width: 700px;
+      height: auto;
+      display: block;
+    }
+    .footer {
+      font-size: 11px;
+      color: #475569;
+      text-align: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="pulse-dot"></div>
+      <div>
+        <h1>Chrome Multi-Process Architecture</h1>
+        <div class="subtitle">Browser Process coordinates multiple subprocesses via IPC channels</div>
+      </div>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1000 740" xmlns="http://www.w3.org/2000/svg">
+        <!-- Defs -->
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(51, 65, 85, 0.3)" stroke-width="0.5"/>
+          </pattern>
+          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+          </marker>
+          <marker id="arrowhead-rev" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+            <polygon points="8 0, 0 3, 8 6" fill="#64748b"/>
+          </marker>
+          <marker id="arrowhead-orange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#fb923c"/>
+          </marker>
+          <marker id="arrowhead-orange-rev" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+            <polygon points="8 0, 0 3, 8 6" fill="#fb923c"/>
+          </marker>
+        </defs>
+
+        <!-- Grid background -->
+        <rect width="1000" height="740" fill="url(#grid)"/>
+
+        <!-- ========================================== -->
+        <!-- CONNECTIONS (drawn first, behind components) -->
+        <!-- ========================================== -->
+
+        <!-- Connection 1: Browser Process ↔ Renderer Process (IPC, bidirectional) -->
+        <!-- Source: bottom_center of L1 = (500, 141), Target: top_center of L2 = (500, 191) -->
+        <line x1="500" y1="141" x2="500" y2="191"
+              stroke="#fb923c" stroke-width="1.5"
+              marker-start="url(#arrowhead-orange-rev)" marker-end="url(#arrowhead-orange)"/>
+        <g transform="translate(500, 166)">
+          <rect x="-18" y="-9" width="36" height="18" rx="3" fill="#020617" opacity="0.9"/>
+          <text x="0" y="0" font-size="10" fill="#fb923c"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="middle" dominant-baseline="central">IPC</text>
+        </g>
+
+        <!-- Connection 2: Browser Process → GPU Process (Command Buffer, dashed, unidirectional) -->
+        <!-- Source: bottom of L1 at x=300 = (300, 141), Target: top of L3 at x=350 = (350, 357) -->
+        <line x1="300" y1="141" x2="350" y2="357"
+              stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,4"
+              marker-end="url(#arrowhead)"/>
+        <g transform="translate(325, 249)">
+          <rect x="-50" y="-9" width="100" height="18" rx="3" fill="#020617" opacity="0.9"/>
+          <text x="0" y="0" font-size="9" fill="#94a3b8"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="middle" dominant-baseline="central">Command Buffer</text>
+        </g>
+
+        <!-- Connection 3: Renderer Process → GPU Process (GPU Commands, unidirectional) -->
+        <!-- Source: bottom of L2 at x=350 = (350, 307), Target: top of L3 at x=350 = (350, 357) -->
+        <line x1="350" y1="307" x2="350" y2="357"
+              stroke="#64748b" stroke-width="1.5"
+              marker-end="url(#arrowhead)"/>
+        <g transform="translate(350, 332)">
+          <rect x="-48" y="-9" width="96" height="18" rx="3" fill="#020617" opacity="0.9"/>
+          <text x="0" y="0" font-size="9" fill="#94a3b8"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="middle" dominant-baseline="central">GPU Commands</text>
+        </g>
+
+        <!-- Connection 4: Browser Process ↔ Utility Process (IPC, bidirectional) -->
+        <!-- Source: bottom of L1 at x=700 = (700, 141), Target: top of L4 at x=700 = (700, 508) -->
+        <line x1="700" y1="141" x2="700" y2="508"
+              stroke="#fb923c" stroke-width="1.5"
+              marker-start="url(#arrowhead-orange-rev)" marker-end="url(#arrowhead-orange)"/>
+        <g transform="translate(700, 325)">
+          <rect x="-18" y="-9" width="36" height="18" rx="3" fill="#020617" opacity="0.9"/>
+          <text x="0" y="0" font-size="10" fill="#fb923c"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="middle" dominant-baseline="central">IPC</text>
+        </g>
+
+        <!-- ========================================== -->
+        <!-- LAYER 1: Browser Process                   -->
+        <!-- y=40, h=101, type=process                  -->
+        <!-- ========================================== -->
+        <g>
+          <!-- Masking rect -->
+          <rect x="40" y="40" width="920" height="101" rx="8" fill="#0f172a"/>
+          <!-- Styled layer card -->
+          <rect x="40" y="40" width="920" height="101" rx="8"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+          <!-- Layer label -->
+          <text x="60" y="58" font-size="14" font-weight="600" fill="white"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="start" dominant-baseline="central">Browser Process</text>
+
+          <!-- Modules: total_w=340, start_x = 40 + (920-340)/2 = 330 -->
+          <!-- module_y = 40 + 35 + 8 = 83 -->
+
+          <!-- Module: UI / Tabs (100x50) at (330, 83), type=module -->
+          <g transform="translate(330, 83)">
+            <rect width="100" height="50" rx="6" fill="#0f172a"/>
+            <rect width="100" height="50" rx="6"
+                  fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="50" y="25" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">UI / Tabs</text>
+          </g>
+
+          <!-- Module: Network (100x50) at (450, 83), type=module -->
+          <g transform="translate(450, 83)">
+            <rect width="100" height="50" rx="6" fill="#0f172a"/>
+            <rect width="100" height="50" rx="6"
+                  fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="50" y="25" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">Network</text>
+          </g>
+
+          <!-- Module: Storage (100x50) at (570, 83), type=data -->
+          <g transform="translate(570, 83)">
+            <rect width="100" height="50" rx="6" fill="#0f172a"/>
+            <rect width="100" height="50" rx="6"
+                  fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="50" y="25" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">Storage</text>
+          </g>
+        </g>
+
+        <!-- ========================================== -->
+        <!-- LAYER 2: Renderer Process (multiple)       -->
+        <!-- y=191, h=116, type=process, count=multiple -->
+        <!-- ========================================== -->
+        <g>
+          <!-- Masking rect -->
+          <rect x="40" y="191" width="920" height="116" rx="8" fill="#0f172a"/>
+          <!-- Styled layer card -->
+          <rect x="40" y="191" width="920" height="116" rx="8"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+          <!-- Stacked card effect for "multiple" -->
+          <rect x="44" y="194" width="920" height="116" rx="8"
+                fill="none" stroke="#22d3ee" stroke-width="0.5" opacity="0.3"/>
+          <!-- Layer label -->
+          <text x="60" y="209" font-size="14" font-weight="600" fill="white"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="start" dominant-baseline="central">Renderer Process</text>
+
+          <!-- Modules: Blink=100, V8 Engine=104, DOM/CSS=104, total=100+104+104+40=348 -->
+          <!-- start_x = 40 + (920-348)/2 = 326 -->
+          <!-- module_y = 191 + 35 + 8 = 234 -->
+
+          <!-- Module: Blink (100x65) at (326, 234), type=module, tech=["Rendering Engine"] -->
+          <g transform="translate(326, 234)">
+            <rect width="100" height="65" rx="6" fill="#0f172a"/>
+            <rect width="100" height="65" rx="6"
+                  fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="50" y="20" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">Blink</text>
+            <!-- Tech badge: "Rendering Engine" (15 chars * ~5px + 12 = 87) -->
+            <rect x="7" y="36" width="86" height="16" rx="4"
+                  fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+            <text x="50" y="44" font-size="8" fill="#94a3b8"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">Render Engine</text>
+          </g>
+
+          <!-- Module: V8 Engine (104x65) at (446, 234), type=module, tech=["JavaScript"] -->
+          <g transform="translate(446, 234)">
+            <rect width="104" height="65" rx="6" fill="#0f172a"/>
+            <rect width="104" height="65" rx="6"
+                  fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="52" y="20" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">V8 Engine</text>
+            <!-- Tech badge: "JavaScript" -->
+            <rect x="17" y="36" width="70" height="16" rx="4"
+                  fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+            <text x="52" y="44" font-size="8" fill="#94a3b8"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">JavaScript</text>
+          </g>
+
+          <!-- Module: DOM / CSS (104x65) at (570, 234), type=module -->
+          <g transform="translate(570, 234)">
+            <rect width="104" height="65" rx="6" fill="#0f172a"/>
+            <rect width="104" height="65" rx="6"
+                  fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="52" y="33" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">DOM / CSS</text>
+          </g>
+        </g>
+
+        <!-- ========================================== -->
+        <!-- LAYER 3: GPU Process                       -->
+        <!-- y=357, h=101, type=infra                   -->
+        <!-- ========================================== -->
+        <g>
+          <!-- Masking rect -->
+          <rect x="40" y="357" width="920" height="101" rx="8" fill="#0f172a"/>
+          <!-- Styled layer card -->
+          <rect x="40" y="357" width="920" height="101" rx="8"
+                fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1"/>
+          <!-- Layer label -->
+          <text x="60" y="375" font-size="14" font-weight="600" fill="white"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="start" dominant-baseline="central">GPU Process</text>
+
+          <!-- Module: OpenGL / Vulkan (152x50) at center, start_x = 40+(920-152)/2 = 424 -->
+          <!-- module_y = 357 + 35 + 8 = 400 -->
+          <g transform="translate(424, 400)">
+            <rect width="152" height="50" rx="6" fill="#0f172a"/>
+            <rect width="152" height="50" rx="6"
+                  fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="76" y="25" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">OpenGL / Vulkan</text>
+          </g>
+        </g>
+
+        <!-- ========================================== -->
+        <!-- LAYER 4: Utility Process                   -->
+        <!-- y=508, h=101, type=infra                   -->
+        <!-- ========================================== -->
+        <g>
+          <!-- Masking rect -->
+          <rect x="40" y="508" width="920" height="101" rx="8" fill="#0f172a"/>
+          <!-- Styled layer card -->
+          <rect x="40" y="508" width="920" height="101" rx="8"
+                fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1"/>
+          <!-- Layer label -->
+          <text x="60" y="526" font-size="14" font-weight="600" fill="white"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="start" dominant-baseline="central">Utility Process</text>
+
+          <!-- Modules: Audio=100, Plugin/PPAPI=144, total=100+144+20=264 -->
+          <!-- start_x = 40 + (920-264)/2 = 368 -->
+          <!-- module_y = 508 + 35 + 8 = 551 -->
+
+          <!-- Module: Audio (100x50) at (368, 551), type=module -->
+          <g transform="translate(368, 551)">
+            <rect width="100" height="50" rx="6" fill="#0f172a"/>
+            <rect width="100" height="50" rx="6"
+                  fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="50" y="25" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">Audio</text>
+          </g>
+
+          <!-- Module: Plugin / PPAPI (144x50) at (488, 551), type=module -->
+          <g transform="translate(488, 551)">
+            <rect width="144" height="50" rx="6" fill="#0f172a"/>
+            <rect width="144" height="50" rx="6"
+                  fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="72" y="25" font-size="12" font-weight="500" fill="white"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="middle" dominant-baseline="central">Plugin / PPAPI</text>
+          </g>
+        </g>
+
+        <!-- ========================================== -->
+        <!-- LEGEND                                     -->
+        <!-- y = 508+101+50 = 659                       -->
+        <!-- ========================================== -->
+        <g transform="translate(40, 659)">
+          <text x="0" y="0" font-size="11" font-weight="600" fill="#cbd5e1"
+                font-family="JetBrains Mono, monospace"
+                text-anchor="start" dominant-baseline="central">Legend</text>
+
+          <!-- Legend items, spaced 110px apart, at y=20 -->
+          <!-- Process -->
+          <g transform="translate(0, 20)">
+            <rect width="14" height="14" rx="3" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee"/>
+            <text x="20" y="7" font-size="11" fill="#cbd5e1"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="start" dominant-baseline="central">Process</text>
+          </g>
+          <!-- Module -->
+          <g transform="translate(110, 20)">
+            <rect width="14" height="14" rx="3" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399"/>
+            <text x="20" y="7" font-size="11" fill="#cbd5e1"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="start" dominant-baseline="central">Module</text>
+          </g>
+          <!-- Data / Storage -->
+          <g transform="translate(220, 20)">
+            <rect width="14" height="14" rx="3" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa"/>
+            <text x="20" y="7" font-size="11" fill="#cbd5e1"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="start" dominant-baseline="central">Data</text>
+          </g>
+          <!-- Infrastructure -->
+          <g transform="translate(310, 20)">
+            <rect width="14" height="14" rx="3" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24"/>
+            <text x="20" y="7" font-size="11" fill="#cbd5e1"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="start" dominant-baseline="central">Infra</text>
+          </g>
+          <!-- IPC Channel -->
+          <g transform="translate(400, 20)">
+            <rect width="14" height="14" rx="3" fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c"/>
+            <text x="20" y="7" font-size="11" fill="#cbd5e1"
+                  font-family="JetBrains Mono, monospace"
+                  text-anchor="start" dominant-baseline="central">IPC Channel</text>
+          </g>
+        </g>
+
+      </svg>
+    </div>
+
+    <div class="footer">
+      Generated by gmdiagram &middot; 2026-04-12
+    </div>
+  </div>
+</body>
+</html>

@@ -13,7 +13,7 @@
       min-height: 100vh;
       padding: 40px 20px;
     }
-    .container { max-width: 960px; margin: 0 auto; }
+    .container { max-width: 1100px; margin: 0 auto; }
     .header {
       display: flex;
       align-items: center;
@@ -52,44 +52,6 @@
       height: auto;
       display: block;
     }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 30px;
-    }
-    .card {
-      background: #fffdf7;
-      border: 2px solid #d5c4a1;
-      border-radius: 10px;
-      padding: 18px;
-      box-shadow: 3px 3px 0px rgba(180, 83, 9, 0.1);
-    }
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .card-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-    }
-    .card-dot.green { background: #15803d; }
-    .card-dot.purple { background: #7e22ce; }
-    .card-dot.amber { background: #b45309; }
-    .card-dot.rose { background: #be123c; }
-    .card-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #3c3836;
-      font-family: system-ui, -apple-system, sans-serif;
-    }
-    .card-content {
-      font-size: 13px;
-      color: #78716c;
-      line-height: 1.6;
-      font-family: system-ui, -apple-system, sans-serif;
-    }
     .footer {
       font-size: 11px;
       color: #a89984;
@@ -113,14 +75,7 @@
     <div class="diagram-container">
       <svg viewBox="0 0 1200 832" xmlns="http://www.w3.org/2000/svg">
 
-        <!-- Defs -->
-        <defs>
-          <filter id="warm-shadow" x="-10%" y="-10%" width="130%" height="130%">
-            <feDropShadow dx="2" dy="2" stdDeviation="0" flood-color="rgba(180,83,9,0.1)"/>
-          </filter>
-        </defs>
-
-        <!-- Decorative accents (corners + midpoints) -->
+        <!-- === Decorative accents === -->
         <circle cx="30" cy="30" r="4" fill="#fef3c7" stroke="#d5c4a1" stroke-width="1"/>
         <circle cx="1170" cy="30" r="3" fill="#dcfce7" stroke="#d5c4a1" stroke-width="1"/>
         <circle cx="30" cy="802" r="3" fill="#f3e8ff" stroke="#d5c4a1" stroke-width="1"/>
@@ -128,359 +83,381 @@
         <circle cx="600" cy="30" r="2.5" fill="#fff7ed" stroke="#d5c4a1" stroke-width="0.8"/>
         <circle cx="600" cy="802" r="2.5" fill="#fff1f2" stroke="#d5c4a1" stroke-width="0.8"/>
 
-        <!-- ============================================================ -->
-        <!-- CONNECTIONS (drawn first, behind nodes)                      -->
-        <!-- ============================================================ -->
+        <!-- ============================================= -->
+        <!-- CONNECTIONS (drawn first, behind all nodes)   -->
+        <!-- ============================================= -->
 
-        <!-- === Central node to Level 1 branches === -->
-
-        <!-- Central -> Diagram Types (right, green) -->
+        <!-- Central node -> Diagram Types (right, emerald) -->
         <path d="M 650,416 C 690,416 730,230 770,230"
-              fill="none" stroke="#15803d" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+              fill="none" stroke="#34d399" stroke-width="2" opacity="0.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Central -> Visual Styles (right, purple) -->
+        <!-- Central node -> Visual Styles (right, violet) -->
         <path d="M 650,416 C 690,416 730,571 770,571"
-              fill="none" stroke="#7e22ce" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+              fill="none" stroke="#a78bfa" stroke-width="2" opacity="0.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Central -> Output Formats (left, amber) -->
+        <!-- Central node -> Output Formats (left, amber) -->
         <path d="M 550,416 C 510,416 430,323 430,323"
-              fill="none" stroke="#b45309" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+              fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Central -> Icon System (left, rose) -->
+        <!-- Central node -> Icon System (left, rose) -->
         <path d="M 550,416 C 510,416 430,540 430,540"
-              fill="none" stroke="#be123c" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+              fill="none" stroke="#fb7185" stroke-width="2" opacity="0.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- === Diagram Types -> children (right, light green) === -->
-        <!-- Parent right edge: x=890, child left edge: x=930 -->
+        <!-- Diagram Types -> Architecture -->
+        <path d="M 922,230 C 962,230 962,106 1002,106"
+              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Diagram Types -> Mind Map -->
+        <path d="M 922,230 C 962,230 962,168 1002,168"
+              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Diagram Types -> Flowchart -->
+        <path d="M 922,230 C 962,230 962,230 1002,230"
+              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Diagram Types -> Sequence -->
+        <path d="M 922,230 C 962,230 962,292 1002,292"
+              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Diagram Types -> ER Diagram -->
+        <path d="M 922,230 C 962,230 962,354 1002,354"
+              fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Diagram Types -> Architecture (child center y=106) -->
-        <path d="M 890,230 C 930,230 890,106 930,106"
-              fill="none" stroke="#22c55e" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Visual Styles -> Dark Professional -->
+        <path d="M 914,571 C 954,571 954,416 994,416"
+              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Visual Styles -> Hand-Drawn -->
+        <path d="M 914,571 C 954,571 954,478 994,478"
+              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Visual Styles -> Light Corporate -->
+        <path d="M 914,571 C 954,571 954,540 994,540"
+              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Visual Styles -> Cyberpunk Neon -->
+        <path d="M 914,571 C 954,571 954,602 994,602"
+              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Visual Styles -> Blueprint -->
+        <path d="M 914,571 C 954,571 954,664 994,664"
+              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Visual Styles -> Warm Cozy -->
+        <path d="M 914,571 C 954,571 954,726 994,726"
+              fill="none" stroke="#c4b5fd" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Diagram Types -> Mind Map (child center y=168) -->
-        <path d="M 890,230 C 930,230 890,168 930,168"
-              fill="none" stroke="#22c55e" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Output Formats -> HTML -->
+        <path d="M 430,323 C 390,323 290,288 238,288"
+              fill="none" stroke="#fcd34d" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Output Formats -> SVG -->
+        <path d="M 430,323 C 390,323 290,323 238,323"
+              fill="none" stroke="#fcd34d" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Output Formats -> PNG -->
+        <path d="M 430,323 C 390,323 290,358 238,358"
+              fill="none" stroke="#fcd34d" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Output Formats -> PDF -->
+        <path d="M 430,323 C 390,323 290,393 238,393"
+              fill="none" stroke="#fcd34d" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Diagram Types -> Flowchart (child center y=230) -->
-        <path d="M 890,230 C 930,230 890,230 930,230"
-              fill="none" stroke="#22c55e" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Icon System -> DevIcons -->
+        <path d="M 430,540 C 390,540 286,524 246,524"
+              fill="none" stroke="#fda4af" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Icon System -> Simple Icons -->
+        <path d="M 430,540 C 390,540 286,540 246,540"
+              fill="none" stroke="#fda4af" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Icon System -> Custom SVG -->
+        <path d="M 430,540 C 390,540 286,556 246,556"
+              fill="none" stroke="#fda4af" stroke-width="1.5" opacity="0.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- Diagram Types -> Sequence (child center y=292) -->
-        <path d="M 890,230 C 930,230 890,292 930,292"
-              fill="none" stroke="#22c55e" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- ============================================= -->
+        <!-- CENTRAL NODE                                   -->
+        <!-- ============================================= -->
+        <g transform="translate(600, 416)">
+          <circle cx="0" cy="0" r="50"
+                  fill="#b45309" stroke="#92400e" stroke-width="2.5"
+                  style="filter: drop-shadow(3px 3px 0px rgba(180,83,9,0.2))"/>
+          <text x="0" y="0" font-size="15" font-weight="700" fill="#fffdf7"
+                font-family="Georgia, serif"
+                text-anchor="middle" dominant-baseline="central">gmdiagram</text>
+        </g>
 
-        <!-- Diagram Types -> ER Diagram (child center y=354) -->
-        <path d="M 890,230 C 930,230 890,354 930,354"
-              fill="none" stroke="#22c55e" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- ============================================= -->
+        <!-- RIGHT SIDE: LEVEL 1 BRANCHES                   -->
+        <!-- ============================================= -->
 
-        <!-- === Visual Styles -> children (right, light purple) === -->
-        <!-- Parent right edge: x=890, child left edge: x=930 -->
+        <!-- Diagram Types (w=152, x=770, y=214) -->
+        <g transform="translate(770, 214)">
+          <rect x="0" y="0" width="152" height="32" rx="12"
+                fill="#dcfce7" stroke="#15803d" stroke-width="2"
+                style="filter: drop-shadow(2px 2px 0px rgba(21,128,61,0.1))"/>
+          <text x="76" y="16" font-size="12" font-weight="600" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Diagram Types</text>
+        </g>
 
-        <!-- Visual Styles -> Dark Professional (child center y=416) -->
-        <path d="M 890,571 C 930,571 890,416 930,416"
-              fill="none" stroke="#8b5cf6" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Visual Styles (w=144, x=770, y=555) -->
+        <g transform="translate(770, 555)">
+          <rect x="0" y="0" width="144" height="32" rx="12"
+                fill="#f3e8ff" stroke="#7e22ce" stroke-width="2"
+                style="filter: drop-shadow(2px 2px 0px rgba(126,34,206,0.1))"/>
+          <text x="72" y="16" font-size="12" font-weight="600" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Visual Styles</text>
+        </g>
 
-        <!-- Visual Styles -> Hand-Drawn (child center y=478) -->
-        <path d="M 890,571 C 930,571 890,478 930,478"
-              fill="none" stroke="#8b5cf6" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- ============================================= -->
+        <!-- RIGHT SIDE: LEVEL 2 (Diagram Types children)   -->
+        <!-- ============================================= -->
 
-        <!-- Visual Styles -> Light Corporate (child center y=540) -->
-        <path d="M 890,571 C 930,571 890,540 930,540"
-              fill="none" stroke="#8b5cf6" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Architecture (w=120, x=1002, y=90) -->
+        <g transform="translate(1002, 90)">
+          <rect x="0" y="0" width="120" height="32" rx="10"
+                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
+          <text x="60" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Architecture</text>
+        </g>
 
-        <!-- Visual Styles -> Cyberpunk Neon (child center y=602) -->
-        <path d="M 890,571 C 930,571 890,602 930,602"
-              fill="none" stroke="#8b5cf6" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Mind Map (w=96, x=1002, y=152) -->
+        <g transform="translate(1002, 152)">
+          <rect x="0" y="0" width="96" height="32" rx="10"
+                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
+          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Mind Map</text>
+        </g>
 
-        <!-- Visual Styles -> Blueprint (child center y=664) -->
-        <path d="M 890,571 C 930,571 890,664 930,664"
-              fill="none" stroke="#8b5cf6" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Flowchart (w=96, x=1002, y=214) -->
+        <g transform="translate(1002, 214)">
+          <rect x="0" y="0" width="96" height="32" rx="10"
+                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
+          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Flowchart</text>
+        </g>
 
-        <!-- Visual Styles -> Warm Cozy (child center y=726) -->
-        <path d="M 890,571 C 930,571 890,726 930,726"
-              fill="none" stroke="#8b5cf6" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Sequence (w=96, x=1002, y=276) -->
+        <g transform="translate(1002, 276)">
+          <rect x="0" y="0" width="96" height="32" rx="10"
+                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
+          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Sequence</text>
+        </g>
 
-        <!-- === Output Formats -> children (left, light amber) === -->
-        <!-- Parent left edge: x=330, child right edge: x=290 -->
-        <!-- Left formula: M x1,y1 C (x1-40),y1 (x2+40),y2 x2,y2 -->
+        <!-- ER Diagram (w=104, x=1002, y=338) -->
+        <g transform="translate(1002, 338)">
+          <rect x="0" y="0" width="104" height="32" rx="10"
+                fill="#fffdf7" stroke="#6ee7b7" stroke-width="1.5"/>
+          <text x="52" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">ER Diagram</text>
+        </g>
 
-        <!-- Output Formats -> HTML (child right edge x=290, center y=230) -->
-        <path d="M 330,323 C 290,323 330,230 290,230"
-              fill="none" stroke="#d97706" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- ============================================= -->
+        <!-- RIGHT SIDE: LEVEL 2 (Visual Styles children)   -->
+        <!-- ============================================= -->
 
-        <!-- Output Formats -> SVG (child right edge x=290, center y=292) -->
-        <path d="M 330,323 C 290,323 330,292 290,292"
-              fill="none" stroke="#d97706" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Dark Professional (w=144, x=994, y=400) -->
+        <g transform="translate(994, 400)">
+          <rect x="0" y="0" width="144" height="32" rx="10"
+                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
+          <text x="72" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Dark Professional</text>
+        </g>
 
-        <!-- Output Formats -> PNG (child right edge x=290, center y=354) -->
-        <path d="M 330,323 C 290,323 330,354 290,354"
-              fill="none" stroke="#d97706" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Hand-Drawn (w=112, x=994, y=462) -->
+        <g transform="translate(994, 462)">
+          <rect x="0" y="0" width="112" height="32" rx="10"
+                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
+          <text x="56" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Hand-Drawn</text>
+        </g>
 
-        <!-- Output Formats -> PDF (child right edge x=290, center y=416) -->
-        <path d="M 330,323 C 290,323 330,416 290,416"
-              fill="none" stroke="#d97706" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Light Corporate (w=128, x=994, y=524) -->
+        <g transform="translate(994, 524)">
+          <rect x="0" y="0" width="128" height="32" rx="10"
+                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
+          <text x="64" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Light Corporate</text>
+        </g>
 
-        <!-- === Icon System -> children (left, light rose) === -->
-        <!-- Parent left edge: x=340, child right edges vary -->
-        <!-- Left formula: M x1,y1 C (x1-40),y1 (x2+40),y2 x2,y2 -->
+        <!-- Cyberpunk Neon (w=128, x=994, y=586) -->
+        <g transform="translate(994, 586)">
+          <rect x="0" y="0" width="128" height="32" rx="10"
+                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
+          <text x="64" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Cyberpunk Neon</text>
+        </g>
 
-        <!-- Icon System -> DevIcons (child right edge x=310, center y=478) -->
-        <path d="M 340,540 C 300,540 350,478 310,478"
-              fill="none" stroke="#e11d48" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Blueprint (w=96, x=994, y=648) -->
+        <g transform="translate(994, 648)">
+          <rect x="0" y="0" width="96" height="32" rx="10"
+                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
+          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Blueprint</text>
+        </g>
 
-        <!-- Icon System -> Simple Icons (child right edge x=310, center y=540) -->
-        <path d="M 340,540 C 300,540 350,540 310,540"
-              fill="none" stroke="#e11d48" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- Warm Cozy (w=96, x=994, y=710) -->
+        <g transform="translate(994, 710)">
+          <rect x="0" y="0" width="96" height="32" rx="10"
+                fill="#fffdf7" stroke="#c4b5fd" stroke-width="1.5"/>
+          <text x="48" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Warm Cozy</text>
+        </g>
 
-        <!-- Icon System -> Custom SVG (child right edge x=310, center y=602) -->
-        <path d="M 340,540 C 300,540 350,602 310,602"
-              fill="none" stroke="#e11d48" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+        <!-- ============================================= -->
+        <!-- LEFT SIDE: LEVEL 1 BRANCHES                    -->
+        <!-- ============================================= -->
 
-        <!-- ============================================================ -->
-        <!-- CENTRAL NODE                                                 -->
-        <!-- ============================================================ -->
+        <!-- Output Formats (w=100, x=430, y=307) -->
+        <g transform="translate(430, 307)">
+          <rect x="0" y="0" width="100" height="32" rx="12"
+                fill="#fef3c7" stroke="#b45309" stroke-width="2"
+                style="filter: drop-shadow(2px 2px 0px rgba(180,83,9,0.1))"/>
+          <text x="50" y="16" font-size="12" font-weight="600" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Output Formats</text>
+        </g>
 
-        <rect x="530" y="386" width="140" height="60" rx="16"
-              fill="#fffdf7" stroke="#b45309" stroke-width="3"
-              filter="url(#warm-shadow)"/>
-        <text x="600" y="412" font-size="15" font-weight="700" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">gmdiagram</text>
-        <text x="600" y="430" font-size="9" fill="#78716c"
-              font-family="system-ui, sans-serif" text-anchor="middle">Skill Engine</text>
+        <!-- Icon System (w=96, x=430, y=524) -->
+        <g transform="translate(430, 524)">
+          <rect x="0" y="0" width="96" height="32" rx="12"
+                fill="#fff1f2" stroke="#be123c" stroke-width="2"
+                style="filter: drop-shadow(2px 2px 0px rgba(190,18,60,0.1))"/>
+          <text x="48" y="16" font-size="12" font-weight="600" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Icon System</text>
+        </g>
 
-        <!-- ============================================================ -->
-        <!-- RIGHT SIDE - LEVEL 1 BRANCHES                                -->
-        <!-- ============================================================ -->
+        <!-- ============================================= -->
+        <!-- LEFT SIDE: LEVEL 2 (Output Formats children)   -->
+        <!-- ============================================= -->
 
-        <!-- Diagram Types (green) y=214 center=230 -->
-        <rect x="770" y="214" width="120" height="32" rx="12"
-              fill="#dcfce7" stroke="#15803d" stroke-width="2"
-              filter="url(#warm-shadow)"/>
-        <text x="830" y="234" font-size="12" font-weight="600" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Diagram Types</text>
+        <!-- HTML (w=60, x=178, y=272) -->
+        <g transform="translate(178, 272)">
+          <rect x="0" y="0" width="60" height="32" rx="10"
+                fill="#fffdf7" stroke="#fcd34d" stroke-width="1.5"/>
+          <text x="30" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">HTML</text>
+        </g>
 
-        <!-- Visual Styles (purple) y=555 center=571 -->
-        <rect x="770" y="555" width="120" height="32" rx="12"
-              fill="#f3e8ff" stroke="#7e22ce" stroke-width="2"
-              filter="url(#warm-shadow)"/>
-        <text x="830" y="575" font-size="12" font-weight="600" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Visual Styles</text>
+        <!-- SVG (w=60, x=178, y=307) -->
+        <g transform="translate(178, 307)">
+          <rect x="0" y="0" width="60" height="32" rx="10"
+                fill="#fffdf7" stroke="#fcd34d" stroke-width="1.5"/>
+          <text x="30" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">SVG</text>
+        </g>
 
-        <!-- ============================================================ -->
-        <!-- RIGHT SIDE - LEVEL 2 BRANCHES: Diagram Types children        -->
-        <!-- (green lighter: stroke #22c55e, fill #bbf7d0)                -->
-        <!-- x=890, start_y=90                                            -->
-        <!-- ============================================================ -->
+        <!-- PNG (w=60, x=178, y=342) -->
+        <g transform="translate(178, 342)">
+          <rect x="0" y="0" width="60" height="32" rx="10"
+                fill="#fffdf7" stroke="#fcd34d" stroke-width="1.5"/>
+          <text x="30" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">PNG</text>
+        </g>
 
-        <!-- Architecture: y=90, center=106 -->
-        <rect x="930" y="90" width="110" height="32" rx="10"
-              fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
-        <text x="985" y="110" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Architecture</text>
+        <!-- PDF (w=60, x=178, y=377) -->
+        <g transform="translate(178, 377)">
+          <rect x="0" y="0" width="60" height="32" rx="10"
+                fill="#fffdf7" stroke="#fcd34d" stroke-width="1.5"/>
+          <text x="30" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">PDF</text>
+        </g>
 
-        <!-- Mind Map: y=152, center=168 -->
-        <rect x="930" y="152" width="100" height="32" rx="10"
-              fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
-        <text x="980" y="172" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Mind Map</text>
+        <!-- ============================================= -->
+        <!-- LEFT SIDE: LEVEL 2 (Icon System children)      -->
+        <!-- ============================================= -->
 
-        <!-- Flowchart: y=214, center=230 -->
-        <rect x="930" y="214" width="100" height="32" rx="10"
-              fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
-        <text x="980" y="234" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Flowchart</text>
+        <!-- DevIcons (w=80, x=166, y=508) -->
+        <g transform="translate(166, 508)">
+          <rect x="0" y="0" width="80" height="32" rx="10"
+                fill="#fffdf7" stroke="#fda4af" stroke-width="1.5"/>
+          <text x="40" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">DevIcons</text>
+        </g>
 
-        <!-- Sequence: y=276, center=292 -->
-        <rect x="930" y="276" width="100" height="32" rx="10"
-              fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
-        <text x="980" y="296" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Sequence</text>
+        <!-- Simple Icons (w=104, x=142, y=524) -->
+        <g transform="translate(142, 524)">
+          <rect x="0" y="0" width="104" height="32" rx="10"
+                fill="#fffdf7" stroke="#fda4af" stroke-width="1.5"/>
+          <text x="52" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Simple Icons</text>
+        </g>
 
-        <!-- ER Diagram: y=338, center=354 -->
-        <rect x="930" y="338" width="100" height="32" rx="10"
-              fill="#bbf7d0" stroke="#22c55e" stroke-width="1.5"/>
-        <text x="980" y="358" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">ER Diagram</text>
+        <!-- Custom SVG (w=104, x=142, y=540) -->
+        <g transform="translate(142, 540)">
+          <rect x="0" y="0" width="104" height="32" rx="10"
+                fill="#fffdf7" stroke="#fda4af" stroke-width="1.5"/>
+          <text x="52" y="16" font-size="11" font-weight="500" fill="#3c3836"
+                font-family="system-ui, sans-serif"
+                text-anchor="middle" dominant-baseline="central">Custom SVG</text>
+        </g>
 
-        <!-- ============================================================ -->
-        <!-- RIGHT SIDE - LEVEL 2 BRANCHES: Visual Styles children        -->
-        <!-- (purple lighter: stroke #8b5cf6, fill #e9d5ff)               -->
-        <!-- x=890, start_y=400                                           -->
-        <!-- ============================================================ -->
-
-        <!-- Dark Professional: y=400, center=416 -->
-        <rect x="930" y="400" width="130" height="32" rx="10"
-              fill="#e9d5ff" stroke="#8b5cf6" stroke-width="1.5"/>
-        <text x="995" y="420" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Dark Professional</text>
-
-        <!-- Hand-Drawn: y=462, center=478 -->
-        <rect x="930" y="462" width="110" height="32" rx="10"
-              fill="#e9d5ff" stroke="#8b5cf6" stroke-width="1.5"/>
-        <text x="985" y="482" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Hand-Drawn</text>
-
-        <!-- Light Corporate: y=524, center=540 -->
-        <rect x="930" y="524" width="120" height="32" rx="10"
-              fill="#e9d5ff" stroke="#8b5cf6" stroke-width="1.5"/>
-        <text x="990" y="544" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Light Corporate</text>
-
-        <!-- Cyberpunk Neon: y=586, center=602 -->
-        <rect x="930" y="586" width="120" height="32" rx="10"
-              fill="#e9d5ff" stroke="#8b5cf6" stroke-width="1.5"/>
-        <text x="990" y="606" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Cyberpunk Neon</text>
-
-        <!-- Blueprint: y=648, center=664 -->
-        <rect x="930" y="648" width="100" height="32" rx="10"
-              fill="#e9d5ff" stroke="#8b5cf6" stroke-width="1.5"/>
-        <text x="980" y="668" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Blueprint</text>
-
-        <!-- Warm Cozy: y=710, center=726 -->
-        <rect x="930" y="710" width="100" height="32" rx="10"
-              fill="#e9d5ff" stroke="#8b5cf6" stroke-width="1.5"/>
-        <text x="980" y="730" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Warm Cozy</text>
-
-        <!-- ============================================================ -->
-        <!-- LEFT SIDE - LEVEL 1 BRANCHES                                 -->
-        <!-- ============================================================ -->
-
-        <!-- Output Formats (amber) x=330 w=100 y=307 center=323 -->
-        <rect x="330" y="307" width="100" height="32" rx="12"
-              fill="#fef3c7" stroke="#b45309" stroke-width="2"
-              filter="url(#warm-shadow)"/>
-        <text x="380" y="327" font-size="12" font-weight="600" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Output Formats</text>
-
-        <!-- Icon System (rose) x=340 w=90 y=524 center=540 -->
-        <rect x="340" y="524" width="90" height="32" rx="12"
-              fill="#fff1f2" stroke="#be123c" stroke-width="2"
-              filter="url(#warm-shadow)"/>
-        <text x="385" y="544" font-size="12" font-weight="600" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Icon System</text>
-
-        <!-- ============================================================ -->
-        <!-- LEFT SIDE - LEVEL 2 BRANCHES: Output Formats children        -->
-        <!-- (amber lighter: stroke #d97706, fill #fde68a)                -->
-        <!-- x=250 w=60, start_y=214                                     -->
-        <!-- ============================================================ -->
-
-        <!-- HTML: y=214, center=230 -->
-        <rect x="230" y="214" width="60" height="32" rx="10"
-              fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
-        <text x="260" y="234" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">HTML</text>
-
-        <!-- SVG: y=276, center=292 -->
-        <rect x="230" y="276" width="60" height="32" rx="10"
-              fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
-        <text x="260" y="296" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">SVG</text>
-
-        <!-- PNG: y=338, center=354 -->
-        <rect x="230" y="338" width="60" height="32" rx="10"
-              fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
-        <text x="260" y="358" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">PNG</text>
-
-        <!-- PDF: y=400, center=416 -->
-        <rect x="230" y="400" width="60" height="32" rx="10"
-              fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
-        <text x="260" y="420" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">PDF</text>
-
-        <!-- ============================================================ -->
-        <!-- LEFT SIDE - LEVEL 2 BRANCHES: Icon System children           -->
-        <!-- (rose lighter: stroke #e11d48, fill #fecdd3)                 -->
-        <!-- x=230 w=80, start_y=462                                     -->
-        <!-- ============================================================ -->
-
-        <!-- DevIcons: y=462, center=478, w=80, right edge=310 -->
-        <rect x="230" y="462" width="80" height="32" rx="10"
-              fill="#fecdd3" stroke="#e11d48" stroke-width="1.5"/>
-        <text x="270" y="482" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">DevIcons</text>
-
-        <!-- Simple Icons: y=524, center=540, w=90, right edge=310 -->
-        <rect x="220" y="524" width="90" height="32" rx="10"
-              fill="#fecdd3" stroke="#e11d48" stroke-width="1.5"/>
-        <text x="265" y="544" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Simple Icons</text>
-
-        <!-- Custom SVG: y=586, center=602, w=80, right edge=310 -->
-        <rect x="230" y="586" width="80" height="32" rx="10"
-              fill="#fecdd3" stroke="#e11d48" stroke-width="1.5"/>
-        <text x="270" y="606" font-size="11" font-weight="500" fill="#3c3836"
-              font-family="Georgia, serif" text-anchor="middle">Custom SVG</text>
-
-        <!-- ============================================================ -->
-        <!-- LEGEND                                                       -->
-        <!-- ============================================================ -->
-
+        <!-- ============================================= -->
+        <!-- LEGEND                                         -->
+        <!-- ============================================= -->
         <g transform="translate(330, 790)">
-          <text x="0" y="0" font-size="11" font-weight="600" fill="#78716c" font-family="system-ui, sans-serif">Legend</text>
+          <text x="0" y="0" font-size="11" font-weight="600" fill="#78716c"
+                font-family="system-ui, sans-serif">Legend</text>
 
-          <!-- Diagram Types (green) -->
-          <rect x="60" y="-12" width="14" height="14" rx="3" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
-          <text x="80" y="0" font-size="11" fill="#78716c" font-family="system-ui, sans-serif">Diagram Types</text>
+          <!-- Diagram Types -->
+          <rect x="0" y="12" width="14" height="14" rx="3"
+                fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <text x="20" y="23" font-size="11" fill="#78716c"
+                font-family="system-ui, sans-serif"
+                text-anchor="start" dominant-baseline="central">Diagram Types</text>
 
-          <!-- Visual Styles (purple) -->
-          <rect x="195" y="-12" width="14" height="14" rx="3" fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.5"/>
-          <text x="215" y="0" font-size="11" fill="#78716c" font-family="system-ui, sans-serif">Visual Styles</text>
+          <!-- Visual Styles -->
+          <rect x="130" y="12" width="14" height="14" rx="3"
+                fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.5"/>
+          <text x="150" y="23" font-size="11" fill="#78716c"
+                font-family="system-ui, sans-serif"
+                text-anchor="start" dominant-baseline="central">Visual Styles</text>
 
-          <!-- Output Formats (amber) -->
-          <rect x="325" y="-12" width="14" height="14" rx="3" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
-          <text x="345" y="0" font-size="11" fill="#78716c" font-family="system-ui, sans-serif">Output Formats</text>
+          <!-- Output Formats -->
+          <rect x="260" y="12" width="14" height="14" rx="3"
+                fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <text x="280" y="23" font-size="11" fill="#78716c"
+                font-family="system-ui, sans-serif"
+                text-anchor="start" dominant-baseline="central">Output Formats</text>
 
-          <!-- Icon System (rose) -->
-          <rect x="470" y="-12" width="14" height="14" rx="3" fill="#fff1f2" stroke="#be123c" stroke-width="1.5"/>
-          <text x="490" y="0" font-size="11" fill="#78716c" font-family="system-ui, sans-serif">Icon System</text>
+          <!-- Icon System -->
+          <rect x="400" y="12" width="14" height="14" rx="3"
+                fill="#fff1f2" stroke="#be123c" stroke-width="1.5"/>
+          <text x="420" y="23" font-size="11" fill="#78716c"
+                font-family="system-ui, sans-serif"
+                text-anchor="start" dominant-baseline="central">Icon System</text>
         </g>
 
       </svg>
-    </div>
-
-    <!-- Summary Cards -->
-    <div class="cards">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot green"></div>
-          <div class="card-title">Diagram Types</div>
-        </div>
-        <div class="card-content">
-          Five core diagram formats including Architecture, Mind Map, Flowchart, Sequence, and ER Diagram for comprehensive technical visualization.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot purple"></div>
-          <div class="card-title">Visual Styles</div>
-        </div>
-        <div class="card-content">
-          Six distinct visual themes from Dark Professional to Warm Cozy, each with carefully crafted color palettes and typography.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot amber"></div>
-          <div class="card-title">Output Formats</div>
-        </div>
-        <div class="card-content">
-          Export to HTML, SVG, PNG, or PDF for flexible integration into documentation, presentations, and workflows.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot rose"></div>
-          <div class="card-title">Icon System</div>
-        </div>
-        <div class="card-content">
-          DevIcons, Simple Icons, and Custom SVG support for enriching diagrams with recognizable technology and brand imagery.
-        </div>
-      </div>
     </div>
 
     <div class="footer">

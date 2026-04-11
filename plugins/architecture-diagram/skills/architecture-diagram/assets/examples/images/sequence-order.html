@@ -48,37 +48,6 @@
       height: auto;
       display: block;
     }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    .card {
-      background: #1e1e2e;
-      border: 1px solid #313244;
-      border-radius: 10px;
-      padding: 20px;
-      transition: box-shadow 0.2s ease;
-    }
-    .card:hover {
-      box-shadow: 0 0 12px rgba(137, 180, 250, 0.08);
-    }
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .card-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-    }
-    .card-dot.blue { background: #89b4fa; box-shadow: 0 0 6px rgba(137, 180, 250, 0.5); }
-    .card-dot.green { background: #a6e3a1; box-shadow: 0 0 6px rgba(166, 227, 161, 0.5); }
-    .card-dot.mauve { background: #cba6f7; box-shadow: 0 0 6px rgba(203, 166, 247, 0.5); }
-    .card-dot.peach { background: #fab387; box-shadow: 0 0 6px rgba(250, 179, 135, 0.5); }
-    .card-title { font-size: 13px; font-weight: 600; color: #cdd6f4; }
-    .card-content { font-size: 12px; color: #a6adc8; line-height: 1.6; }
     .footer {
       font-size: 11px;
       color: #585b70;
@@ -99,9 +68,9 @@
     </div>
 
     <div class="diagram-container">
-      <svg viewBox="0 0 880 560" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 840 530" xmlns="http://www.w3.org/2000/svg">
         <!-- ========================================== -->
-        <!-- DEFS: Filters, Markers, Patterns           -->
+        <!-- DEFS                                       -->
         <!-- ========================================== -->
         <defs>
           <!-- Neon glow filter -->
@@ -112,303 +81,208 @@
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
-          <filter id="glow-strong">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
           <!-- Grid pattern -->
           <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
             <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#313244" stroke-width="0.5" opacity="0.4"/>
           </pattern>
-          <!-- Solid arrow marker (Blue) for sync messages -->
+          <!-- Sync arrow (solid filled) -->
           <marker id="arrow-sync" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
             <polygon points="0 0, 8 3, 0 6" fill="#89b4fa"/>
           </marker>
-          <!-- Open arrow marker (Green) for async messages -->
+          <!-- Async arrow (open chevron) -->
           <marker id="arrow-async" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
             <polyline points="0 0, 8 3, 0 6" fill="none" stroke="#a6e3a1" stroke-width="1.2"/>
           </marker>
-          <!-- Dashed arrow marker (Mauve) for return messages -->
+          <!-- Return arrow (open chevron) -->
           <marker id="arrow-return" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-            <polyline points="0 0, 8 3, 0 6" fill="none" stroke="#cba6f7" stroke-width="1.2"/>
+            <polyline points="0 0, 8 3, 0 6" fill="none" stroke="#a6adc8" stroke-width="1.2"/>
           </marker>
         </defs>
 
         <!-- Grid background -->
-        <rect width="880" height="560" fill="#181825"/>
-        <rect width="880" height="560" fill="url(#grid)"/>
+        <rect width="840" height="530" fill="#181825"/>
+        <rect width="840" height="530" fill="url(#grid)"/>
 
         <!-- ========================================== -->
-        <!-- ACTORS (5 participants)                    -->
+        <!-- LIFELINES (drawn first, behind everything) -->
         <!-- ========================================== -->
-        <!-- Coordinates: actor_x = [120, 270, 420, 570, 720] -->
-        <!-- Actor box: W=120, H=36, rx=4 -->
-
-        <!-- Customer (actor) -->
-        <rect x="60" y="20" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="60" y="20" width="120" height="36" rx="4"
-              fill="rgba(137,180,250,0.08)" stroke="#89b4fa" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="120" y="43" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">Customer</text>
-
-        <!-- API Gateway (participant) -->
-        <rect x="210" y="20" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="210" y="20" width="120" height="36" rx="4"
-              fill="rgba(166,227,161,0.1)" stroke="#a6e3a1" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="270" y="43" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">API Gateway</text>
-
-        <!-- Order Service (control) -->
-        <rect x="360" y="20" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="360" y="20" width="120" height="36" rx="4"
-              fill="rgba(203,166,247,0.1)" stroke="#cba6f7" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="420" y="43" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">Order Service</text>
-
-        <!-- Payment Service (boundary) -->
-        <rect x="510" y="20" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="510" y="20" width="120" height="36" rx="4"
-              fill="rgba(250,179,135,0.1)" stroke="#fab387" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="570" y="43" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">Payment Svc</text>
-
-        <!-- Inventory Service (entity) -->
-        <rect x="660" y="20" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="660" y="20" width="120" height="36" rx="4"
-              fill="rgba(137,180,250,0.08)" stroke="#89b4fa" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="720" y="43" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">Inventory Svc</text>
+        <!--
+          Actors: Customer(120), API Gateway(270), Order Service(420), Payment Service(570), Inventory Service(720)
+          actor_x = [120, 270, 420, 570, 720]
+          MSG_START_Y = 100, MSG_GAP = 40, max_order = 9
+          lifeline_bottom = 100 + 9*40 + 40 = 500
+        -->
+        <line x1="120" y1="72" x2="120" y2="500" stroke="#6c7086" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+        <line x1="270" y1="72" x2="270" y2="500" stroke="#6c7086" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+        <line x1="420" y1="72" x2="420" y2="500" stroke="#6c7086" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+        <line x1="570" y1="72" x2="570" y2="500" stroke="#6c7086" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+        <line x1="720" y1="72" x2="720" y2="500" stroke="#6c7086" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
 
         <!-- ========================================== -->
-        <!-- LIFELINES (dashed vertical lines)          -->
+        <!-- ACTOR: Customer (stick figure at x=120)    -->
         <!-- ========================================== -->
-        <!-- From y=56 to y=500 -->
-
-        <line x1="120" y1="56" x2="120" y2="500" stroke="#313244" stroke-width="1" stroke-dasharray="6,4" filter="url(#glow)"/>
-        <line x1="270" y1="56" x2="270" y2="500" stroke="#313244" stroke-width="1" stroke-dasharray="6,4" filter="url(#glow)"/>
-        <line x1="420" y1="56" x2="420" y2="500" stroke="#313244" stroke-width="1" stroke-dasharray="6,4" filter="url(#glow)"/>
-        <line x1="570" y1="56" x2="570" y2="500" stroke="#313244" stroke-width="1" stroke-dasharray="6,4" filter="url(#glow)"/>
-        <line x1="720" y1="56" x2="720" y2="500" stroke="#313244" stroke-width="1" stroke-dasharray="6,4" filter="url(#glow)"/>
+        <g transform="translate(120, 0)">
+          <!-- Head -->
+          <circle cx="0" cy="8" r="6" fill="none" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <!-- Body -->
+          <line x1="0" y1="14" x2="0" y2="28" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <!-- Arms -->
+          <line x1="-8" y1="20" x2="8" y2="20" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <!-- Legs -->
+          <line x1="0" y1="28" x2="-6" y2="38" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <line x1="0" y1="28" x2="6" y2="38" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <!-- Label -->
+          <text x="0" y="56" font-size="11" font-weight="600" fill="#cdd6f4" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Customer</text>
+        </g>
 
         <!-- ========================================== -->
-        <!-- ACTIVATION BOX on Order Service            -->
+        <!-- ACTOR: API Gateway (box at x=270)          -->
         <!-- ========================================== -->
-        <!-- Active from msg 2 (y=140) to msg 8 (y=420) -->
-        <rect x="414" y="140" width="12" height="300" rx="2"
-              fill="rgba(203,166,247,0.15)" stroke="#cba6f7" stroke-width="1" filter="url(#glow)"/>
+        <g transform="translate(270, 20)">
+          <rect x="-52" y="0" width="104" height="36" rx="4" fill="#181825"/>
+          <rect x="-52" y="0" width="104" height="36" rx="4"
+                fill="rgba(137,180,250,0.08)" stroke="#89b4fa" stroke-width="1.2" filter="url(#glow)"/>
+          <text x="0" y="18" font-size="11" font-weight="500" fill="#cdd6f4" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">API Gateway</text>
+        </g>
 
         <!-- ========================================== -->
-        <!-- LOOP FRAGMENT (messages 3-7)               -->
+        <!-- ACTOR: Order Service (box at x=420)        -->
         <!-- ========================================== -->
-        <!-- Involved actors: order-svc(420), inventory-svc(720), payment-svc(570) -->
-        <!-- fragment_x = 420 - 30 = 390 -->
-        <!-- fragment_y = 180 - 15 = 165 -->
-        <!-- fragment_w = 720 - 390 + 30 = 360 -->
-        <!-- fragment_h = (7-3+1)*40 + 30 = 190 -->
+        <g transform="translate(420, 20)">
+          <rect x="-58" y="0" width="116" height="36" rx="4" fill="#181825"/>
+          <rect x="-58" y="0" width="116" height="36" rx="4"
+                fill="rgba(166,227,161,0.1)" stroke="#a6e3a1" stroke-width="1.2" filter="url(#glow)"/>
+          <text x="0" y="18" font-size="11" font-weight="500" fill="#cdd6f4" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Order Service</text>
+        </g>
 
-        <!-- Fragment frame -->
-        <rect x="390" y="165" width="360" height="200" rx="4" fill="none"
-              stroke="#6c7086" stroke-width="1" filter="url(#glow)"/>
+        <!-- ========================================== -->
+        <!-- ACTOR: Payment Service (box at x=570)      -->
+        <!-- ========================================== -->
+        <g transform="translate(570, 20)">
+          <rect x="-62" y="0" width="124" height="36" rx="4" fill="#181825"/>
+          <rect x="-62" y="0" width="124" height="36" rx="4"
+                fill="rgba(203,166,247,0.1)" stroke="#cba6f7" stroke-width="1.2" filter="url(#glow)"/>
+          <text x="0" y="18" font-size="11" font-weight="500" fill="#cdd6f4" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Payment Service</text>
+        </g>
 
-        <!-- Label tab (pentagon) -->
-        <path d="M 390,165 L 390,185 L 440,185 L 450,175 L 450,165 Z"
-              fill="rgba(108,112,134,0.2)" stroke="#6c7086" stroke-width="1" filter="url(#glow)"/>
+        <!-- ========================================== -->
+        <!-- ACTOR: Inventory Service (box at x=720)    -->
+        <!-- ========================================== -->
+        <g transform="translate(720, 20)">
+          <rect x="-66" y="0" width="132" height="36" rx="4" fill="#181825"/>
+          <rect x="-66" y="0" width="132" height="36" rx="4"
+                fill="rgba(249,226,175,0.06)" stroke="#f9e2af" stroke-width="1.2" filter="url(#glow)"/>
+          <text x="0" y="18" font-size="11" font-weight="500" fill="#cdd6f4" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Inventory Service</text>
+        </g>
 
-        <!-- Label text -->
-        <text x="398" y="180" font-size="10" font-weight="600" fill="#bac2de"
-              font-family="JetBrains Mono, monospace">loop</text>
-
-        <!-- Condition text -->
-        <text x="402" y="200" font-size="9" fill="#a6adc8"
-              font-family="JetBrains Mono, monospace">[verify &amp; process]</text>
+        <!-- ========================================== -->
+        <!-- ACTIVATION BOX: Order Service              -->
+        <!-- Active from message 2 (y=140) to 8 (y=380) -->
+        <!-- ========================================== -->
+        <rect x="414" y="140" width="12" height="260" rx="2"
+              fill="rgba(166,227,161,0.12)" stroke="#a6e3a1" stroke-width="1" filter="url(#glow)"/>
 
         <!-- ========================================== -->
         <!-- MESSAGES                                   -->
         <!-- ========================================== -->
-        <!-- msg_y[order] = 100 + (order-1) * 40 -->
-        <!-- customer=120, gateway=270, order-svc=420, payment-svc=570, inventory-svc=720 -->
+        <!--
+          message_y[order] = MSG_START_Y + (order - 1) * MSG_GAP
+          y[1]=100, y[2]=140, y[3]=180, y[4]=220, y[5]=260, y[6]=300, y[7]=340, y[8]=380, y[9]=420
+        -->
 
-        <!-- 1. Customer -> API Gateway: POST /orders (sync) y=100 -->
+        <!-- MSG 1: Customer → API Gateway — POST /orders (sync, y=100) -->
         <line x1="120" y1="100" x2="270" y2="100"
               stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"
               marker-end="url(#arrow-sync)"/>
-        <rect x="146" y="84" width="98" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="195" y="95" font-size="9" fill="#89b4fa"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">POST /orders</text>
+        <text x="195" y="92" font-size="9" fill="#89b4fa" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">POST /orders</text>
 
-        <!-- 2. API Gateway -> Order Service: Create order (sync) y=140 -->
+        <!-- MSG 2: API Gateway → Order Service — Create order (sync, y=140) -->
         <line x1="270" y1="140" x2="420" y2="140"
               stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"
               marker-end="url(#arrow-sync)"/>
-        <rect x="300" y="124" width="90" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="345" y="135" font-size="9" fill="#89b4fa"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">Create order</text>
+        <text x="345" y="132" font-size="9" fill="#89b4fa" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Create order</text>
 
-        <!-- 3. Order Service -> Inventory Service: Check stock availability (sync) y=180 -->
-        <line x1="426" y1="180" x2="720" y2="180"
+        <!-- MSG 3: Order Service → Inventory Service — Check stock availability (sync, y=180) -->
+        <line x1="420" y1="180" x2="720" y2="180"
               stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"
               marker-end="url(#arrow-sync)"/>
-        <rect x="506" y="164" width="134" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="573" y="175" font-size="9" fill="#89b4fa"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">Check stock avail.</text>
+        <text x="570" y="172" font-size="9" fill="#89b4fa" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Check stock availability</text>
 
-        <!-- 4. Inventory Service -> Order Service: Stock confirmed (return) y=220 -->
-        <line x1="720" y1="220" x2="426" y2="220"
-              stroke="#cba6f7" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#glow)"
+        <!-- MSG 4: Inventory Service → Order Service — Stock confirmed (return, y=220) -->
+        <line x1="720" y1="220" x2="420" y2="220"
+              stroke="#a6adc8" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#glow)"
               marker-end="url(#arrow-return)"/>
-        <rect x="518" y="204" width="110" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="573" y="215" font-size="9" fill="#cba6f7"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">Stock confirmed</text>
+        <text x="570" y="212" font-size="9" fill="#a6adc8" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Stock confirmed</text>
 
-        <!-- 5. Order Service -> Payment Service: Charge payment (sync) y=260 -->
-        <line x1="426" y1="260" x2="570" y2="260"
+        <!-- MSG 5: Order Service → Payment Service — Charge payment (sync, y=260) -->
+        <line x1="420" y1="260" x2="570" y2="260"
               stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"
               marker-end="url(#arrow-sync)"/>
-        <rect x="448" y="244" width="100" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="498" y="255" font-size="9" fill="#89b4fa"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">Charge payment</text>
+        <text x="495" y="252" font-size="9" fill="#89b4fa" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Charge payment</text>
 
-        <!-- 6. Payment Service -> Order Service: Payment success (return) y=300 -->
-        <line x1="570" y1="300" x2="426" y2="300"
-              stroke="#cba6f7" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#glow)"
+        <!-- MSG 6: Payment Service → Order Service — Payment success (return, y=300) -->
+        <line x1="570" y1="300" x2="420" y2="300"
+              stroke="#a6adc8" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#glow)"
               marker-end="url(#arrow-return)"/>
-        <rect x="448" y="284" width="108" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="498" y="295" font-size="9" fill="#cba6f7"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">Payment success</text>
+        <text x="495" y="292" font-size="9" fill="#a6adc8" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Payment success</text>
 
-        <!-- 7. Order Service -> Inventory Service: Reserve items (async) y=340 -->
-        <line x1="426" y1="340" x2="720" y2="340"
+        <!-- MSG 7: Order Service → Inventory Service — Reserve items (async, y=340) -->
+        <line x1="420" y1="340" x2="720" y2="340"
               stroke="#a6e3a1" stroke-width="1.5" filter="url(#glow)"
               marker-end="url(#arrow-async)"/>
-        <rect x="516" y="324" width="106" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="573" y="335" font-size="9" fill="#a6e3a1"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">Reserve items</text>
+        <text x="570" y="332" font-size="9" fill="#a6e3a1" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Reserve items</text>
 
-        <!-- 8. Order Service -> API Gateway: Order confirmed (201) (return) y=380 -->
+        <!-- MSG 8: Order Service → API Gateway — Order confirmed (201) (return, y=380) -->
         <line x1="420" y1="380" x2="270" y2="380"
-              stroke="#cba6f7" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#glow)"
+              stroke="#a6adc8" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#glow)"
               marker-end="url(#arrow-return)"/>
-        <rect x="288" y="364" width="124" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="345" y="375" font-size="9" fill="#cba6f7"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">Order conf. (201)</text>
+        <text x="345" y="372" font-size="9" fill="#a6adc8" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Order confirmed (201)</text>
 
-        <!-- 9. API Gateway -> Customer: Order confirmation (return) y=420 -->
+        <!-- MSG 9: API Gateway → Customer — Order confirmation (return, y=420) -->
         <line x1="270" y1="420" x2="120" y2="420"
-              stroke="#cba6f7" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#glow)"
+              stroke="#a6adc8" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#glow)"
               marker-end="url(#arrow-return)"/>
-        <rect x="140" y="404" width="114" height="14" rx="3" fill="#181825" opacity="0.95"/>
-        <text x="195" y="415" font-size="9" fill="#cba6f7"
-              font-family="JetBrains Mono, monospace" text-anchor="middle" filter="url(#glow)">Order confirmation</text>
+        <text x="195" y="412" font-size="9" fill="#a6adc8" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Order confirmation</text>
 
         <!-- ========================================== -->
-        <!-- BOTTOM ACTOR BOXES (mirrored at bottom)    -->
+        <!-- BOTTOM ACTOR BOXES (mirrored)              -->
         <!-- ========================================== -->
 
-        <!-- Customer -->
-        <rect x="60" y="500" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="60" y="500" width="120" height="36" rx="4"
-              fill="rgba(137,180,250,0.08)" stroke="#89b4fa" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="120" y="523" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">Customer</text>
+        <!-- Customer (stick figure at bottom, y=500) -->
+        <g transform="translate(120, 470)">
+          <circle cx="0" cy="8" r="6" fill="none" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <line x1="0" y1="14" x2="0" y2="28" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <line x1="-8" y1="20" x2="8" y2="20" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <line x1="0" y1="28" x2="-6" y2="38" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <line x1="0" y1="28" x2="6" y2="38" stroke="#89b4fa" stroke-width="1.5" filter="url(#glow)"/>
+          <text x="0" y="50" font-size="10" font-weight="600" fill="#6c7086" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Customer</text>
+        </g>
 
         <!-- API Gateway -->
-        <rect x="210" y="500" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="210" y="500" width="120" height="36" rx="4"
-              fill="rgba(166,227,161,0.1)" stroke="#a6e3a1" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="270" y="523" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">API Gateway</text>
+        <g transform="translate(270, 490)">
+          <rect x="-52" y="0" width="104" height="30" rx="4" fill="rgba(137,180,250,0.04)" stroke="#89b4fa" stroke-width="0.8" opacity="0.6"/>
+          <text x="0" y="15" font-size="9" fill="#6c7086" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">API Gateway</text>
+        </g>
 
         <!-- Order Service -->
-        <rect x="360" y="500" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="360" y="500" width="120" height="36" rx="4"
-              fill="rgba(203,166,247,0.1)" stroke="#cba6f7" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="420" y="523" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">Order Service</text>
+        <g transform="translate(420, 490)">
+          <rect x="-58" y="0" width="116" height="30" rx="4" fill="rgba(166,227,161,0.04)" stroke="#a6e3a1" stroke-width="0.8" opacity="0.6"/>
+          <text x="0" y="15" font-size="9" fill="#6c7086" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Order Service</text>
+        </g>
 
         <!-- Payment Service -->
-        <rect x="510" y="500" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="510" y="500" width="120" height="36" rx="4"
-              fill="rgba(250,179,135,0.1)" stroke="#fab387" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="570" y="523" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">Payment Svc</text>
+        <g transform="translate(570, 490)">
+          <rect x="-62" y="0" width="124" height="30" rx="4" fill="rgba(203,166,247,0.04)" stroke="#cba6f7" stroke-width="0.8" opacity="0.6"/>
+          <text x="0" y="15" font-size="9" fill="#6c7086" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Payment Service</text>
+        </g>
 
         <!-- Inventory Service -->
-        <rect x="660" y="500" width="120" height="36" rx="4" fill="#181825"/>
-        <rect x="660" y="500" width="120" height="36" rx="4"
-              fill="rgba(137,180,250,0.08)" stroke="#89b4fa" stroke-width="1.2" filter="url(#glow)"/>
-        <text x="720" y="523" font-size="12" font-weight="500" fill="#cdd6f4"
-              font-family="JetBrains Mono, monospace" text-anchor="middle">Inventory Svc</text>
-
-        <!-- ========================================== -->
-        <!-- LEGEND                                     -->
-        <!-- ========================================== -->
-        <g transform="translate(60, 555)">
-          <!-- Sync -->
-          <line x1="0" y1="0" x2="30" y2="0" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#arrow-sync)" filter="url(#glow)"/>
-          <text x="38" y="4" font-size="9" fill="#bac2de" font-family="JetBrains Mono, monospace">Sync</text>
-
-          <!-- Async -->
-          <line x1="100" y1="0" x2="130" y2="0" stroke="#a6e3a1" stroke-width="1.5" marker-end="url(#arrow-async)" filter="url(#glow)"/>
-          <text x="138" y="4" font-size="9" fill="#bac2de" font-family="JetBrains Mono, monospace">Async</text>
-
-          <!-- Return -->
-          <line x1="210" y1="0" x2="240" y2="0" stroke="#cba6f7" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrow-return)" filter="url(#glow)"/>
-          <text x="248" y="4" font-size="9" fill="#bac2de" font-family="JetBrains Mono, monospace">Return</text>
-
-          <!-- Activation -->
-          <rect x="328" y="-6" width="12" height="12" rx="2"
-                fill="rgba(203,166,247,0.15)" stroke="#cba6f7" stroke-width="1" filter="url(#glow)"/>
-          <text x="346" y="4" font-size="9" fill="#bac2de" font-family="JetBrains Mono, monospace">Active</text>
-
-          <!-- Loop -->
-          <rect x="418" y="-8" width="28" height="16" rx="3" fill="none" stroke="#6c7086" stroke-width="1" filter="url(#glow)"/>
-          <text x="452" y="4" font-size="9" fill="#bac2de" font-family="JetBrains Mono, monospace">Loop</text>
+        <g transform="translate(720, 490)">
+          <rect x="-66" y="0" width="132" height="30" rx="4" fill="rgba(249,226,175,0.04)" stroke="#f9e2af" stroke-width="0.8" opacity="0.6"/>
+          <text x="0" y="15" font-size="9" fill="#6c7086" font-family="JetBrains Mono, monospace" text-anchor="middle" dominant-baseline="central">Inventory Service</text>
         </g>
 
       </svg>
-    </div>
-
-    <!-- Summary Cards -->
-    <div class="cards">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot blue"></div>
-          <div class="card-title">Request Flow</div>
-        </div>
-        <div class="card-content">
-          Customer sends POST /orders through the API Gateway to Order Service. The gateway routes and validates the incoming request before forwarding it to the appropriate service handler.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot green"></div>
-          <div class="card-title">Inventory &amp; Payment</div>
-        </div>
-        <div class="card-content">
-          Order Service orchestrates a verification loop: checking stock availability with Inventory Service, then charging the payment via Payment Service. Both services confirm before proceeding.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot mauve"></div>
-          <div class="card-title">Confirmation</div>
-        </div>
-        <div class="card-content">
-          After successful payment, items are reserved asynchronously. The order is confirmed with HTTP 201 and the confirmation propagates back through the gateway to the customer.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot peach"></div>
-          <div class="card-title">Message Types</div>
-        </div>
-        <div class="card-content">
-          4 synchronous calls, 1 asynchronous fire-and-forget (Reserve items), and 4 return messages. The loop fragment groups the stock check, payment charge, and their responses.
-        </div>
-      </div>
     </div>
 
     <div class="footer">

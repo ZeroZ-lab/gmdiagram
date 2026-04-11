@@ -48,36 +48,6 @@
       height: auto;
       display: block;
     }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    .card {
-      background: #1e1e2e;
-      border: 1px solid #313244;
-      border-radius: 10px;
-      padding: 20px;
-      transition: box-shadow 0.2s ease;
-    }
-    .card:hover {
-      box-shadow: 0 0 12px rgba(137, 180, 250, 0.08);
-    }
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .card-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-    }
-    .card-dot.blue { background: #89b4fa; box-shadow: 0 0 6px rgba(137, 180, 250, 0.5); }
-    .card-dot.green { background: #a6e3a1; box-shadow: 0 0 6px rgba(166, 227, 161, 0.5); }
-    .card-dot.mauve { background: #cba6f7; box-shadow: 0 0 6px rgba(203, 166, 247, 0.5); }
-    .card-title { font-size: 13px; font-weight: 600; color: #cdd6f4; }
-    .card-content { font-size: 12px; color: #a6adc8; line-height: 1.6; }
     .footer {
       font-size: 11px;
       color: #585b70;
@@ -343,37 +313,6 @@
         </g>
 
       </svg>
-    </div>
-
-    <!-- Summary Cards -->
-    <div class="cards">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot blue"></div>
-          <div class="card-title">Orchestration Layer</div>
-        </div>
-        <div class="card-content">
-          Agent Router dispatches tasks, Planner chains reasoning steps, Memory maintains context windows, and Guard Rails enforce safety boundaries.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot green"></div>
-          <div class="card-title">Tool Execution Layer</div>
-        </div>
-        <div class="card-content">
-          Sandboxed Code Interpreter, Web Search, API Caller, and File I/O tools — each with isolated execution and monitored outputs.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot mauve"></div>
-          <div class="card-title">Knowledge Base Layer</div>
-        </div>
-        <div class="card-content">
-          Vector Store for embeddings, Doc Index for full-text search, Redis Cache for hot paths, and Prompt Store for template management.
-        </div>
-      </div>
     </div>
 
     <div class="footer">

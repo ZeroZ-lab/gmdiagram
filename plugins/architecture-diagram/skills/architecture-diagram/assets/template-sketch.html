@@ -42,34 +42,6 @@
       height: auto;
       display: block;
     }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-    .card {
-      background: white;
-      border: 2px solid #2c3e50;
-      border-radius: 6px;
-      padding: 16px;
-      box-shadow: 2px 2px 0px rgba(0,0,0,0.08);
-    }
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    .card-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      border: 1.5px solid #2c3e50;
-    }
-    .card-dot.blue { background: #3498db; }
-    .card-dot.green { background: #27ae60; }
-    .card-dot.orange { background: #e67e22; }
-    .card-title { font-size: 13px; font-weight: 700; color: #2c3e50; }
-    .card-content { font-size: 12px; color: #7f8c8d; line-height: 1.5; }
     .footer {
       font-size: 11px;
       color: #bdc3c7;
@@ -194,37 +166,6 @@
         </g>
 
       </svg>
-    </div>
-
-    <!-- Summary Cards -->
-    <div class="cards">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot blue"></div>
-          <div class="card-title">3 Tiers</div>
-        </div>
-        <div class="card-content">
-          Classic frontend-backend-database separation for maintainability and scalability.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot green"></div>
-          <div class="card-title">REST + Auth</div>
-        </div>
-        <div class="card-content">
-          Backend exposes REST API with JWT-based authentication service.
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot orange"></div>
-          <div class="card-title">React + Node.js</div>
-        </div>
-        <div class="card-content">
-          TypeScript React frontend, Node.js API server, PostgreSQL for persistence.
-        </div>
-      </div>
     </div>
 
     <div class="footer">
