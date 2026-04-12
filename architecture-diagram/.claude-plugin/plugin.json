@@ -1,6 +1,6 @@
 {
   "name": "architecture-diagram",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate diagrams from natural language as single-file HTML, SVG, Mermaid, and exportable PNG/PDF.",
   "author": {
     "name": "zhengjianqiao"

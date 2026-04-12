@@ -133,6 +133,8 @@ Before delivering, verify:
 - [ ] SVG `<text>` (connection labels only) has `text-anchor="middle" dominant-baseline="central"`
 - [ ] Connection lines route around intermediate layers (never cross through layer cards)
 - [ ] Masking rects cover full layer area (hides arrows behind components)
+- [ ] **Every layer height is exactly LAYER_H_BADGE (116) or LAYER_H_SIMPLE (101) — NEVER custom heights like 49, 80, or 106**
+- [ ] **NO overlapping layers: gap between every pair of adjacent layers = exactly 50px**
 - [ ] Layer y-positions are correctly stacked: `layer_y[i] = layer_y[i-1] + h + gap`
 - [ ] ViewBox fits all content with no clipping and no more than 40px whitespace margin
 - [ ] Legend matches the component types used

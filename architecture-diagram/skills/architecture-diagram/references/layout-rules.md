@@ -30,11 +30,23 @@ Only two things need coordinate math:
 
 ## Step 1: Determine Layer Heights
 
-For each layer, choose a fixed height:
-- **`LAYER_H_SIMPLE` (101px)**: layers with standard modules (no tech badges)
-- **`LAYER_H_BADGE` (116px)**: layers where any module has tech badges
+> ⚠️ **CRITICAL RULE: ALWAYS use fixed heights. NEVER compute custom heights based on content.**
+> The most common layout bug is using non-standard heights (e.g., 49px, 80px, 106px) for individual layers,
+> which breaks the y-position chain and causes layers to overlap.
 
-Do NOT try to compute height from content — CSS handles content layout. These fixed heights ensure arrow routing is predictable.
+For each layer, choose a fixed height from the table below:
+
+| Condition | Height | Constant |
+|-----------|--------|----------|
+| Any module in the layer has `tech` badges | **116px** | `LAYER_H_BADGE` |
+| All modules have NO tech badges | **101px** | `LAYER_H_SIMPLE` |
+| Layer has NO children (empty layer, label only) | **60px** | `LAYER_H_EMPTY` |
+
+**Common mistakes to avoid:**
+- ❌ Using 49px for a layer with 1 module → use 116px (if module has badges) or 101px
+- ❌ Using 80px for a "thin" layer → use 116px or 101px
+- ❌ Computing height from module count → always use the fixed values above
+- ❌ Making Gateway/Infra layers shorter because they have fewer modules → still use fixed heights
 
 ## Step 2: Position Layers Vertically
 
@@ -138,6 +150,30 @@ viewBox = "0 0 1000 viewBox_h"
 
 Default: `"0 0 1000 620"`. Adjust based on actual content.
 
+## Step 5.5: VERIFY — Overlap Check (MANDATORY)
+
+After computing all positions, verify NO layers overlap:
+
+```
+for each pair of adjacent layers (i, i+1):
+  gap = layer_y[i+1] - (layer_y[i] + layer_h[i])
+  assert gap == LAYER_GAP (50px), otherwise there is an overlap!
+```
+
+If ANY gap ≠ 50px, recompute the y-positions from the first incorrect layer downward.
+
+**Quick sanity check**: tabulate all layers with their y, h, and gap-to-next. Example correct table:
+
+| # | Label | y | h | End | Gap |
+|---|-------|---|---|-----|-----|
+| 0 | Gateway | 40 | 116 | 156 | 50 |
+| 1 | Frontend | 206 | 116 | 322 | 50 |
+| 2 | Backend | 372 | 116 | 488 | 50 |
+| 3 | Core | 538 | 116 | 654 | 50 |
+| 4 | Workers | 704 | 116 | 820 | 50 |
+| 5 | Data | 870 | 116 | 986 | 50 |
+| 6 | External | 1036 | 116 | 1152 | — |
+
 ## Step 6: Position Legend
 
 ```
@@ -209,5 +245,10 @@ h = 508 + 101 + 50 + 50 + 30 = 739 → "0 0 1000 740"
 - Position SVG `<text>` label at top-left
 
 ### Layer with no children
-- Set height to 60px (just the label)
+- Set height to **60px** (just the label)
 - Use `type-[layer_type]` for the border styling
+
+### Layer with only 1 module (e.g., Gateway, Load Balancer)
+- **Still use LAYER_H_BADGE (116px) or LAYER_H_SIMPLE (101px)** — do NOT shrink the height
+- A single-module layer is NOT the same as a no-children layer
+- Example: a Gateway layer with Nginx module + `:80/:443` badge → height = 116px
