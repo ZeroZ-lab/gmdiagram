@@ -41,12 +41,12 @@ Create a flowchart for a CI/CD pipeline with build, test, and deploy stages
 画一个微服务架构图，包含 API Gateway、用户服务、订单服务
 ```
 
-For full documentation including examples, visual style reference, and output format details, see the [Architecture Diagram Skill README](plugins/architecture-diagram/skills/architecture-diagram/README.md).
+For full documentation including examples, visual style reference, and output format details, see the [Architecture Diagram Skill README](architecture-diagram/skills/architecture-diagram/README.md).
 
 ## Repository Structure
 
 - `.claude-plugin/marketplace.json` — Marketplace definition
-- `plugins/architecture-diagram/` — Installable plugin
+- `architecture-diagram/` — Installable plugin
   - `skills/architecture-diagram/` — Skill instructions, templates, schemas, export scripts
 - `docs/SPEC.md` — Product specification
 

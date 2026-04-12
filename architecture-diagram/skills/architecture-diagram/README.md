@@ -143,7 +143,7 @@ Add icons to any component via the `"icon"` field:
 ## File Structure
 
 ```
-plugins/architecture-diagram/
+architecture-diagram/
 ├── .claude-plugin/
 │   └── plugin.json                   # Plugin manifest
 ├── README.md                         # Plugin overview
