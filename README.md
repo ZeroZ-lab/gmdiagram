@@ -25,7 +25,7 @@ Current focus:
 
 ```bash
 # 1. Add the marketplace
-/plugin marketplace add https://github.com/ZeroZ-lab/gmdiagram
+/plugin marketplace add ZeroZ-lab/gmdiagram
 
 # 2. Install the plugin
 /plugin install architecture-diagram@gmdiagram-marketplace

@@ -7,7 +7,7 @@ Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
 ## Install
 
 ```bash
-/plugin marketplace add https://github.com/ZeroZ-lab/gmdiagram
+/plugin marketplace add ZeroZ-lab/gmdiagram
 /plugin install architecture-diagram@gmdiagram-marketplace
 ```
 

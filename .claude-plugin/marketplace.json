@@ -6,12 +6,12 @@
   "metadata": {
     "description": "Local marketplace for the gmdiagram Claude Code plugin.",
     "version": "0.1.0",
-    "pluginRoot": "./plugins"
+    "pluginRoot": "plugins"
   },
   "plugins": [
     {
       "name": "architecture-diagram",
-      "source": "./architecture-diagram",
+      "source": "architecture-diagram",
       "description": "Generate diagrams from natural language as HTML, SVG, Mermaid, and exportable PNG/PDF.",
       "version": "0.1.0",
       "author": {

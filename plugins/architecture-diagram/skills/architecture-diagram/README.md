@@ -20,12 +20,7 @@ Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
 Clone this repository, add it as a local Claude Code marketplace, then install the `architecture-diagram` plugin from that marketplace:
 
 ```bash
-git clone https://github.com/ZeroZ-lab/gmdiagram.git
-cd gmdiagram
-```
-
-```bash
-/plugin marketplace add https://github.com/ZeroZ-lab/gmdiagram
+/plugin marketplace add ZeroZ-lab/gmdiagram
 /plugin install architecture-diagram@gmdiagram-marketplace
 ```
 
