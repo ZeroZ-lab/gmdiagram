@@ -63,7 +63,7 @@
       border-top: 1px solid #e2e8f0;
     }
 
-    /* Flowchart node styles */
+    /* Flowchart node styles via foreignObject */
     .flow-node {
       display: flex;
       align-items: center;
@@ -75,40 +75,37 @@
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       text-align: center;
     }
-
     .flow-node .node-label {
       font-size: 13px;
       font-weight: 500;
       line-height: 1.3;
       word-wrap: break-word;
     }
-
-    /* Type-specific styles (light-corporate) */
     .type-start {
       background: #f0fdf4;
       border: 2px solid #22c55e;
       border-radius: 20px;
       color: #166534;
     }
-    .type-start .node-label {
-      font-weight: 600;
-    }
-
+    .type-start .node-label { font-weight: 600; }
     .type-end {
       background: #f0fdf4;
       border: 2px solid #22c55e;
       border-radius: 20px;
       color: #166534;
     }
-    .type-end .node-label {
-      font-weight: 600;
-    }
-
+    .type-end .node-label { font-weight: 600; }
     .type-process {
       background: #f0f9ff;
       border: 2px solid #0ea5e9;
       border-radius: 6px;
       color: #0c4a6e;
+    }
+    .type-error {
+      background: #fef2f2;
+      border: 2px solid #ef4444;
+      border-radius: 6px;
+      color: #991b1b;
     }
   </style>
 </head>
@@ -125,7 +122,6 @@
     <div class="diagram-container">
       <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
 
-        <!-- Defs: Arrowhead markers -->
         <defs>
           <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
             <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
@@ -138,287 +134,143 @@
           </marker>
         </defs>
 
-        <!-- === NODES === -->
+        <!-- ============================================ -->
+        <!-- CONNECTIONS (drawn first, behind nodes)      -->
+        <!-- ============================================ -->
 
-        <!-- Start Node -->
-        <foreignObject x="375" y="40" width="150" height="50">
+        <!-- Start → Enter Credentials -->
+        <line x1="450" y1="60" x2="450" y2="100"
+              stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Enter Credentials → Valid? (diamond) -->
+        <line x1="450" y1="150" x2="450" y2="195"
+              stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Valid? → Login Success (Valid, right) -->
+        <path d="M 540 240 L 680 240 L 680 310"
+              stroke="#22c55e" stroke-width="2" fill="none"
+              marker-end="url(#arrow-green)"/>
+        <rect x="585" y="228" width="50" height="18" rx="3" fill="white" stroke="#e2e8f0" stroke-width="0.5"/>
+        <text x="610" y="241" font-size="11" font-weight="500" fill="#22c55e"
+              font-family="'Inter', system-ui, sans-serif" text-anchor="middle">Valid</text>
+
+        <!-- Valid? → Show Error (Invalid, left) -->
+        <path d="M 360 240 L 200 240 L 200 310"
+              stroke="#ef4444" stroke-width="2" fill="none"
+              marker-end="url(#arrow-red)"/>
+        <rect x="245" y="228" width="60" height="18" rx="3" fill="white" stroke="#e2e8f0" stroke-width="0.5"/>
+        <text x="275" y="241" font-size="11" font-weight="500" fill="#ef4444"
+              font-family="'Inter', system-ui, sans-serif" text-anchor="middle">Invalid</text>
+
+        <!-- Show Error → Retry -->
+        <line x1="200" y1="360" x2="200" y2="400"
+              stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Retry → Enter Credentials (loop back) -->
+        <path d="M 120 425 L 50 425 L 50 125 L 360 125"
+              stroke="#64748b" stroke-width="2" fill="none"
+              stroke-dasharray="4,3"
+              marker-end="url(#arrow)"/>
+
+        <!-- Login Success → Generate Token -->
+        <line x1="680" y1="360" x2="680" y2="400"
+              stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Generate Token → End -->
+        <line x1="680" y1="450" x2="680" y2="490"
+              stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- ============================================ -->
+        <!-- NODES                                        -->
+        <!-- ============================================ -->
+
+        <!-- Start (terminal) -->
+        <foreignObject x="385" y="20" width="130" height="40">
           <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-start">
             <span class="node-label">Start</span>
           </div>
         </foreignObject>
 
-        <!-- Process: Check Credentials (Decision Diamond) -->
-        <polygon points="450,200 570,260 450,320 330,260"
-                 fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
-        <text x="450" y="255" font-size="13" font-weight="500" fill="#78350f"
-              font-family="'Inter', system-ui, sans-serif" text-anchor="middle">Check</text>
-        <text x="450" y="272" font-size="13" font-weight="500" fill="#78350f"
-              font-family="'Inter', system-ui, sans-serif" text-anchor="middle">Credentials</text>
-
-        <!-- Process: Show Error -->
-        <foreignObject x="100" y="380" width="160" height="50">
+        <!-- Enter Credentials (process) -->
+        <foreignObject x="350" y="100" width="200" height="50">
           <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-process">
+            <span class="node-label">Enter Credentials</span>
+          </div>
+        </foreignObject>
+
+        <!-- Valid? (decision diamond) -->
+        <polygon points="450,195 540,240 450,285 360,240"
+                 fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+        <text x="450" y="235" font-size="13" font-weight="500" fill="#78350f"
+              font-family="'Inter', system-ui, sans-serif" text-anchor="middle">Valid?</text>
+        <text x="450" y="252" font-size="13" font-weight="500" fill="#78350f"
+              font-family="'Inter', system-ui, sans-serif" text-anchor="middle"></text>
+
+        <!-- Show Error (process) -->
+        <foreignObject x="120" y="310" width="160" height="50">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-error">
             <span class="node-label">Show Error</span>
           </div>
         </foreignObject>
 
-        <!-- End: Login Success -->
-        <foreignObject x="600" y="380" width="160" height="50">
-          <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-end">
+        <!-- Login Success (terminal) -->
+        <foreignObject x="600" y="310" width="160" height="50">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-start">
             <span class="node-label">Login Success</span>
           </div>
         </foreignObject>
 
-        <!-- Process: Retry -->
-        <foreignObject x="100" y="500" width="160" height="50">
+        <!-- Retry (process) -->
+        <foreignObject x="120" y="400" width="160" height="50">
           <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-process">
             <span class="node-label">Retry</span>
           </div>
         </foreignObject>
 
-        <!-- === CONNECTIONS === -->
+        <!-- Generate Token (process) -->
+        <foreignObject x="590" y="400" width="180" height="50">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-process">
+            <span class="node-label">Generate Token</span>
+          </div>
+        </foreignObject>
 
-        <!-- Start → Check Credentials -->
-        <line x1="450" y1="90" x2="450" y2="200"
-              stroke="#64748b" stroke-width="2"
-              marker-end="url(#arrow)"/>
+        <!-- End (terminal) -->
+        <foreignObject x="615" y="490" width="130" height="40">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-end">
+            <span class="node-label">End</span>
+          </div>
+        </foreignObject>
 
-        <!-- Check Credentials → Login Success (Valid path) -->
-        <path d="M 570 260 L 680 260 L 680 380"
-              stroke="#22c55e" stroke-width="2" fill="none"
-              marker-end="url(#arrow-green)"/>
-        <rect x="585" y="252" width="50" height="18" rx="3" fill="white" stroke="#e2e8f0" stroke-width="0.5"/>
-        <text x="610" y="265" font-size="11" font-weight="500" fill="#22c55e"
-              font-family="'Inter', system-ui, sans-serif" text-anchor="middle">Valid</text>
-
-        <!-- Check Credentials → Show Error (Invalid path) -->
-        <path d="M 330 260 L 180 260 L 180 380"
-              stroke="#ef4444" stroke-width="2" fill="none"
-              marker-end="url(#arrow-red)"/>
-        <rect x="245" y="252" width="60" height="18" rx="3" fill="white" stroke="#e2e8f0" stroke-width="0.5"/>
-        <text x="275" y="265" font-size="11" font-weight="500" fill="#ef4444"
-              font-family="'Inter', system-ui, sans-serif" text-anchor="middle">Invalid</text>
-
-        <!-- Show Error → Retry -->
-        <line x1="180" y1="430" x2="180" y2="500"
-              stroke="#64748b" stroke-width="2"
-              marker-end="url(#arrow)"/>
-
-        <!-- Retry → Check Credentials (loop back) -->
-        <path d="M 100 525 L 50 525 L 50 260 L 330 260"
-              stroke="#64748b" stroke-width="2" fill="none"
-              stroke-dasharray="4,3"
-              marker-end="url(#arrow)"/>
-        <rect x="838" y="250" width="40" height="16" rx="3" fill="white" stroke="#ffedd5" stroke-width="0.5"/>
-        <text x="858" y="262" font-size="9" font-weight="500" fill="#ea580c"
-              font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Retry</text>
-
-        <!-- 7. check-2fa -> prompt-2fa: Enabled (down) -->
-        <line x1="420" y1="560" x2="420" y2="615"
-              stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
-        <rect x="393" y="573" width="54" height="16" rx="3" fill="white" stroke="#d1fae5" stroke-width="0.5"/>
-        <text x="420" y="585" font-size="9" font-weight="500" fill="#059669"
-              font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Enabled</text>
-
-        <!-- 8. check-2fa -> generate-token: Disabled (right then down) -->
-        <path d="M 495,515 L 600,515 L 600,970 L 510,970"
-              fill="none" stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
-        <rect x="604" y="508" width="56" height="16" rx="3" fill="white" stroke="#e2e8f0" stroke-width="0.5"/>
-        <text x="632" y="520" font-size="9" font-weight="500" fill="#64748b"
-              font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Disabled</text>
-
-        <!-- 9. prompt-2fa -> verify-2fa -->
-        <line x1="420" y1="655" x2="420" y2="710"
-              stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
-
-        <!-- 10. verify-2fa -> 2fa-valid -->
-        <line x1="420" y1="750" x2="420" y2="805"
-              stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
-
-        <!-- 11. 2fa-valid -> generate-token: Yes (down) -->
-        <line x1="420" y1="895" x2="420" y2="950"
-              stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
-        <rect x="404" y="906" width="32" height="16" rx="3" fill="white" stroke="#d1fae5" stroke-width="0.5"/>
-        <text x="420" y="918" font-size="10" font-weight="600" fill="#059669"
-              font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Yes</text>
-
-        <!-- 12. 2fa-valid -> prompt-2fa: No (dashed loop-back) -->
-        <path d="M 495,850 C 660,850 660,635 500,635"
-              fill="none" stroke="#ea580c" stroke-width="1" stroke-dasharray="6,4"
-              marker-end="url(#arrow-loop)"/>
-        <rect x="655" y="730" width="56" height="16" rx="3" fill="white" stroke="#ffedd5" stroke-width="0.5"/>
-        <text x="683" y="742" font-size="9" font-weight="500" fill="#ea580c"
-              font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">No (retry)</text>
-
-        <!-- 13. generate-token -> log-audit -->
-        <line x1="420" y1="990" x2="420" y2="1045"
-              stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
-
-        <!-- 14. log-audit -> end -->
-        <line x1="420" y1="1095" x2="420" y2="1150"
-              stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
-
-
-        <!-- ============================================================ -->
-        <!-- NODES                                                        -->
-        <!-- ============================================================ -->
-
-        <!-- start (terminal, rounded rect rx=20) -->
-        <g transform="translate(370, 40)">
-          <rect x="0" y="0" width="100" height="40" rx="20"
-                fill="#ecfdf5" stroke="#059669" stroke-width="1"/>
-          <text x="50" y="20" font-size="13" font-weight="600" fill="#059669"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Start</text>
-        </g>
-
-        <!-- user-login (parallelogram / io) -->
-        <g transform="translate(350, 135)">
-          <polygon points="15,0 155,0 140,40 0,40"
-                   fill="#eff6ff" stroke="#1e40af" stroke-width="1"/>
-          <text x="77" y="20" font-size="12" font-weight="600" fill="#1e40af"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">User Login</text>
-        </g>
-
-        <!-- validate-creds (subprocess, double-border rect) -->
-        <g transform="translate(330, 230)">
-          <rect x="0" y="0" width="180" height="40" rx="4"
-                fill="#ecfdf5" stroke="#059669" stroke-width="1"/>
-          <rect x="6" y="0" width="168" height="40" rx="2"
-                fill="none" stroke="#059669" stroke-width="0.8"/>
-          <text x="90" y="20" font-size="12" font-weight="600" fill="#059669"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Validate Credentials</text>
-        </g>
-
-        <!-- creds-valid (decision, diamond) -->
-        <g transform="translate(345, 325)">
-          <polygon points="75,0 150,45 75,90 0,45"
-                   fill="#fffbeb" stroke="#d97706" stroke-width="1"/>
-          <text x="75" y="45" font-size="12" font-weight="600" fill="#d97706"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Valid?</text>
-        </g>
-
-        <!-- show-error (process, rect) -->
-        <g transform="translate(645, 350)">
-          <rect x="0" y="0" width="150" height="40" rx="4"
-                fill="#fef2f2" stroke="#dc2626" stroke-width="1"/>
-          <text x="75" y="20" font-size="12" font-weight="600" fill="#dc2626"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Show Error</text>
-        </g>
-
-        <!-- check-2fa (decision, diamond) -->
-        <g transform="translate(345, 470)">
-          <polygon points="75,0 150,45 75,90 0,45"
-                   fill="#fffbeb" stroke="#d97706" stroke-width="1"/>
-          <text x="75" y="45" font-size="12" font-weight="600" fill="#d97706"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Check 2FA</text>
-        </g>
-
-        <!-- prompt-2fa (parallelogram / io) -->
-        <g transform="translate(340, 615)">
-          <polygon points="15,0 175,0 160,40 0,40"
-                   fill="#eff6ff" stroke="#1e40af" stroke-width="1"/>
-          <text x="87" y="20" font-size="12" font-weight="600" fill="#1e40af"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Prompt 2FA Code</text>
-        </g>
-
-        <!-- verify-2fa (subprocess, double-border rect) -->
-        <g transform="translate(330, 710)">
-          <rect x="0" y="0" width="180" height="40" rx="4"
-                fill="#ecfdf5" stroke="#059669" stroke-width="1"/>
-          <rect x="6" y="0" width="168" height="40" rx="2"
-                fill="none" stroke="#059669" stroke-width="0.8"/>
-          <text x="90" y="20" font-size="12" font-weight="600" fill="#059669"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Verify 2FA Code</text>
-        </g>
-
-        <!-- 2fa-valid (decision, diamond) -->
-        <g transform="translate(345, 805)">
-          <polygon points="75,0 150,45 75,90 0,45"
-                   fill="#fffbeb" stroke="#d97706" stroke-width="1"/>
-          <text x="75" y="45" font-size="12" font-weight="600" fill="#d97706"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">2FA Valid?</text>
-        </g>
-
-        <!-- generate-token (process, rect) -->
-        <g transform="translate(330, 950)">
-          <rect x="0" y="0" width="180" height="40" rx="4"
-                fill="#fef2f2" stroke="#dc2626" stroke-width="1"/>
-          <text x="90" y="20" font-size="12" font-weight="600" fill="#dc2626"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Generate Token</text>
-        </g>
-
-        <!-- log-audit (document, wavy bottom) -->
-        <g transform="translate(330, 1045)">
-          <path d="M 0,0 L 180,0 L 180,45 Q 135,55 90,45 Q 45,35 0,45 Z"
-                fill="#f5f3ff" stroke="#7c3aed" stroke-width="1"/>
-          <text x="90" y="22" font-size="12" font-weight="600" fill="#7c3aed"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">Log Audit Entry</text>
-        </g>
-
-        <!-- end (terminal, rounded rect rx=20) -->
-        <g transform="translate(370, 1150)">
-          <rect x="0" y="0" width="100" height="40" rx="20"
-                fill="#ecfdf5" stroke="#059669" stroke-width="1"/>
-          <text x="50" y="20" font-size="13" font-weight="600" fill="#059669"
-                font-family="system-ui, sans-serif" text-anchor="middle" dominant-baseline="central">End</text>
-        </g>
-
-
-        <!-- ============================================================ -->
-        <!-- LEGEND                                                       -->
-        <!-- ============================================================ -->
-        <g transform="translate(40, 1215)">
+        <!-- ============================================ -->
+        <!-- LEGEND                                       -->
+        <!-- ============================================ -->
+        <g transform="translate(40, 555)">
           <text x="0" y="0" font-size="10" font-weight="600" fill="#475569"
                 font-family="system-ui, sans-serif" letter-spacing="0.5">LEGEND</text>
 
-          <!-- Start / End -->
-          <rect x="0" y="12" width="30" height="14" rx="7"
-                fill="#ecfdf5" stroke="#059669" stroke-width="1"/>
-          <text x="36" y="23" font-size="10" fill="#64748b"
+          <rect x="0" y="10" width="30" height="14" rx="7"
+                fill="#f0fdf4" stroke="#22c55e" stroke-width="1"/>
+          <text x="36" y="21" font-size="10" fill="#64748b"
                 font-family="system-ui, sans-serif" dominant-baseline="central">Start / End</text>
 
-          <!-- Process -->
-          <rect x="120" y="12" width="20" height="14" rx="4"
-                fill="#fef2f2" stroke="#dc2626" stroke-width="1"/>
-          <text x="146" y="23" font-size="10" fill="#64748b"
+          <rect x="120" y="10" width="20" height="14" rx="4"
+                fill="#f0f9ff" stroke="#0ea5e9" stroke-width="1"/>
+          <text x="146" y="21" font-size="10" fill="#64748b"
                 font-family="system-ui, sans-serif" dominant-baseline="central">Process</text>
 
-          <!-- Decision -->
-          <polygon points="230,12 240,19 230,26 220,19"
-                   fill="#fffbeb" stroke="#d97706" stroke-width="1"/>
-          <text x="248" y="23" font-size="10" fill="#64748b"
+          <polygon points="230,10 240,17 230,24 220,17"
+                   fill="#fffbeb" stroke="#f59e0b" stroke-width="1"/>
+          <text x="248" y="21" font-size="10" fill="#64748b"
                 font-family="system-ui, sans-serif" dominant-baseline="central">Decision</text>
 
-          <!-- Data I/O -->
-          <polygon points="325,12 345,12 342,26 322,26"
-                   fill="#eff6ff" stroke="#1e40af" stroke-width="1"/>
-          <text x="352" y="23" font-size="10" fill="#64748b"
-                font-family="system-ui, sans-serif" dominant-baseline="central">Data I/O</text>
-
-          <!-- Subprocess -->
-          <rect x="420" y="12" width="20" height="14" rx="4"
-                fill="#ecfdf5" stroke="#059669" stroke-width="1"/>
-          <rect x="423" y="12" width="14" height="14" rx="2"
-                fill="none" stroke="#059669" stroke-width="0.6"/>
-          <text x="446" y="23" font-size="10" fill="#64748b"
-                font-family="system-ui, sans-serif" dominant-baseline="central">Subprocess</text>
-
-          <!-- Document -->
-          <path d="M 535,12 L 555,12 L 555,24 Q 548,28 545,24 Q 540,20 535,24 L 535,12 Z"
-                fill="#f5f3ff" stroke="#7c3aed" stroke-width="1"/>
-          <text x="562" y="23" font-size="10" fill="#64748b"
-                font-family="system-ui, sans-serif" dominant-baseline="central">Document</text>
-
-          <!-- Flow -->
-          <line x1="640" y1="19" x2="670" y2="19"
-                stroke="#64748b" stroke-width="1" marker-end="url(#arrow)"/>
-          <text x="678" y="23" font-size="10" fill="#64748b"
+          <line x1="330" y1="17" x2="360" y2="17"
+                stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <text x="368" y="21" font-size="10" fill="#64748b"
                 font-family="system-ui, sans-serif" dominant-baseline="central">Flow</text>
 
-          <!-- Loop-back -->
-          <line x1="720" y1="19" x2="750" y2="19"
-                stroke="#ea580c" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-loop)"/>
-          <text x="758" y="23" font-size="10" fill="#64748b"
+          <line x1="420" y1="17" x2="450" y2="17"
+                stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+          <text x="458" y="21" font-size="10" fill="#64748b"
                 font-family="system-ui, sans-serif" dominant-baseline="central">Loop-back</text>
         </g>
 
