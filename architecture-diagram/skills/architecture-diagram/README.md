@@ -1,6 +1,6 @@
 # gmdiagram — Architecture Diagram Skill
 
-A Claude Code skill that generates professional diagrams from natural language descriptions. Supports 5 diagram types, 6 visual styles, and 4 output formats.
+A Claude Code and Codex skill that generates professional diagrams from natural language descriptions. Supports 5 diagram types, 6 visual styles, and 4 output formats.
 
 Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
 
@@ -17,12 +17,23 @@ Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
 
 ### Install
 
+#### Claude Code
+
 Clone this repository, add it as a local Claude Code marketplace, then install the `architecture-diagram` plugin from that marketplace:
 
 ```bash
 /plugin marketplace add ZeroZ-lab/gmdiagram
 /plugin install architecture-diagram@gmdiagram-marketplace
 ```
+
+#### Codex
+
+Clone this repository locally and use the bundled Codex metadata:
+
+- Plugin manifest: `architecture-diagram/.codex-plugin/plugin.json`
+- Marketplace entry: `.agents/plugins/marketplace.json`
+
+The Claude and Codex variants share the same `skills/`, `assets/`, and `scripts/` directories, so the behavior stays aligned across both environments.
 
 ### Use
 
@@ -145,7 +156,9 @@ Add icons to any component via the `"icon"` field:
 ```
 architecture-diagram/
 ├── .claude-plugin/
-│   └── plugin.json                   # Plugin manifest
+│   └── plugin.json                   # Claude plugin manifest
+├── .codex-plugin/
+│   └── plugin.json                   # Codex plugin manifest
 ├── README.md                         # Plugin overview
 └── skills/
     └── architecture-diagram/

@@ -1,6 +1,6 @@
 # gmdiagram
 
-`gmdiagram` is a Claude Code plugin marketplace for generating polished diagrams from natural language.
+`gmdiagram` is a plugin repository for generating polished diagrams from natural language in both Claude Code and Codex.
 
 Repository: `https://github.com/ZeroZ-lab/gmdiagram`
 
@@ -23,6 +23,8 @@ Current focus:
 
 ## Quick Start
 
+### Claude Code
+
 ```bash
 # 1. Add the marketplace
 /plugin marketplace add ZeroZ-lab/gmdiagram
@@ -31,7 +33,16 @@ Current focus:
 /plugin install architecture-diagram@gmdiagram-marketplace
 ```
 
-Then ask Claude to create a diagram:
+### Codex
+
+For Codex, use the repo as a local plugin source. This repository now includes:
+
+- `architecture-diagram/.codex-plugin/plugin.json`
+- `.agents/plugins/marketplace.json`
+
+If you are using this repo locally, point Codex at the repository root so it can discover the marketplace and plugin metadata.
+
+Then ask the agent to create a diagram:
 
 ```text
 Draw an architecture diagram of Chrome's multi-process system
@@ -46,7 +57,10 @@ For full documentation including examples, visual style reference, and output fo
 ## Repository Structure
 
 - `.claude-plugin/marketplace.json` — Marketplace definition
+- `.agents/plugins/marketplace.json` — Codex local marketplace definition
 - `architecture-diagram/` — Installable plugin
+  - `.claude-plugin/plugin.json` — Claude plugin manifest
+  - `.codex-plugin/plugin.json` — Codex plugin manifest
   - `skills/architecture-diagram/` — Skill instructions, templates, schemas, export scripts
 - `docs/SPEC.md` — Product specification
 
