@@ -32,7 +32,7 @@ Step 8: Update README + test suite         (depends on step 7)
 | 5. 4 diagram types | DONE | All 8 files (components + layout) rewritten with foreignObject + CSS |
 | 6. SKILL.md | DONE | Quality Checklist covers foreignObject xmlns, CSS classes, arrow routing, and flowchart `io` SVG polygon rules |
 | 7. Regenerate examples | DONE | Existing example JSONs have rendered HTML outputs, and the 4 new style examples now also have PNG previews |
-| 8. Update README + tests | PARTIAL | Skill README now references valid PNG previews for all 9 styles; export verification passes, but full test suite is still pending |
+| 8. Update README + tests | DONE | Skill README references valid PNG previews for all 9 styles; export verification passes; full test suite 198/198 passed |
 
 ## Task Details
 
@@ -47,7 +47,7 @@ Step 8: Update README + test suite         (depends on step 7)
 | 5. Update 4 diagram types | DONE | `references/components-{flowchart,mindmap,er,sequence}.md` + `layout-{flowchart,mindmap,er,sequence}.md` (8 files) | Each type has CSS-based templates and simplified layout |
 | 6. Update SKILL.md | DONE | `SKILL.md` | Checklist verifies foreignObject xmlns, CSS classes, arrow routing |
 
-### Phase 2: Examples — IN PROGRESS
+### Phase 2: Examples — COMPLETE
 
 Existing example coverage now present:
 
@@ -73,7 +73,7 @@ Remaining example work:
 
 - optional: regenerate screenshots if visual design changes again
 
-### Phase 3: Docs + Tests — IN PROGRESS
+### Phase 3: Docs + Tests — COMPLETE
 
 Completed:
 
@@ -87,5 +87,4 @@ Completed:
 
 Remaining:
 
-- run full test suite
-- decide whether to regenerate the 4 new style previews as PNG and switch README back from HTML links to image previews
+- nothing — migration complete

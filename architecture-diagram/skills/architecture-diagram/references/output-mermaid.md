@@ -18,6 +18,9 @@ Map gmdiagram styles to Mermaid themes:
 | cyberpunk-neon | `%%{init: {theme: 'dark'}}%%` |
 | blueprint | `%%{init: {theme: 'dark'}}%%` |
 | warm-cozy | `%%{init: {theme: 'default'}}%%` |
+| minimalist | `%%{init: {theme: 'base'}}%%` |
+| terminal-retro | `%%{init: {theme: 'dark'}}%%` |
+| pastel-dream | `%%{init: {theme: 'base'}}%%` |
 
 For custom colors, add `classDef`:
 ```
