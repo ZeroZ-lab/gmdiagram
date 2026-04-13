@@ -18,21 +18,32 @@ After generating an HTML or SVG diagram, use the export script to convert:
 ## Requirements
 
 ### PNG Export
-- **Node.js** 18+ (for @resvg/resvg-js)
-- The script auto-installs the dependency on first run
+- Preferred: **Node.js** 18+ (for `@resvg/resvg-js`)
+- Fallback on macOS: **Quick Look** via `qlmanage`
+- Optional fallback: **python3 + cairosvg** if system Cairo libraries are available
 
 ### PDF Export
-- **rsvg-convert** (from librsvg)
-- Install: `brew install librsvg` (macOS) or `apt install librsvg2-bin` (Linux)
+- Preferred: **rsvg-convert** (from librsvg)
+- Fallback on macOS: **Quick Look + sips**
+- Optional fallback: **python3 + cairosvg** if system Cairo libraries are available
+- Install librsvg: `brew install librsvg` (macOS) or `apt install librsvg2-bin` (Linux)
 
 ## How It Works
 
 1. If input is HTML, extract the `<svg>` element using sed
-2. For PNG: use @resvg/resvg-js (Rust-based SVG renderer) to rasterize at 2000px width
-3. For PDF: use rsvg-convert for direct SVG-to-PDF vector conversion
+2. For PNG:
+   - prefer `@resvg/resvg-js` when Node.js is available
+   - otherwise use macOS Quick Look thumbnail generation
+   - otherwise try CairoSVG if available
+3. For PDF:
+   - prefer `rsvg-convert` for direct SVG-to-PDF conversion
+   - otherwise use macOS Quick Look thumbnail generation plus `sips`
+   - otherwise try CairoSVG if available
 
 ## Limitations
 
 - PNG background defaults to `#020617` (dark) — adjust in the script for light styles
 - Google Fonts need to be available on the system for accurate rendering in PNG
 - SVG filters (cyberpunk glow) may render slightly differently in PNG vs browser
+- Quick Look fallback generates raster previews; PDF output from the Quick Look path is image-based rather than vector-perfect
+- CairoSVG requires system Cairo libraries; `pip install cairosvg` alone may not be sufficient on every machine

@@ -106,24 +106,24 @@ Each of the 9 visual styles applied to a different diagram type:
 </tr>
 <tr>
 <td width="50%" align="center">
-<a href="assets/examples/images/architecture-minimalist.html">Open HTML Preview</a><br/>
+<img src="assets/examples/images/architecture-minimalist.png" alt="Minimalist" width="100%"/><br/>
 <b>Clean API Architecture</b><br/>
 <sup>Architecture · <b>Minimalist</b> · 4 layers · 9 modules</sup>
 </td>
 <td width="50%" align="center">
-<a href="assets/examples/images/architecture-terminal.html">Open HTML Preview</a><br/>
+<img src="assets/examples/images/architecture-terminal.png" alt="Terminal Retro" width="100%"/><br/>
 <b>Retro Terminal System</b><br/>
 <sup>Architecture · <b>Terminal Retro</b> · 4 layers · CRT phosphor green</sup>
 </td>
 </tr>
 <tr>
 <td width="50%" align="center">
-<a href="assets/examples/images/architecture-cyberpunk.html">Open HTML Preview</a><br/>
+<img src="assets/examples/images/architecture-cyberpunk.png" alt="Cyberpunk" width="100%"/><br/>
 <b>Hacker Toolkit</b><br/>
 <sup>Architecture · <b>Cyberpunk Neon</b> · 4 layers · Catppuccin palette</sup>
 </td>
 <td width="50%" align="center">
-<a href="assets/examples/images/architecture-pastel.html">Open HTML Preview</a><br/>
+<img src="assets/examples/images/architecture-pastel.png" alt="Pastel Dream" width="100%"/><br/>
 <b>Cloud Native Ecosystem</b><br/>
 <sup>Architecture · <b>Pastel Dream</b> · 5 layers · lavender pastels</sup>
 </td>
