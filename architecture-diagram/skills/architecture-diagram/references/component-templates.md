@@ -199,7 +199,69 @@ When a connection must skip layers (e.g., Browser→GPU skipping Renderer), rout
 </defs>
 ```
 
-## What Changed vs Old Approach
+## 12. Hand-Drawn Style Layer (using foreignObject)
+
+Hand-drawn sketch style uses taller layer heights (110px/130px vs 101px/116px) due to bolder borders.
+
+```svg
+<!-- Layer: Browser Process at y=40, height=130px (has badges) -->
+<g transform="translate(40, 40)">
+  <foreignObject width="920" height="130">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="layer-card type-process">
+      <div class="layer-header">
+        <span class="layer-label">Browser Process</span>
+        <span class="layer-description">Main process - controls UI and coordinates subprocesses</span>
+      </div>
+      <div class="modules">
+        <div class="module type-module">
+          <span class="module-label">UI Module</span>
+          <span class="tech-badges">
+            <span class="tech-badge">Address Bar</span>
+            <span class="tech-badge">Tabs</span>
+            <span class="tech-badge">Bookmarks</span>
+          </span>
+        </div>
+        <div class="module type-channel">
+          <span class="module-label">Network Service</span>
+          <span class="tech-badges">
+            <span class="tech-badge">HTTP/HTTPS</span>
+            <span class="tech-badge">WebSocket</span>
+            <span class="tech-badge">QUIC</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </foreignObject>
+</g>
+```
+
+**Key differences from dark-professional:**
+- Layer height: **130px** (not 116px) when modules have badges
+- Module styling: white background with 2px colored border
+- Badges: white background with colored border (not translucent)
+- Header: includes optional `.layer-description` for subtitles
+
+## Style-Specific Module CSS
+
+### Dark Professional (template-dark.html)
+```css
+.module { min-width: 100px; height: 50px; border-radius: 6px; padding: 0 16px; }
+.module.has-badges { height: 65px; }
+```
+
+### Hand-Drawn Sketch (template-sketch.html)
+```css
+.module {
+  min-width: 100px;
+  min-height: 50px;  /* Use min-height, not height */
+  border-radius: 6px;
+  padding: 10px 16px;
+  background: white;
+}
+/* Layer heights: 110px (simple), 130px (badges), 70px (empty) */
+```
+
+**Critical:** Hand-drawn uses `min-height` not fixed `height`, allowing modules to grow if needed. Always use the taller layer heights (110px/130px) for this style.
 
 | Old (SVG absolute) | New (CSS + SVG hybrid) |
 |---|---|

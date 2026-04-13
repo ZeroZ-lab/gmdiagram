@@ -103,12 +103,30 @@ Use different marker IDs than the dark style (both can't coexist on one page):
 
 ## Layout Rules
 
-Same coordinate calculation as `references/layout-rules.md`, with these adjustments:
+Same coordinate calculation as `references/layout-rules.md`, with these **CRITICAL adjustments** for hand-drawn style:
 
-- `LAYER_GAP`: 50px (same)
-- `MODULE_GAP`: 20px (same)
-- Module border: 2px thick instead of 1.5px
-- Layer border: 2.5px thick instead of 1px
+| Constant | Dark Professional | Hand-Drawn Sketch |
+|----------|------------------|-------------------|
+| `LAYER_GAP` | 50px | 50px (same) |
+| `MODULE_GAP` | 20px | 20px (same) |
+| `LAYER_H_SIMPLE` | **101px** | **110px** |
+| `LAYER_H_BADGE` | **116px** | **130px** |
+| `LAYER_H_EMPTY` | **60px** | **70px** |
+| Module border | 1.5px | 2px thick |
+| Layer border | 1px | 2.5px thick |
+
+**Why taller layers?** Hand-drawn style uses bolder borders (2-2.5px vs 1-1.5px) and requires more internal padding for the "whiteboard" aesthetic. The extra height prevents module content from touching layer boundaries.
+
+### Height Selection Guide
+
+| Condition | Use Height |
+|-----------|------------|
+| Layer has modules WITH `tech` badges (3+ badges) | **130px** (`LAYER_H_BADGE`) |
+| Layer has modules with 1-2 badges | **130px** (badges need room) |
+| Layer has modules WITHOUT badges | **110px** (`LAYER_H_SIMPLE`) |
+| Layer has NO children (label only) | **70px** (`LAYER_H_EMPTY`) |
+
+**Common mistake:** Using 101px/116px (dark style values) for hand-drawn causes badges to overflow. Always use the taller hand-drawn values.
 
 ## Summary Cards
 

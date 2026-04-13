@@ -25,8 +25,24 @@ Only two things need coordinate math:
 | `SVG_W` | 1000px | SVG viewBox width (fixed) |
 | `LAYER_W` | 920px | Layer card width (= SVG_W - 2 * PAGE_MARGIN) |
 | `LEGEND_OFFSET` | 50px | Space below last layer before legend |
-| `LAYER_H_SIMPLE` | 101px | Layer height with simple modules |
-| `LAYER_H_BADGE` | 116px | Layer height with tech badge modules |
+
+### Style-Specific Layer Heights
+
+**CRITICAL:** Layer heights vary by visual style due to different border widths and padding.
+
+| Style | `LAYER_H_SIMPLE` | `LAYER_H_BADGE` | `LAYER_H_EMPTY` |
+|-------|------------------|-----------------|-----------------|
+| dark-professional | 101px | 116px | 60px |
+| cyberpunk-neon | 101px | 116px | 60px |
+| terminal-retro | 101px | 116px | 60px |
+| light-corporate | 105px | 120px | 65px |
+| minimalist | 95px | 110px | 55px |
+| **hand-drawn** | **110px** | **130px** | **70px** |
+| warm-cozy | 105px | 120px | 65px |
+| blueprint | 101px | 116px | 60px |
+| pastel-dream | 105px | 125px | 65px |
+
+> **Why different heights?** Thicker borders and larger visual elements need more room. Hand-drawn style has 2.5px layer borders (vs 1px for dark), requiring ~15-20px extra height to prevent content overflow.
 
 ## Density Multipliers
 
