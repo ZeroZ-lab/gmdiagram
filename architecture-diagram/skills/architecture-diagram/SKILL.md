@@ -281,6 +281,7 @@ Before delivering, verify:
 - [ ] JSON validates against the diagram type's schema
 - [ ] Every `<foreignObject>` has `xmlns="http://www.w3.org/1999/xhtml"` on the root HTML element
 - [ ] Component boxes use CSS classes from the template (`.module`, `.type-X`, `.module-label`)
+- [ ] Flowchart `io` nodes use matched SVG parallelogram mask + visible polygon geometry; never use rectangular masks behind clipped shapes
 - [ ] SVG `<text>` (connection labels only) has `text-anchor="middle" dominant-baseline="central"`
 - [ ] Connection lines route around intermediate layers (never cross through layer cards)
 - [ ] Masking rects cover full layer area (hides arrows behind components)

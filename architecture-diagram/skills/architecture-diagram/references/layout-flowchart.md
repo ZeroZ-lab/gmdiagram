@@ -5,11 +5,12 @@ These rules compute SVG coordinates from the flowchart JSON schema. Follow them 
 ## Architecture: CSS+SVG Hybrid
 
 This layout reference works with the CSS+SVG hybrid approach defined in `components-flowchart.md`:
-- **Rectangular nodes** (start, end, process, io, document, subprocess) use `<foreignObject>` + CSS. CSS handles node width, text centering, border styling, and padding. Layout only needs to compute `(x, y, width, height)` for the foreignObject container.
+- **Rectangular nodes** (start, end, process, document, subprocess) use `<foreignObject>` + CSS. CSS handles node width, text centering, border styling, and padding. Layout only needs to compute `(x, y, width, height)` for the foreignObject container.
+- **I/O nodes** use pure SVG `<polygon>` parallelograms. Layout must compute the polygon points and the centered text anchor position. Do not treat `io` nodes as rectangular foreignObject containers.
 - **Decision (diamond) nodes** use pure SVG `<polygon>`. Layout must compute the center `(cx, cy)` and half-dimensions to build the polygon points string.
 - **Connections** remain SVG `<line>` or `<path>` elements. Layout computes start/end points and control points.
 - **Connection labels** remain SVG `<text>`. Layout computes label positions.
-- **No text_x / text_y calculations** are needed for rectangular nodes — CSS flexbox centers text automatically.
+- **No text_x / text_y calculations** are needed for rectangular nodes — CSS flexbox centers text automatically. `io` and `decision` nodes are the exceptions because they use SVG text.
 
 ## Constants
 
@@ -40,7 +41,7 @@ Apply these multipliers to the constants above based on the `density` parameter 
 
 ## Step 1: Calculate Node Dimensions
 
-Each node type has different dimension rules. These dimensions set the `<foreignObject>` width/height (or `<polygon>` extents for diamonds). **CSS handles text centering within the node — do not compute text positions for rectangular nodes.**
+Each node type has different dimension rules. These dimensions set the `<foreignObject>` width/height (or `<polygon>` extents for SVG-native shapes). **CSS handles text centering within rectangular nodes — do not compute text positions for start/end/process/subprocess/document nodes.**
 
 ### Start / End terminals
 ```
@@ -68,8 +69,14 @@ node_h = max(DIAMOND_H, node_w * 0.65)
 ```
 node_w = max(120, label_length * 8 + 32 + IO_SKEW * 2)
 node_h = 40
-// The foreignObject uses the same (x, y, w, h) as a rectangular node
-// CSS clip-path or SVG polygon handles the parallelogram shape
+// Layout computes polygon points directly:
+// top_left     = (x + IO_SKEW, y)
+// top_right    = (x + node_w + IO_SKEW, y)
+// bottom_right = (x + node_w - IO_SKEW, y + node_h)
+// bottom_left  = (x - IO_SKEW, y + node_h)
+// Also compute centered text anchor:
+// label_x = x + node_w / 2
+// label_y = y + node_h / 2
 ```
 
 ### Subprocess nodes (double-border rect)
@@ -151,6 +158,22 @@ branch_node_x = branch_column_x - branch_node_w / 2
 ```
 
 **No additional text_x or text_y calculations needed for rectangular nodes.** The foreignObject div uses CSS flexbox to center text both horizontally and vertically within the node dimensions.
+
+### I/O label positions — SVG text only
+
+For I/O parallelograms, label text positions must be computed because the label is rendered as SVG `<text>`:
+```
+label_x = x + node_w / 2
+label_y = y + node_h / 2
+```
+
+For two-line labels:
+```
+line1_x = x + node_w / 2
+line1_y = y + node_h / 2 - 8
+line2_x = x + node_w / 2
+line2_y = y + node_h / 2 + 8
+```
 
 ### Diamond (decision) label positions — SVG text only
 
@@ -457,7 +480,7 @@ The following are handled by CSS and do **not** need coordinate calculations:
 | Text font/size/color | CSS `.node-label` | Monospace, white, 12px |
 | Subprocess double border | CSS `box-shadow: inset` | No inner rect needed |
 | Document wavy bottom | CSS `clip-path` | No SVG path needed |
-| I/O parallelogram skew | CSS `clip-path` or SVG polygon | Shape effect |
+| I/O parallelogram skew | SVG polygon geometry | Shape effect without mask mismatch |
 | Node padding | CSS `padding: 4px 8px` | Consistent spacing |
 | Text wrapping | CSS `word-wrap: break-word` | Auto line breaking |
 

@@ -5,7 +5,8 @@ Copy and adapt these SVG snippets when generating flowchart diagram HTML. All co
 ## Architecture: CSS+SVG Hybrid
 
 This template uses a **CSS+SVG hybrid approach**:
-- **Rectangular nodes** (start, end, process, io, document, subprocess) use `<foreignObject>` + CSS classes for styling and text layout. CSS handles sizing, colors, text centering, and padding.
+- **Rectangular nodes** (start, end, process, subprocess, document) use `<foreignObject>` + CSS classes for styling and text layout. CSS handles sizing, colors, text centering, and padding.
+- **I/O nodes** use pure SVG `<polygon>` for both mask and visible shape. Do not mix a rectangular mask with CSS `clip-path`, because the hidden rectangular background will leak at the left/right edges and looks broken in browsers.
 - **Diamond (decision) nodes** use pure SVG `<polygon>` because CSS cannot draw diamond shapes.
 - **Arrows, connections, and labels** on connections use pure SVG elements.
 
@@ -67,12 +68,6 @@ Include these styles in the `<style>` block of the SVG or in the enclosing HTML:
   border-radius: 4px;
 }
 
-.type-io {
-  background: rgba(8, 51, 68, 0.4);
-  border: 1.5px solid #22d3ee;
-  border-radius: 4px;
-}
-
 .type-subprocess {
   background: rgba(6, 78, 59, 0.4);
   border: 1.5px solid #34d399;
@@ -104,7 +99,7 @@ Include these styles in the `<style>` block of the SVG or in the enclosing HTML:
 | `end` | `.type-end` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) |
 | `process` | `.type-process` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) |
 | `decision` | *(SVG only)* | `rgba(120, 53, 15, 0.3)` | `#fbbf24` (amber) |
-| `io` | `.type-io` | `rgba(8, 51, 68, 0.4)` | `#22d3ee` (cyan) |
+| `io` | *(SVG polygon only)* | `rgba(8, 51, 68, 0.4)` | `#22d3ee` (cyan) |
 | `subprocess` | `.type-subprocess` | `rgba(6, 78, 59, 0.4)` | `#34d399` (emerald) |
 | `document` | `.type-document` | `rgba(76, 29, 149, 0.4)` | `#a78bfa` (violet) |
 
@@ -187,39 +182,24 @@ bottom_vertex = (cx, cy + h/2)       // (500, 530)
 left_vertex   = (cx - w/2, cy)       // (430, 485)
 ```
 
-## 4. I/O Parallelogram (foreignObject + CSS)
+## 4. I/O Parallelogram (SVG Polygon Only)
 
-I/O nodes use a rectangular foreignObject with CSS `transform: skewX()` for the parallelogram effect, or a CSS `clip-path` polygon.
+I/O nodes should be rendered as pure SVG parallelograms. Use the same polygon geometry for both the opaque mask and the visible border/fill. Do **not** use a rectangular `<foreignObject>` plus CSS `clip-path` here; the mask and visible shape will diverge and produce ugly dark sidebars.
 
 ```svg
 <!-- I/O node: "User Login" at position (430, 340), size 140x40 -->
-<!-- Masking rect -->
-<rect x="430" y="340" width="140" height="40" rx="4" fill="#0f172a"/>
-<!-- Node via foreignObject with skew -->
-<foreignObject x="430" y="340" width="140" height="40">
-  <div xmlns="http://www.w3.org/1999/xhtml"
-       class="flow-node type-io"
-       style="clip-path: polygon(12px 0%, calc(100% - 0px) 0%, calc(100% - 12px) 100%, 0px 100%);">
-    <span class="node-label">User Login</span>
-  </div>
-</foreignObject>
-```
-
-For broader compatibility, the masking rect and border can also be done with an SVG `<polygon>` behind the foreignObject:
-```svg
 <!-- Background mask -->
 <polygon points="442,340 582,340 570,380 430,380" fill="#0f172a"/>
 <!-- Styled parallelogram border -->
 <polygon points="442,340 582,340 570,380 430,380"
          fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
-<!-- Text via foreignObject (transparent background) -->
-<foreignObject x="430" y="340" width="140" height="40">
-  <div xmlns="http://www.w3.org/1999/xhtml" class="flow-node type-io"
-       style="background: transparent; border: none;">
-    <span class="node-label">User Login</span>
-  </div>
-</foreignObject>
+<!-- Text -->
+<text x="506" y="360" font-size="12" font-weight="500" fill="white"
+      font-family="JetBrains Mono, monospace"
+      text-anchor="middle" dominant-baseline="middle">User Login</text>
 ```
+
+If the label needs two lines, split it into two `<text>` nodes or use `<tspan>` inside one `<text>`. Keep the text centered in the polygon, not in an invisible rectangle.
 
 Parallelogram coordinate formula (for the polygon mask/border):
 ```
@@ -460,7 +440,7 @@ band_h = max(node_h for nodes in lane) + 40
 
 ## foreignObject Pattern Summary
 
-For all rectangular node types (start, end, process, io, subprocess, document), use this pattern:
+For rectangular node types (start, end, process, subprocess, document), use this pattern:
 
 ```svg
 <!-- 1. Masking rect (same position/size as node, opaque background color) -->
@@ -476,11 +456,11 @@ For all rectangular node types (start, end, process, io, subprocess, document), 
 Where:
 - `X`, `Y` = top-left position from layout calculations
 - `W`, `H` = node dimensions from layout calculations
-- `RX` = corner radius (20 for start/end, 4 for process/io/subprocess/document)
-- `type-TYPE` = one of `type-start`, `type-end`, `type-process`, `type-io`, `type-subprocess`, `type-document`
+- `RX` = corner radius (20 for start/end, 4 for process/subprocess/document)
+- `type-TYPE` = one of `type-start`, `type-end`, `type-process`, `type-subprocess`, `type-document`
 - CSS handles all visual styling (background, border, border-radius, text centering)
 
-For **decision (diamond)** nodes only, continue using SVG `<polygon>` with `<text>` labels.
+For **decision (diamond)** and **I/O parallelogram** nodes, continue using SVG geometry with SVG `<text>` labels.
 
 ## Rendering Order
 
@@ -489,7 +469,7 @@ When composing the final SVG, draw elements in this order:
 1. Grid background (`<rect fill="url(#grid)" />`)
 2. Swimlane bands and separators
 3. All connection lines and arrows (behind nodes)
-4. All node shapes (on top of arrows) — masking rects first, then foreignObject divs or SVG shapes
+4. All node shapes (on top of arrows) — masking rects/polygons first, then foreignObject divs or SVG shapes
 5. All labels (text on top of everything) — connection labels and decision diamond text
 6. Legend
 

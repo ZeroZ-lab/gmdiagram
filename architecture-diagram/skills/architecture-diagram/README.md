@@ -1,13 +1,13 @@
 # gmdiagram — Architecture Diagram Skill
 
-A Claude Code and Codex skill that generates professional diagrams from natural language descriptions. Supports 5 diagram types, 6 visual styles, and 4 output formats.
+A Claude Code and Codex skill that generates professional diagrams from natural language descriptions. Supports 5 diagram types, 9 visual styles, and 4 output formats.
 
 Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
 
 ## Features
 
 - **5 diagram types**: Architecture, Flowchart, Mind Map, ER Diagram, Sequence Diagram
-- **6 visual styles**: Dark Professional, Hand-Drawn Sketch, Light Corporate, Cyberpunk Neon, Blueprint, Warm Cozy
+- **9 visual styles**: Dark Professional, Hand-Drawn Sketch, Light Corporate, Cyberpunk Neon, Blueprint, Warm Cozy, Minimalist, Terminal Retro, Pastel Dream
 - **4 output formats**: HTML, SVG, Mermaid, PNG/PDF (via export script)
 - **150+ icons**: Curated from Tabler Icons and Simple Icons for richer visual expression
 - **Structured generation**: Two-step process (JSON schema → output) for reliable results
@@ -65,7 +65,7 @@ Just ask Claude to create a diagram:
 
 ## Examples
 
-Each of the 6 visual styles applied to a different diagram type:
+Each of the 9 visual styles applied to a different diagram type:
 
 <table>
 <tr>
@@ -104,6 +104,30 @@ Each of the 6 visual styles applied to a different diagram type:
 <sup>Mind Map · <b>Warm Cozy</b> · 3 levels · 15+ nodes</sup>
 </td>
 </tr>
+<tr>
+<td width="50%" align="center">
+<a href="assets/examples/images/architecture-minimalist.html">Open HTML Preview</a><br/>
+<b>Clean API Architecture</b><br/>
+<sup>Architecture · <b>Minimalist</b> · 4 layers · 9 modules</sup>
+</td>
+<td width="50%" align="center">
+<a href="assets/examples/images/architecture-terminal.html">Open HTML Preview</a><br/>
+<b>Retro Terminal System</b><br/>
+<sup>Architecture · <b>Terminal Retro</b> · 4 layers · CRT phosphor green</sup>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center">
+<a href="assets/examples/images/architecture-cyberpunk.html">Open HTML Preview</a><br/>
+<b>Hacker Toolkit</b><br/>
+<sup>Architecture · <b>Cyberpunk Neon</b> · 4 layers · Catppuccin palette</sup>
+</td>
+<td width="50%" align="center">
+<a href="assets/examples/images/architecture-pastel.html">Open HTML Preview</a><br/>
+<b>Cloud Native Ecosystem</b><br/>
+<sup>Architecture · <b>Pastel Dream</b> · 5 layers · lavender pastels</sup>
+</td>
+</tr>
 </table>
 
 ## Visual Styles
@@ -116,6 +140,9 @@ Each of the 6 visual styles applied to a different diagram type:
 | **Cyberpunk Neon** | Catppuccin dark (#11111b) | Developer tools, tech content |
 | **Blueprint** | Nord dark (#2e3440) | Engineering specs, infra docs |
 | **Warm Cozy** | Warm cream (#f9f5eb) | Tutorials, non-technical audiences |
+| **Minimalist** | Pure white (#ffffff) | Technical docs, print |
+| **Terminal Retro** | CRT black (#0a0a0a) | Developer blogs, fun |
+| **Pastel Dream** | Lavender (#fef7ff) | Education, presentations |
 
 ## Output Formats
 
@@ -204,7 +231,10 @@ architecture-diagram/
 │   ├── style-light-corporate.md
 │   ├── style-cyberpunk-neon.md
 │   ├── style-blueprint.md
-│   └── style-warm-cozy.md
+│   ├── style-warm-cozy.md
+│   ├── style-minimalist.md
+│   ├── style-terminal-retro.md
+│   └── style-pastel-dream.md
 │
 ├── assets/
 │   ├── schema-architecture.json      # Architecture JSON Schema
@@ -218,6 +248,9 @@ architecture-diagram/
 │   ├── template-cyberpunk-neon.html
 │   ├── template-blueprint.html
 │   ├── template-warm-cozy.html
+│   ├── template-minimalist.html
+│   ├── template-terminal-retro.html
+│   ├── template-pastel-dream.html
 │   └── examples/
 │
 └── scripts/
