@@ -28,6 +28,16 @@ This layout reference works with the CSS+SVG hybrid approach defined in `compone
 | `LEGEND_OFFSET` | 50px | Space below last node before legend |
 | `BRANCH_LABEL_OFFSET` | 8px | Offset of Yes/No label from decision edge |
 
+## Density Multipliers
+
+Apply these multipliers to the constants above based on the `density` parameter (default: `normal`).
+
+| Constant | compact | normal | spacious |
+|----------|---------|--------|----------|
+| PAGE_MARGIN | 24px | 40px | 60px |
+| NODE_GAP_V | 40px | 60px | 80px |
+| NODE_GAP_H | 25px | 40px | 55px |
+
 ## Step 1: Calculate Node Dimensions
 
 Each node type has different dimension rules. These dimensions set the `<foreignObject>` width/height (or `<polygon>` extents for diamonds). **CSS handles text centering within the node — do not compute text positions for rectangular nodes.**
@@ -500,3 +510,17 @@ If two connections target the same node:
 - Main flow arrow enters from top (bottom_center -> top_center)
 - Branch arrow enters from the right side (right_center or left offset)
 - Offset the second arrow's y slightly to avoid visual overlap
+
+## LR Mode (Left-to-Right)
+
+When the primary flow direction is horizontal (left-to-right), the layout adapts as follows:
+
+### Layout Changes
+
+- **Primary flow axis is horizontal** (left-to-right)
+- **NODE_GAP_H** becomes the main sequential gap (80px between nodes in the main flow)
+- **NODE_GAP_V** becomes the branch row gap (40px between parallel rows)
+- **Decision branches go up/down** instead of left/right
+- **Main row** center_y = SVG_H / 2
+- **Branch rows** offset vertically: `branch_row_y = main_row_y + (branch_index + 1) * (max_node_h + 40)`
+- **Loop-back connections** route along the bottom of the diagram

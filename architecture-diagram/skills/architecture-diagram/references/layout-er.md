@@ -13,6 +13,16 @@
 | ENTITY_GAP_V | 80 | Vertical gap between entities |
 | CARD_LABEL_PAD | 30 | Padding for cardinality label |
 
+## Density Multipliers
+
+Apply these multipliers to the constants above based on the `density` parameter (default: `normal`).
+
+| Constant | compact | normal | spacious |
+|----------|---------|--------|----------|
+| PAGE_MARGIN | 24px | 40px | 60px |
+| ENTITY_GAP_H | 80px | 120px | 160px |
+| ENTITY_GAP_V | 50px | 80px | 110px |
+
 ## Entity Dimensions
 
 ### Width

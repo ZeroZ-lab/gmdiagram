@@ -28,6 +28,16 @@ Only two things need coordinate math:
 | `LAYER_H_SIMPLE` | 101px | Layer height with simple modules |
 | `LAYER_H_BADGE` | 116px | Layer height with tech badge modules |
 
+## Density Multipliers
+
+Apply these multipliers to the constants above based on the `density` parameter (default: `normal`).
+
+| Constant | compact | normal | spacious |
+|----------|---------|--------|----------|
+| PAGE_MARGIN | 24px | 40px | 60px |
+| LAYER_GAP | 30px | 50px | 70px |
+| MODULE_GAP | 12px | 20px | 28px |
+
 ## Step 1: Determine Layer Heights
 
 > ⚠️ **CRITICAL RULE: ALWAYS use fixed heights. NEVER compute custom heights based on content.**
@@ -252,3 +262,37 @@ h = 508 + 101 + 50 + 50 + 30 = 739 → "0 0 1000 740"
 - **Still use LAYER_H_BADGE (116px) or LAYER_H_SIMPLE (101px)** — do NOT shrink the height
 - A single-module layer is NOT the same as a no-children layer
 - Example: a Gateway layer with Nginx module + `:80/:443` badge → height = 116px
+
+## LR Mode (Left-to-Right)
+
+When `direction` is `"LR"`, layers become vertical columns arranged horizontally instead of horizontal rows stacked vertically.
+
+### Layout Changes
+
+- **Layers become vertical columns** arranged left-to-right
+- **SVG_W** becomes computed from column count; **SVG_H** is fixed at 800px
+- **Column width**: 180px; **Column gap**: 40px
+- **Modules stack vertically** within each column (`flex-direction: column`)
+- **Connections route horizontally** between columns
+
+### Coordinate Formulas
+
+```
+col_x[0] = PAGE_MARGIN
+col_x[i] = col_x[i-1] + col_w + 40
+```
+
+Where `col_w = 180` and the column gap is `40`.
+
+### ViewBox Calculation
+
+```
+viewBox_w = col_x[last] + col_w + PAGE_MARGIN
+viewBox_h = max(col_h) + PAGE_MARGIN * 2
+viewBox = "0 0 viewBox_w viewBox_h"
+```
+
+### Connection Routing
+
+- Adjacent columns: straight horizontal line from right edge of source column to left edge of target column
+- Skipping columns: route along TOP or BOTTOM edge to avoid crossing intermediate columns

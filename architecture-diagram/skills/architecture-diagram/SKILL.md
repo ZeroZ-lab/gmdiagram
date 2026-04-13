@@ -13,7 +13,7 @@ description: >
   sequence diagram, interaction diagram, message flow, API flow, protocol flow,
   分层架构图, 系统架构图, 架构图, 流程图, 思维导图, ER图, 序列图, 时序图,
   or wants to visualize how a system works.
-  Supports 5 diagram types and 6 visual styles: dark-professional, hand-drawn, light-corporate, cyberpunk-neon, blueprint, warm-cozy.
+  Supports 5 diagram types and 9 visual styles: dark-professional, hand-drawn, light-corporate, cyberpunk-neon, blueprint, warm-cozy, minimalist, terminal-retro, pastel-dream.
   Supports 4 output formats: html, svg, mermaid, png/pdf (via export script).
 ---
 
@@ -74,36 +74,55 @@ options:
 
 ### Question 2 — Visual Style (always ask unless user named a style)
 
-Split into two calls of 3 options each to stay within the 4-option limit.
+Split into three style families. First call asks for family:
 
-**First call** — ask diagram type (if needed) AND style group:
+**First call:**
 ```
 question: "Which style family?"
 header: "Style"
 multiSelect: false
 options:
-  - label: "Dark (Recommended)"
-    description: "Dark Professional — neon accents, tech articles, docs, presentations"
-  - label: "Light / Corporate"
-    description: "Light Corporate — clean white, muted palette, enterprise reviews"
+  - label: "Dark"
+    description: "Dark Professional, Cyberpunk Neon, or Terminal Retro"
+  - label: "Light / Clean"
+    description: "Light Corporate, Minimalist, or Warm Cozy"
   - label: "Creative"
-    description: "Hand-Drawn, Cyberpunk Neon, Blueprint, or Warm Cozy"
+    description: "Hand-Drawn, Blueprint, or Pastel Dream"
 ```
 
-If the user picks "Creative", follow up:
+Then follow up based on the family:
+
+**Dark follow-up:**
 ```
-question: "Which creative style?"
-header: "Style"
-multiSelect: false
+options:
+  - label: "Dark Professional (Recommended)"
+    description: "Neon accents, tech articles, docs, presentations"
+  - label: "Cyberpunk Neon"
+    description: "Catppuccin dark, vivid neon, developer tools"
+  - label: "Terminal Retro"
+    description: "CRT green-on-black, scanlines, developer blogs"
+```
+
+**Light follow-up:**
+```
+options:
+  - label: "Light Corporate"
+    description: "Clean white, muted palette, enterprise reviews"
+  - label: "Minimalist"
+    description: "Monochrome, ultra-thin borders, maximum whitespace"
+  - label: "Warm Cozy"
+    description: "Warm cream, soft tones, tutorials"
+```
+
+**Creative follow-up:**
+```
 options:
   - label: "Hand-Drawn Sketch"
-    description: "Warm beige, sketchy borders — whiteboard, teaching, blog posts"
-  - label: "Cyberpunk Neon"
-    description: "Catppuccin dark, vivid neon — developer tools, futuristic content"
+    description: "Warm beige, sketchy borders, whiteboard feel"
   - label: "Blueprint"
-    description: "Nord blue, grid lines — engineering specs, infrastructure docs"
-  - label: "Warm Cozy"
-    description: "Warm cream, soft tones — tutorials, non-technical audience"
+    description: "Nord blue, grid lines, engineering specs"
+  - label: "Pastel Dream"
+    description: "Soft pastels, rounded corners, playful"
 ```
 
 ### Question 3 — Output Format (always ask unless user named a format)
@@ -139,6 +158,38 @@ Minimize the number of `AskUserQuestion` calls:
 3. Put `(Recommended)` on the default/first option for style and format.
 4. After all selections are made, proceed to the Two-Step Generation Process below.
 
+### Density (default: normal, never ask)
+
+Density defaults to `"normal"`. Infer from the user's description — never ask via AskUserQuestion:
+- "compact" / "dense" / "tight" / "紧凑" → `"compact"`
+- "spacious" / "spread out" / "presentation" / "宽松" → `"spacious"`
+- Otherwise → `"normal"`
+
+When density differs from normal, read the "Density Multipliers" section in the corresponding layout reference file to get adjusted spacing constants.
+
+### Direction (default: TB, never ask)
+
+Direction defaults to `"TB"` (top-to-bottom). Only applies to `architecture` and `flowchart`. Infer from user description:
+- "left to right" / "horizontal" / "LR" / "从左到右" → `"LR"`
+- Otherwise → `"TB"`
+
+When direction is `"LR"`, read the "LR Mode" section in the layout reference file for transformed coordinate rules. ER, sequence, and mindmap diagrams always use their inherent layout — ignore direction for these types.
+
+### Font and Color Overrides (ask only if user requests)
+
+After all selections, if the user mentions custom colors, fonts, or brand colors, apply overrides from the `font` and `colors` fields in the JSON schema.
+
+**Font override:** When `font` is set, add a Google Fonts `<link>` in the HTML `<head>` and replace all `font-family` declarations with the user's font as primary.
+
+**Color overrides:** When `colors` object is present:
+- `colors.primary` replaces the style's primary accent/border color
+- `colors.secondary` replaces subtle border and background colors
+- `colors.accent` replaces highlight colors
+- `colors.background` replaces the page background color
+- `colors.text` replaces primary text color
+
+Apply overrides LAST, after all style template values are resolved. Override colors replace corresponding values in type color mapping, connection lines, and legend swatches.
+
 ## Two-Step Generation Process
 
 ALWAYS follow these two steps in order. Never skip to output directly.
@@ -160,6 +211,8 @@ Key rules across all types:
 - Use semantic `type` values as defined in each schema
 - If the user doesn't specify a style, use `dark-professional`
 - If the user doesn't specify a format, use `html`
+- If the user doesn't specify a density, use `normal`
+- If the user doesn't specify a direction, use `TB` (architecture/flowchart only)
 - Components can reference icons via the `"icon"` field (see `references/icons-catalog.md`)
 
 Output the JSON first, then proceed to Step 2.
@@ -175,6 +228,9 @@ Read the diagram-type reference file for generation instructions:
    - `cyberpunk-neon` → `references/style-cyberpunk-neon.md` → `assets/template-cyberpunk-neon.html`
    - `blueprint` → `references/style-blueprint.md` → `assets/template-blueprint.html`
    - `warm-cozy` → `references/style-warm-cozy.md` → `assets/template-warm-cozy.html`
+   - `minimalist` → `references/style-minimalist.md` → `assets/template-minimalist.html`
+   - `terminal-retro` → `references/style-terminal-retro.md` → `assets/template-terminal-retro.html`
+   - `pastel-dream` → `references/style-pastel-dream.md` → `assets/template-pastel-dream.html`
 
 2. **Compute layout**: Follow the coordinate calculation rules in the diagram-type-specific layout file.
 

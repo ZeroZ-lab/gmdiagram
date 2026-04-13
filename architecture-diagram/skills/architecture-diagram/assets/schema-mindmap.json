@@ -26,8 +26,8 @@
     },
     "style": {
       "type": "string",
-      "enum": ["dark-professional", "hand-drawn", "light-corporate", "cyberpunk-neon", "blueprint", "warm-cozy"],
-      "description": "Visual style preset. Each style has its own template and design rules. Options: dark-professional (dark tech), hand-drawn (sketch/whiteboard), light-corporate (business/clean), cyberpunk-neon (neon glow/Catppuccin), blueprint (engineering/Nord), warm-cozy (friendly/Gruvbox).",
+      "enum": ["dark-professional", "hand-drawn", "light-corporate", "cyberpunk-neon", "blueprint", "warm-cozy", "minimalist", "terminal-retro", "pastel-dream"],
+      "description": "Visual style preset. Each style has its own template and design rules. Options: dark-professional (dark tech), hand-drawn (sketch/whiteboard), light-corporate (business/clean), cyberpunk-neon (neon glow/Catppuccin), blueprint (engineering/Nord), warm-cozy (friendly/Gruvbox), minimalist (ultra-clean monochrome), terminal-retro (CRT green-on-black), pastel-dream (soft pastels, rounded).",
       "default": "dark-professional"
     },
     "format": {
@@ -35,6 +35,12 @@
       "enum": ["html", "svg", "mermaid"],
       "description": "Output format. HTML is the default (single-file with inline SVG and CSS). SVG outputs standalone SVG. Mermaid outputs Mermaid text syntax.",
       "default": "html"
+    },
+    "density": {
+      "type": "string",
+      "enum": ["compact", "normal", "spacious"],
+      "description": "Layout density. compact=tighter spacing for dense diagrams; normal=standard spacing; spacious=generous spacing for presentations.",
+      "default": "normal"
     },
     "centralNode": {
       "$ref": "#/$defs/centralNode",
@@ -45,6 +51,23 @@
       "description": "Legend entries shown below the diagram. Auto-generated from branch colors if not provided.",
       "items": { "$ref": "#/$defs/legendEntry" },
       "default": []
+    },
+    "font": {
+      "type": "string",
+      "description": "Optional font override. Replaces the style's default font family. Use a Google Fonts name (e.g., 'Inter', 'Fira Code', 'Merriweather').",
+      "default": null
+    },
+    "colors": {
+      "type": "object",
+      "description": "Optional color overrides. Each key overrides the corresponding semantic color from the chosen style.",
+      "properties": {
+        "primary": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "Primary accent color (borders, highlights)" },
+        "secondary": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "Secondary color (subtle borders, backgrounds)" },
+        "accent": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "Accent color (highlights, call-to-action elements)" },
+        "background": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "Page background color" },
+        "text": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "description": "Primary text color" }
+      },
+      "additionalProperties": false
     },
     "metadata": {
       "type": "object",

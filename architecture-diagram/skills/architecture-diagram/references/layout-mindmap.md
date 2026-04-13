@@ -20,6 +20,16 @@ Node boxes use `<foreignObject>` + CSS (see `components-mindmap.md`), so text ce
 | `NODE_PAD` | 24px | Total horizontal padding inside nodes (12px each side) |
 | `PAGE_MARGIN` | 40px | Minimum space between content and SVG edge |
 
+## Density Multipliers
+
+Apply these multipliers to the constants above based on the `density` parameter (default: `normal`).
+
+| Constant | compact | normal | spacious |
+|----------|---------|--------|----------|
+| PAGE_MARGIN | 24px | 40px | 60px |
+| BRANCH_H_GAP | 80px | 120px | 160px |
+| BRANCH_V_GAP | 20px | 30px | 40px |
+
 ## Step 1: Determine Central Node Position
 
 ```

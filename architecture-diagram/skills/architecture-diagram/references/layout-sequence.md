@@ -18,6 +18,16 @@
 | ACTOR_BOX_MIN_W | 80 | Minimum width for actor boxes (CSS min-width) |
 | ACTOR_BOX_PAD_X | 12 | Horizontal padding inside actor box (CSS padding) |
 
+## Density Multipliers
+
+Apply these multipliers to the constants above based on the `density` parameter (default: `normal`).
+
+| Constant | compact | normal | spacious |
+|----------|---------|--------|----------|
+| PAGE_MARGIN | 24px | 40px | 60px |
+| ACTOR_GAP | 100px | 150px | 200px |
+| MSG_GAP | 28px | 40px | 55px |
+
 ## Actor Positioning
 
 ```

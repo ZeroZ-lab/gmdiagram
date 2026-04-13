@@ -7,7 +7,7 @@
 - **Repository**: https://github.com/ZeroZ-lab/gmdiagram
 - **Author**: zhengjianqiao
 - **License**: MIT
-- **Versions**: Marketplace `0.1.2`, Plugin `0.1.2`
+- **Versions**: Marketplace `0.2.0`, Plugin `0.2.0`
 
 ## Repository Structure
 
@@ -55,7 +55,7 @@ ALL diagram generation follows exactly two steps. Never skip to output directly.
 
 ### Visual Styles (6)
 
-`dark-professional` (default), `hand-drawn`, `light-corporate`, `cyberpunk-neon`, `blueprint`, `warm-cozy`
+`dark-professional` (default), `hand-drawn`, `light-corporate`, `cyberpunk-neon`, `blueprint`, `warm-cozy`, `minimalist`, `terminal-retro`, `pastel-dream`
 
 Each style has a reference file (`references/style-{name}.md`) and an HTML template (`assets/template-{name}.html`).
 

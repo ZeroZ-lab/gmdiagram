@@ -17,7 +17,7 @@ Current focus:
 ## Features
 
 - **5 diagram types**: Architecture, Flowchart, Mind Map, ER Diagram, Sequence Diagram
-- **6 visual styles**: Dark Professional, Hand-Drawn Sketch, Light Corporate, Cyberpunk Neon, Blueprint, Warm Cozy
+- **9 visual styles**: Dark Professional, Hand-Drawn Sketch, Light Corporate, Cyberpunk Neon, Blueprint, Warm Cozy, Minimalist, Terminal Retro, Pastel Dream
 - **4 output formats**: HTML, SVG, Mermaid, PNG/PDF export
 - **Single-file delivery**: inline SVG, embedded styling, no JavaScript required
 
@@ -66,8 +66,8 @@ For full documentation including examples, visual style reference, and output fo
 
 ## Version
 
-- Marketplace: `0.1.2`
-- Plugin: `0.1.2`
+- Marketplace: `0.2.0`
+- Plugin: `0.2.0`
 
 ## License
 
