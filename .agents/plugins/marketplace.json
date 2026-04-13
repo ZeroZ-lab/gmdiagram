@@ -1,5 +1,7 @@
 {
   "name": "gmdiagram-marketplace",
+  "version": "0.1.2",
+  "description": "Local marketplace for the gmdiagram Codex plugin.",
   "interface": {
     "displayName": "gmdiagram Marketplace"
   },

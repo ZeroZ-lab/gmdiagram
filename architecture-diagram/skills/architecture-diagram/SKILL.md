@@ -27,19 +27,117 @@ Generate publication-quality diagrams as standalone files. The output can be:
 - **Mermaid**: Mermaid text syntax (paste into GitHub, Notion, etc.)
 - **PNG/PDF**: Via the export script at `scripts/export.sh`
 
-## Diagram Type Selection
+## Interactive Selection
 
-When the user describes a system, determine the diagram type:
+When the user's request does NOT already specify all three choices (diagram type, style, output format), use the `AskUserQuestion` tool to let the user choose.
 
-| User Intent | Diagram Type | Reference File |
-|---|---|---|
-| System layers, tiers, services, infrastructure, platform | `architecture` | `references/diagram-architecture.md` |
-| Process flow, decision tree, algorithm, branching logic | `flowchart` | `references/diagram-flowchart.md` |
-| Brainstorm, topic hierarchy, feature tree, learning roadmap | `mindmap` | `references/diagram-mindmap.md` |
-| Database tables, entities, relationships, data model | `er` | `references/diagram-er.md` |
-| Message flow, API calls, protocol, interaction between actors | `sequence` | `references/diagram-sequence.md` |
+**Important**: `AskUserQuestion` supports at most **4 options per question** and **4 questions per call**. When there are more than 4 choices, split into two calls or use the auto-infer + confirm pattern below.
 
-If unsure, default to `architecture`. Read the diagram-type-registry at `references/diagram-type-registry.md` for detailed trigger keywords.
+### Selection Strategy
+
+For each dimension, follow this logic:
+
+1. **Can the choice be inferred from the user's description?** → Skip asking, use the inferred value directly.
+2. **Does the user explicitly state it?** → Skip asking, use the stated value.
+3. **Still ambiguous?** → Ask via `AskUserQuestion`.
+
+### Question 1 — Diagram Type (ask only if ambiguous)
+
+The user's description usually makes the type obvious. Only ask when multiple types could fit.
+
+```
+question: "Which diagram type fits your needs?"
+header: "Type"
+multiSelect: false
+options:
+  - label: "Architecture"
+    description: "System layers, services, infrastructure, platform maps"
+  - label: "Flowchart"
+    description: "Process flow, decision tree, branching logic"
+  - label: "Mind Map"
+    description: "Topic hierarchy, brainstorm, feature tree"
+  - label: "Other"
+    description: "ER Diagram (data model) or Sequence Diagram (message flow)"
+```
+
+If the user picks "Other", ask a follow-up:
+```
+question: "Which specific type?"
+header: "Type"
+multiSelect: false
+options:
+  - label: "ER Diagram"
+    description: "Database tables, entities, relationships, data model"
+  - label: "Sequence Diagram"
+    description: "Message flow, API calls, protocol, interaction between actors"
+```
+
+### Question 2 — Visual Style (always ask unless user named a style)
+
+Split into two calls of 3 options each to stay within the 4-option limit.
+
+**First call** — ask diagram type (if needed) AND style group:
+```
+question: "Which style family?"
+header: "Style"
+multiSelect: false
+options:
+  - label: "Dark (Recommended)"
+    description: "Dark Professional — neon accents, tech articles, docs, presentations"
+  - label: "Light / Corporate"
+    description: "Light Corporate — clean white, muted palette, enterprise reviews"
+  - label: "Creative"
+    description: "Hand-Drawn, Cyberpunk Neon, Blueprint, or Warm Cozy"
+```
+
+If the user picks "Creative", follow up:
+```
+question: "Which creative style?"
+header: "Style"
+multiSelect: false
+options:
+  - label: "Hand-Drawn Sketch"
+    description: "Warm beige, sketchy borders — whiteboard, teaching, blog posts"
+  - label: "Cyberpunk Neon"
+    description: "Catppuccin dark, vivid neon — developer tools, futuristic content"
+  - label: "Blueprint"
+    description: "Nord blue, grid lines — engineering specs, infrastructure docs"
+  - label: "Warm Cozy"
+    description: "Warm cream, soft tones — tutorials, non-technical audience"
+```
+
+### Question 3 — Output Format (always ask unless user named a format)
+
+```
+question: "Which output format?"
+header: "Format"
+multiSelect: false
+options:
+  - label: "HTML (Recommended)"
+    description: "Single file with inline SVG, opens in any browser"
+  - label: "SVG"
+    description: "Standalone SVG for vector editors (Figma, Illustrator)"
+  - label: "Mermaid"
+    description: "Text syntax, paste into GitHub, Notion, or markdown"
+  - label: "PNG / PDF"
+    description: "Image export via script (requires Node.js or rsvg-convert)"
+```
+
+### How to Combine Questions
+
+Minimize the number of `AskUserQuestion` calls:
+
+- **User specified nothing**: First call asks Type + Style family + Format (3 questions). Then a follow-up call if they picked "Other" type or "Creative" style.
+- **User specified type only**: Ask Style family + Format (2 questions). Follow-up if "Creative" style.
+- **User specified type + style**: Ask Format only (1 question, 1 call).
+- **User specified everything**: Skip all selection, proceed directly to generation.
+
+### Rules
+
+1. If the user already specified all three, skip selection entirely.
+2. Only ask about dimensions the user hasn't specified.
+3. Put `(Recommended)` on the default/first option for style and format.
+4. After all selections are made, proceed to the Two-Step Generation Process below.
 
 ## Two-Step Generation Process
 
@@ -98,22 +196,19 @@ For other formats:
 5. **No JavaScript** — the output must work without any scripting (HTML/SVG formats)
 6. **Escape all user text** — HTML-entity-escape `<`, `>`, `&`, `"`, `'` in all labels, titles, and descriptions before inserting into SVG/HTML to prevent XSS
 
-## Style Decision Guide
+## Diagram Type Reference
 
-| Situation | Recommended style |
-|-----------|------------------|
-| Technical article, documentation | `dark-professional` |
-| Presentation, slide deck | `dark-professional` |
-| Whiteboard/teaching context | `hand-drawn` |
-| Blog post with casual tone | `hand-drawn` |
-| Enterprise architecture review | `light-corporate` |
-| Stakeholder/business presentation | `light-corporate` |
-| Developer tool, CLI product | `cyberpunk-neon` |
-| Futuristic/tech-forward content | `cyberpunk-neon` |
-| Engineering spec, technical drawing | `blueprint` |
-| Infrastructure/SRE documentation | `blueprint` |
-| Educational content, tutorial | `warm-cozy` |
-| Non-technical audience, friendly docs | `warm-cozy` |
+When the diagram type is clear from context (or after the user selects it), use this mapping:
+
+| Diagram Type | Reference File | Schema File |
+|---|---|---|
+| `architecture` | `references/diagram-architecture.md` | `assets/schema-architecture.json` |
+| `flowchart` | `references/diagram-flowchart.md` | `assets/schema-flowchart.json` |
+| `mindmap` | `references/diagram-mindmap.md` | `assets/schema-mindmap.json` |
+| `er` | `references/diagram-er.md` | `assets/schema-er.json` |
+| `sequence` | `references/diagram-sequence.md` | `assets/schema-sequence.json` |
+
+Read the diagram-type-registry at `references/diagram-type-registry.md` for detailed trigger keywords.
 
 ## Iteration Workflow
 

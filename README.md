@@ -66,8 +66,8 @@ For full documentation including examples, visual style reference, and output fo
 
 ## Version
 
-- Marketplace: `0.1.0`
-- Plugin: `0.1.0`
+- Marketplace: `0.1.2`
+- Plugin: `0.1.2`
 
 ## License
 
