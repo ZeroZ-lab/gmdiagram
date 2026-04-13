@@ -21,6 +21,9 @@ Map gmdiagram styles to Mermaid themes:
 | minimalist | `%%{init: {theme: 'base'}}%%` |
 | terminal-retro | `%%{init: {theme: 'dark'}}%%` |
 | pastel-dream | `%%{init: {theme: 'base'}}%%` |
+| notion | `%%{init: {theme: 'base'}}%%` |
+| material | `%%{init: {theme: 'base'}}%%` |
+| glassmorphism | `%%{init: {theme: 'base'}}%%` |
 
 For custom colors, add `classDef`:
 ```
@@ -136,6 +139,91 @@ Rules:
 - `->>` sync, `--)>>` async, `-->>` return
 - `alt/else/end`, `loop/end`, `opt/end` for fragments
 - `activate`/`deactivate` for activation boxes
+
+## Gantt Chart → Mermaid
+
+```mermaid
+gantt
+    title Project Timeline
+    dateFormat YYYY-MM-DD
+    section Planning
+    Research     :a1, 2024-01-01, 10d
+    Design       :a2, after a1, 5d
+    section Development
+    Backend      :b1, after a2, 14d
+    Frontend     :b2, after a2, 14d
+    Integration  :b3, after b1, 7d
+    section Milestones
+    Beta Release :milestone, after b3, 0d
+```
+
+Rules:
+- Use `gantt` keyword
+- `dateFormat` directive (e.g., `YYYY-MM-DD`)
+- `section` for grouping tasks
+- Task: `Label :id, start, duration`
+- `after id` for dependencies
+- Milestone: add `milestone` keyword, zero duration
+
+## UML Class Diagram → Mermaid
+
+```mermaid
+classDiagram
+    class Animal {
+        +String name
+        +int age
+        +makeSound() void
+    }
+    class Dog {
+        +fetch() void
+    }
+    Animal <|-- Dog : inheritance
+    class IShape {
+        <<interface>>
+        +draw() void
+    }
+    IShape <|.. Circle : implements
+```
+
+Rules:
+- Use `classDiagram` keyword
+- Class: `class Name { attributes methods }`
+- Visibility: `+` public, `-` private, `#` protected
+- Stereotype: `<<interface>>` inside class
+- Inheritance: `Class <|-- Subclass`
+- Implementation: `Interface <|.. Class`
+- Composition: `Class1 *-- Class2`
+- Aggregation: `Class1 o-- Class2`
+- Association: `Class1 --> Class2`
+- Dependency: `Class1 ..> Class2`
+
+## Network Topology → Mermaid
+
+```mermaid
+graph TB
+    subgraph DMZ
+        FW[Firewall]
+        LB[Load Balancer]
+    end
+    subgraph Production
+        S1[Server 1]
+        S2[Server 2]
+        DB[(Database)]
+    end
+    FW -->|1Gbps| LB
+    LB --> S1
+    LB --> S2
+    S1 --> DB
+    S2 --> DB
+```
+
+Rules:
+- Use `graph TB` or `graph LR` keyword
+- Standard boxes: `id[Label]`
+- Databases: `id[(Label)]`
+- Cloud: `id((Label))`
+- Connections: `-->` with optional `|label|` for bandwidth/type
+- Zones → `subgraph ZoneName ... end`
 
 ## General Rules
 

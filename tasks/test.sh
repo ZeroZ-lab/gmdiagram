@@ -16,7 +16,9 @@ pass() { PASS=$((PASS+1)); echo "  ${GREEN}✓${NC} $1"; }
 fail() { FAIL=$((FAIL+1)); ERRORS="$ERRORS\n  ${RED}✗${NC} $1"; echo "  ${RED}✗${NC} $1"; }
 skip() { echo "  ${YELLOW}⊘${NC} $1 (skipped)"; }
 
-BASE="/Users/zhengjianqiao/workspace/gmdiagram/architecture-diagram/skills/architecture-diagram"
+# Resolve BASE relative to repo root (works locally and in CI)
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+BASE="$REPO_ROOT/architecture-diagram/skills/architecture-diagram"
 
 echo "====================================="
 echo "  gmdiagram Test Suite"
@@ -34,13 +36,13 @@ echo "=== 1. File Structure ==="
 # README.md exists
 [ -f "$BASE/README.md" ] && pass "README.md exists" || fail "README.md missing"
 
-# 5 JSON schemas
-for type in architecture flowchart mindmap er sequence; do
+# 8 JSON schemas (5 original + 3 new)
+for type in architecture flowchart mindmap er sequence gantt uml-class network; do
   [ -f "$BASE/assets/schema-${type}.json" ] && pass "schema-${type}.json exists" || fail "schema-${type}.json missing"
 done
 
-# 9 template HTML files
-for style in dark sketch light-corporate cyberpunk-neon blueprint warm-cozy minimalist terminal-retro pastel-dream; do
+# 12 template HTML files (9 original + 3 new)
+for style in dark sketch light-corporate cyberpunk-neon blueprint warm-cozy minimalist terminal-retro pastel-dream notion material glassmorphism; do
   case $style in
     sketch) template="template-sketch" ;;
     dark) template="template-dark" ;;
@@ -49,24 +51,24 @@ for style in dark sketch light-corporate cyberpunk-neon blueprint warm-cozy mini
   [ -f "$BASE/assets/${template}.html" ] && pass "${template}.html exists" || fail "${template}.html missing"
 done
 
-# 9 style reference files
-for style in dark-professional hand-drawn light-corporate cyberpunk-neon blueprint warm-cozy minimalist terminal-retro pastel-dream; do
+# 12 style reference files (9 original + 3 new)
+for style in dark-professional hand-drawn light-corporate cyberpunk-neon blueprint warm-cozy minimalist terminal-retro pastel-dream notion material glassmorphism; do
   [ -f "$BASE/references/style-${style}.md" ] && pass "style-${style}.md exists" || fail "style-${style}.md missing"
 done
 
-# 5 diagram reference files
-for type in architecture flowchart mindmap er sequence; do
+# 8 diagram reference files (5 original + 3 new)
+for type in architecture flowchart mindmap er sequence gantt uml-class network; do
   [ -f "$BASE/references/diagram-${type}.md" ] && pass "diagram-${type}.md exists" || fail "diagram-${type}.md missing"
 done
 
-# 5 layout reference files (layout-rules.md for architecture, layout-*.md for others)
+# 8 layout reference files
 [ -f "$BASE/references/layout-rules.md" ] && pass "layout-rules.md exists" || fail "layout-rules.md missing"
-for type in flowchart mindmap er sequence; do
+for type in flowchart mindmap er sequence gantt uml-class network; do
   [ -f "$BASE/references/layout-${type}.md" ] && pass "layout-${type}.md exists" || fail "layout-${type}.md missing"
 done
 
-# 4+ component reference files
-for type in flowchart mindmap er sequence; do
+# 7 component reference files (flowchart mindmap er sequence gantt uml-class network)
+for type in flowchart mindmap er sequence gantt uml-class network; do
   [ -f "$BASE/references/components-${type}.md" ] && pass "components-${type}.md exists" || fail "components-${type}.md missing"
 done
 [ -f "$BASE/references/component-templates.md" ] && pass "component-templates.md exists" || fail "component-templates.md missing"
@@ -110,7 +112,7 @@ echo ""
 # ===========================================
 echo "=== 3. Schema Structure ==="
 
-for type in architecture flowchart mindmap er sequence; do
+for type in architecture flowchart mindmap er sequence gantt uml-class network; do
   schema="$BASE/assets/schema-${type}.json"
   name="schema-${type}.json"
 
@@ -143,13 +145,13 @@ style_enum = None
 for key in ['style']:
   if key in s.get('properties',{}):
     style_enum = s['properties'][key].get('enum',[])
-if style_enum and len(style_enum)==9:
+if style_enum and len(style_enum)==12:
   exit(0)
 exit(1)
 " 2>/dev/null; then
-    pass "$name has 9 style options"
+    pass "$name has 12 style options"
   else
-    fail "$name should have 9 style options"
+    fail "$name should have 12 style options"
   fi
 
   # Check format enum
@@ -308,8 +310,8 @@ for type in architecture flowchart mindmap er sequence; do
   fi
 done
 
-# References all 9 styles
-for style in dark-professional hand-drawn light-corporate cyberpunk-neon blueprint warm-cozy minimalist terminal-retro pastel-dream; do
+# References all 12 styles
+for style in dark-professional hand-drawn light-corporate cyberpunk-neon blueprint warm-cozy minimalist terminal-retro pastel-dream notion material glassmorphism; do
   if grep -q "$style" "$SKILL"; then
     pass "SKILL.md references '$style'"
   else

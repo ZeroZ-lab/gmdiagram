@@ -13,7 +13,7 @@ description: >
   sequence diagram, interaction diagram, message flow, API flow, protocol flow,
   分层架构图, 系统架构图, 架构图, 流程图, 思维导图, ER图, 序列图, 时序图,
   or wants to visualize how a system works.
-  Supports 5 diagram types and 9 visual styles: dark-professional, hand-drawn, light-corporate, cyberpunk-neon, blueprint, warm-cozy, minimalist, terminal-retro, pastel-dream.
+  Supports 8 diagram types and 12 visual styles: dark-professional, hand-drawn, light-corporate, cyberpunk-neon, blueprint, warm-cozy, minimalist, terminal-retro, pastel-dream, notion, material, glassmorphism.
   Supports 4 output formats: html, svg, mermaid, png/pdf (via export script).
 ---
 
@@ -57,7 +57,7 @@ options:
   - label: "Mind Map"
     description: "Topic hierarchy, brainstorm, feature tree"
   - label: "Other"
-    description: "ER Diagram (data model) or Sequence Diagram (message flow)"
+    description: "ER Diagram, Sequence, Gantt, UML Class, or Network"
 ```
 
 If the user picks "Other", ask a follow-up:
@@ -70,6 +70,22 @@ options:
     description: "Database tables, entities, relationships, data model"
   - label: "Sequence Diagram"
     description: "Message flow, API calls, protocol, interaction between actors"
+  - label: "Gantt Chart"
+    description: "Project timeline, milestones, task scheduling"
+  - label: "More"
+    description: "UML Class Diagram or Network Topology"
+```
+
+If the user picks "More", ask a final follow-up:
+```
+question: "Which type?"
+header: "Type"
+multiSelect: false
+options:
+  - label: "UML Class Diagram"
+    description: "OOP design, classes, inheritance, interfaces"
+  - label: "Network Topology"
+    description: "Servers, routers, subnets, network architecture"
 ```
 
 ### Question 2 — Visual Style (always ask unless user named a style)
@@ -85,9 +101,9 @@ options:
   - label: "Dark"
     description: "Dark Professional, Cyberpunk Neon, or Terminal Retro"
   - label: "Light / Clean"
-    description: "Light Corporate, Minimalist, or Warm Cozy"
+    description: "Light Corporate, Minimalist, Warm Cozy, or Notion"
   - label: "Creative"
-    description: "Hand-Drawn, Blueprint, or Pastel Dream"
+    description: "Hand-Drawn, Blueprint, Pastel Dream, Material, or Glassmorphism"
 ```
 
 Then follow up based on the family:
@@ -112,6 +128,8 @@ options:
     description: "Monochrome, ultra-thin borders, maximum whitespace"
   - label: "Warm Cozy"
     description: "Warm cream, soft tones, tutorials"
+  - label: "Notion"
+    description: "Notion-like document aesthetic, system fonts, subtle borders"
 ```
 
 **Creative follow-up:**
@@ -123,6 +141,17 @@ options:
     description: "Nord blue, grid lines, engineering specs"
   - label: "Pastel Dream"
     description: "Soft pastels, rounded corners, playful"
+  - label: "More"
+    description: "Material Design or Glassmorphism"
+```
+
+If user picks "More":
+```
+options:
+  - label: "Material Design"
+    description: "Google Material, bold fills, elevation shadows, Roboto font"
+  - label: "Glassmorphism"
+    description: "Frosted glass, translucent layers, gradient background"
 ```
 
 ### Question 3 — Output Format (always ask unless user named a format)
@@ -205,6 +234,9 @@ Read the user's description and extract structure into the JSON schema for the s
 | `mindmap` | `assets/schema-mindmap.json` |
 | `er` | `assets/schema-er.json` |
 | `sequence` | `assets/schema-sequence.json` |
+| `gantt` | `assets/schema-gantt.json` |
+| `uml-class` | `assets/schema-uml-class.json` |
+| `network` | `assets/schema-network.json` |
 
 Key rules across all types:
 - Every component gets a unique `id` (kebab-case)
@@ -231,6 +263,9 @@ Read the diagram-type reference file for generation instructions:
    - `minimalist` → `references/style-minimalist.md` → `assets/template-minimalist.html`
    - `terminal-retro` → `references/style-terminal-retro.md` → `assets/template-terminal-retro.html`
    - `pastel-dream` → `references/style-pastel-dream.md` → `assets/template-pastel-dream.html`
+   - `notion` → `references/style-notion.md` → `assets/template-notion.html`
+   - `material` → `references/style-material.md` → `assets/template-material.html`
+   - `glassmorphism` → `references/style-glassmorphism.md` → `assets/template-glassmorphism.html`
 
 2. **Compute layout**: Follow the coordinate calculation rules in the diagram-type-specific layout file.
 
@@ -263,6 +298,9 @@ When the diagram type is clear from context (or after the user selects it), use 
 | `mindmap` | `references/diagram-mindmap.md` | `assets/schema-mindmap.json` |
 | `er` | `references/diagram-er.md` | `assets/schema-er.json` |
 | `sequence` | `references/diagram-sequence.md` | `assets/schema-sequence.json` |
+| `gantt` | `references/diagram-gantt.md` | `assets/schema-gantt.json` |
+| `uml-class` | `references/diagram-uml-class.md` | `assets/schema-uml-class.json` |
+| `network` | `references/diagram-network.md` | `assets/schema-network.json` |
 
 Read the diagram-type-registry at `references/diagram-type-registry.md` for detailed trigger keywords.
 

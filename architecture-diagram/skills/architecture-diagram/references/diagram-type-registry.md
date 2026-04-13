@@ -11,11 +11,14 @@ All supported diagram types with their trigger keywords, schema files, and refer
 | `mindmap` | `assets/schema-mindmap.json` | `references/diagram-mindmap.md` | `references/layout-mindmap.md` | `references/components-mindmap.md` | mind map, mindmap, brainstorm, concept map, feature tree, roadmap, 思维导图, 头脑风暴, 概念图 |
 | `er` | `assets/schema-er.json` | `references/diagram-er.md` | `references/layout-er.md` | `references/components-er.md` | ER diagram, entity relationship, database schema, data model, table relationship, ER图, 数据库设计, 实体关系 |
 | `sequence` | `assets/schema-sequence.json` | `references/diagram-sequence.md` | `references/layout-sequence.md` | `references/components-sequence.md` | sequence diagram, interaction diagram, message flow, API flow, protocol, 时序图, 序列图, 交互图 |
+| `gantt` | `assets/schema-gantt.json` | `references/diagram-gantt.md` | `references/layout-gantt.md` | `references/components-gantt.md` | gantt, timeline, schedule, milestone, project plan, 甘特图, 时间线, 项目计划 |
+| `uml-class` | `assets/schema-uml-class.json` | `references/diagram-uml-class.md` | `references/layout-uml-class.md` | `references/components-uml-class.md` | UML, class diagram, OOP, inheritance, interface, 类图, UML图, 继承关系 |
+| `network` | `assets/schema-network.json` | `references/diagram-network.md` | `references/layout-network.md` | `references/components-network.md` | network, topology, infrastructure, subnet, VLAN, 网络拓扑, 网络架构, 服务器 |
 
 ## Shared Resources
 
 All diagram types share:
-- **6 visual styles**: `references/style-*.md` + `assets/template-*.html`
+- **12 visual styles**: `references/style-*.md` + `assets/template-*.html`
 - **Design system**: `references/design-system.md`
 - **Icon catalog**: `references/icons-catalog.md`
 - **Output formats**: `references/output-svg.md`, `references/output-mermaid.md`, `references/output-png-pdf.md`

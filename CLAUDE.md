@@ -7,7 +7,7 @@
 - **Repository**: https://github.com/ZeroZ-lab/gmdiagram
 - **Author**: zhengjianqiao
 - **License**: MIT
-- **Versions**: Marketplace `0.2.3`, Plugin `0.2.3`
+- **Versions**: Marketplace `0.3.0`, Plugin `0.3.0`
 
 ## Repository Structure
 
@@ -98,7 +98,7 @@ cd architecture-diagram/skills/architecture-diagram/scripts && npm install
 | Change Type | Version Bump | Example |
 |-------------|-------------|---------|
 | Bug fix, typo, small tweak | `patch +1` | `0.1.0` → `0.1.1` |
-| New feature, new diagram type/style, new template | `minor +1` | `0.1.0` → `0.2.0` |
+| New feature, new diagram type/style, new template | `minor +1` | `0.1.0` → `0.3.0` |
 | Breaking change to schema, template API, or output format | `major +1` | `0.1.0` → `1.0.0` |
 
 Files to update on every version bump (keep all in sync):
