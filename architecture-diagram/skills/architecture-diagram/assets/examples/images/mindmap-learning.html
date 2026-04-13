@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full-Stack Developer Roadmap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f9f5eb;
+      color: #3d3d3d;
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .warm-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #e8a87c;
+    }
+    h1 { font-size: 24px; font-weight: 800; color: #4a3728; }
+    .subtitle { font-size: 14px; color: #8b7355; margin-top: 2px; }
+    .diagram-container {
+      background: white;
+      border: 2px solid #e8dcc8;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      overflow-x: auto;
+    }
+    .diagram-container svg { width: 100%; min-width: 900px; height: auto; display: block; }
+    .footer { font-size: 11px; color: #bfaa8e; text-align: center; padding-top: 14px; border-top: 2px dashed #ecf0e4; }
+
+    /* Mindmap node classes (warm-cozy) */
+    .mm-node {
+      display: flex; align-items: center; justify-content: center;
+      padding: 8px 16px; border-radius: 12px;
+      font-size: 13px; font-weight: 600; white-space: nowrap;
+      font-family: 'Nunito', sans-serif;
+    }
+    .mm-central {
+      background: linear-gradient(135deg, #e8a87c, #d4845a);
+      color: white; font-size: 16px; font-weight: 800;
+      border-radius: 16px; padding: 12px 24px;
+      box-shadow: 0 4px 16px rgba(212,132,90,0.3);
+    }
+    .mm-branch {
+      color: white; font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .mm-leaf {
+      background: white; font-weight: 600; font-size: 12px;
+      border: 1.5px solid; color: #5a5a5a;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="warm-dot"></div>
+      <div>
+        <h1>Full-Stack Developer Roadmap</h1>
+        <div class="subtitle">Learning path for modern full-stack development</div>
+      </div>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1060 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="dot" markerWidth="4" markerHeight="4" refX="2" refY="2">
+            <circle cx="2" cy="2" r="2" fill="#d4a574"/>
+          </marker>
+        </defs>
+
+        <!-- CONNECTION LINES (drawn first) -->
+
+        <!-- Center → Frontend -->
+        <path d="M 540,260 C 600,260 640,130 700,130" fill="none" stroke="#fb923c" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Frontend → leaves -->
+        <path d="M 820,130 C 860,130 880,70 920,70" fill="none" stroke="#fb923c" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 820,130 C 860,130 880,110 920,110" fill="none" stroke="#fb923c" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 820,130 C 860,130 880,150 920,150" fill="none" stroke="#fb923c" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 820,130 C 860,130 880,190 920,190" fill="none" stroke="#fb923c" stroke-width="1.5" opacity="0.6"/>
+
+        <!-- Center → Backend -->
+        <path d="M 540,260 C 600,260 640,390 700,390" fill="none" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Backend → leaves -->
+        <path d="M 820,390 C 860,390 880,330 920,330" fill="none" stroke="#2dd4bf" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 820,390 C 860,390 880,370 920,370" fill="none" stroke="#2dd4bf" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 820,390 C 860,390 880,410 920,410" fill="none" stroke="#2dd4bf" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 820,390 C 860,390 880,450 920,450" fill="none" stroke="#2dd4bf" stroke-width="1.5" opacity="0.6"/>
+
+        <!-- Center → DevOps -->
+        <path d="M 420,260 C 360,260 320,170 260,170" fill="none" stroke="#f472b6" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- DevOps → leaves -->
+        <path d="M 160,170 C 120,170 100,120 70,120" fill="none" stroke="#f472b6" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 160,170 C 120,170 100,170 70,170" fill="none" stroke="#f472b6" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 160,170 C 120,170 100,220 70,220" fill="none" stroke="#f472b6" stroke-width="1.5" opacity="0.6"/>
+
+        <!-- Center → Database -->
+        <path d="M 420,260 C 360,260 320,360 260,360" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Database → leaves -->
+        <path d="M 160,360 C 120,360 100,310 70,310" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 160,360 C 120,360 100,360 70,360" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity="0.6"/>
+        <path d="M 160,360 C 120,360 100,410 70,410" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity="0.6"/>
+
+        <!-- NODES -->
+
+        <!-- Central Node -->
+        <g transform="translate(420, 230)">
+          <foreignObject width="200" height="60">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-central">Full-Stack Developer</div>
+          </foreignObject>
+        </g>
+
+        <!-- RIGHT SIDE -->
+
+        <!-- Frontend branch -->
+        <g transform="translate(700, 110)">
+          <foreignObject width="120" height="40">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-branch" style="background:#fb923c;">Frontend</div>
+          </foreignObject>
+        </g>
+        <!-- Frontend leaves -->
+        <g transform="translate(920, 55)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#fb923c;">HTML &amp; CSS</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(920, 95)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#fb923c;">JavaScript</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(920, 135)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#fb923c;">React / Vue</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(920, 175)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#fb923c;">TypeScript</div>
+          </foreignObject>
+        </g>
+
+        <!-- Backend branch -->
+        <g transform="translate(700, 370)">
+          <foreignObject width="120" height="40">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-branch" style="background:#2dd4bf;">Backend</div>
+          </foreignObject>
+        </g>
+        <!-- Backend leaves -->
+        <g transform="translate(920, 315)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#2dd4bf;">Node.js</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(920, 355)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#2dd4bf;">Python</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(920, 395)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#2dd4bf;">REST &amp; GraphQL</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(920, 435)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#2dd4bf;">Authentication</div>
+          </foreignObject>
+        </g>
+
+        <!-- LEFT SIDE -->
+
+        <!-- DevOps branch -->
+        <g transform="translate(160, 150)">
+          <foreignObject width="100" height="40">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-branch" style="background:#f472b6;">DevOps</div>
+          </foreignObject>
+        </g>
+        <!-- DevOps leaves -->
+        <g transform="translate(0, 105)">
+          <foreignObject width="120" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#f472b6;">Git &amp; GitHub</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(10, 155)">
+          <foreignObject width="110" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#f472b6;">Docker</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(0, 205)">
+          <foreignObject width="120" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#f472b6;">CI/CD Pipelines</div>
+          </foreignObject>
+        </g>
+
+        <!-- Database branch -->
+        <g transform="translate(160, 340)">
+          <foreignObject width="100" height="40">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-branch" style="background:#a78bfa;">Database</div>
+          </foreignObject>
+        </g>
+        <!-- Database leaves -->
+        <g transform="translate(0, 295)">
+          <foreignObject width="120" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#a78bfa;">SQL (PostgreSQL)</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(0, 345)">
+          <foreignObject width="120" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#a78bfa;">NoSQL (MongoDB)</div>
+          </foreignObject>
+        </g>
+        <g transform="translate(0, 395)">
+          <foreignObject width="120" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="mm-node mm-leaf" style="border-color:#a78bfa;">Redis &amp; Caching</div>
+          </foreignObject>
+        </g>
+
+      </svg>
+    </div>
+
+    <div class="footer">
+      Generated by gmdiagram &middot; 2026-04-13
+    </div>
+  </div>
+</body>
+</html>
