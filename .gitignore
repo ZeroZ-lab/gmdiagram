@@ -1,7 +1,12 @@
-docs/SPEC.md
-tasks/
+docs/*
+!docs/SPEC.md
+!docs/NEXT-PLAN.md
+tasks/*
+!tasks/migration.md
+!tasks/test.sh
 .playwright-mcp/
 .DS_Store
 warm-cozy-full.png
 warm-cozy-preview.png
 .docs/*
+architecture-diagram/skills/architecture-diagram/scripts/node_modules/
