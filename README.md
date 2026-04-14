@@ -1,6 +1,6 @@
 # gmdiagram
 
-`gmdiagram` is a plugin repository for generating polished diagrams from natural language in both Claude Code and Codex.
+`gmdiagram` is a plugin repository for generating polished diagrams and data charts from natural language in both Claude Code and Codex.
 
 Repository: `https://github.com/ZeroZ-lab/gmdiagram`
 
@@ -10,14 +10,15 @@ Most AI-generated diagrams are structurally correct but visually weak. `gmdiagra
 
 Current focus:
 
-- Generate diagrams from natural language through the `architecture-diagram` plugin
+- Generate diagrams and data charts from natural language through the `architecture-diagram` plugin
 - Produce single-file outputs that are easy to open, share, and export
 - Support multiple diagram types and visual styles without requiring a separate design tool
 
 ## Features
 
-- **5 diagram types**: Architecture, Flowchart, Mind Map, ER Diagram, Sequence Diagram
-- **9 visual styles**: Dark Professional, Hand-Drawn Sketch, Light Corporate, Cyberpunk Neon, Blueprint, Warm Cozy, Minimalist, Terminal Retro, Pastel Dream
+- **8 diagram types**: Architecture, Flowchart, Mind Map, ER Diagram, Sequence Diagram, Gantt, UML Class, Network
+- **3 chart types**: Bar Chart, Pie Chart, Line Chart (via `data-chart` skill)
+- **12 visual styles**: Dark Professional, Hand-Drawn Sketch, Light Corporate, Cyberpunk Neon, Blueprint, Warm Cozy, Minimalist, Terminal Retro, Pastel Dream, Notion, Material, Glassmorphism
 - **4 output formats**: HTML, SVG, Mermaid, PNG/PDF export
 - **Single-file delivery**: inline SVG, embedded styling, no JavaScript required
 
@@ -61,13 +62,14 @@ For full documentation including examples, visual style reference, and output fo
 - `architecture-diagram/` — Installable plugin
   - `.claude-plugin/plugin.json` — Claude plugin manifest
   - `.codex-plugin/plugin.json` — Codex plugin manifest
-  - `skills/architecture-diagram/` — Skill instructions, templates, schemas, export scripts
+  - `skills/architecture-diagram/` — Diagram skill instructions, templates, schemas, export scripts
+  - `skills/data-chart/` — Chart skill instructions, schemas, render rules
 - `docs/SPEC.md` — Product specification
 
 ## Version
 
-- Marketplace: `0.3.0`
-- Plugin: `0.3.0`
+- Marketplace: `0.4.0`
+- Plugin: `0.4.0`
 
 ## License
 

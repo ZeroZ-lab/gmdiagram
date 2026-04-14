@@ -2,12 +2,12 @@
 
 ## Project Overview
 
-`gmdiagram` is a Claude Code / Codex plugin marketplace that generates publication-quality diagrams from natural language. The main (and currently only) plugin is `architecture-diagram`, which produces single-file HTML with inline SVG and embedded CSS — no JavaScript required.
+`gmdiagram` is a Claude Code / Codex plugin marketplace that generates publication-quality diagrams and data charts from natural language. The main plugin is `architecture-diagram`, which produces single-file HTML with inline SVG and embedded CSS — no JavaScript required. The plugin includes two skills: `architecture-diagram` (diagrams) and `data-chart` (data visualization charts).
 
 - **Repository**: https://github.com/ZeroZ-lab/gmdiagram
 - **Author**: zhengjianqiao
 - **License**: MIT
-- **Versions**: Marketplace `0.3.1`, Plugin `0.3.1`
+- **Versions**: Marketplace `0.4.0`, Plugin `0.4.0`
 
 ## Repository Structure
 
@@ -19,17 +19,26 @@ gmdiagram/
 │   ├── .claude-plugin/plugin.json           # Claude plugin manifest
 │   ├── .codex-plugin/plugin.json            # Codex plugin manifest
 │   ├── README.md                            # Plugin overview
-│   └── skills/architecture-diagram/
-│       ├── SKILL.md                         # Core skill instructions (LLM reads this)
-│       ├── README.md                        # Full user documentation
-│       ├── references/                      # Technical reference docs (layout, styles, components, schemas)
-│       ├── assets/
-│       │   ├── schema-*.json                # JSON schemas per diagram type
-│       │   ├── template-*.html              # HTML templates per visual style
-│       │   └── examples/                    # Example diagrams (JSON + HTML + screenshots)
-│       └── scripts/
-│           ├── export.sh                    # PNG/PDF export script
-│           └── package.json                 # resvg-js dependency for PNG export
+│   └── skills/
+│       ├── architecture-diagram/
+│       │   ├── SKILL.md                     # Diagram skill instructions
+│       │   ├── README.md                    # Full user documentation
+│       │   ├── references/                  # Technical reference docs
+│       │   ├── assets/
+│       │   │   ├── schema-*.json            # JSON schemas per diagram type
+│       │   │   ├── template-*.html          # HTML templates per visual style
+│       │   │   └── examples/                # Example diagrams
+│       │   └── scripts/
+│       │       ├── export.sh                # PNG/PDF export script
+│       │       └── package.json             # resvg-js dependency
+│       └── data-chart/
+│           ├── SKILL.md                     # Chart skill instructions
+│           ├── references/                  # Chart render rules, palettes, axis rules
+│           └── assets/
+│               ├── schema-bar.json          # Bar chart JSON Schema
+│               ├── schema-pie.json          # Pie chart JSON Schema (Phase 2)
+│               ├── schema-line.json         # Line chart JSON Schema (Phase 3)
+│               └── examples/                # Example charts
 ├── docs/SPEC.md                             # Product specification (Chinese)
 └── tasks/                                   # Task tracking and test outputs
 ```
@@ -52,6 +61,14 @@ ALL diagram generation follows exactly two steps. Never skip to output directly.
 | `mindmap` | `schema-mindmap.json` | `diagram-mindmap.md` | brainstorm, hierarchy, 思维导图 |
 | `er` | `schema-er.json` | `diagram-er.md` | database, entity, schema, ER图 |
 | `sequence` | `schema-sequence.json` | `diagram-sequence.md` | API flow, message, interaction, 时序图 |
+
+### Supported Chart Types (data-chart skill)
+
+| Type | Schema File | Render Reference | Trigger Keywords |
+|------|------------|-----------------|-----------------|
+| `bar` | `schema-bar.json` | `render-bar.md` | bar chart, column chart, 柱状图, 条形图 |
+| `pie` | `schema-pie.json` | `render-pie.md` | pie chart, donut chart, 饼图, 环形图 |
+| `line` | `schema-line.json` | `render-line.md` | line chart, area chart, 折线图, 面积图 |
 
 ### Visual Styles (6)
 
