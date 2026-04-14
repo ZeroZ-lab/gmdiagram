@@ -9,7 +9,7 @@ SEMVER_PATTERN="^[0-9]+\.[0-9]+\.[0-9]+$"
 
 echo "=== Checking Metadata Version Compliance ==="
 
-for skill_dir in architecture-diagram/skills/architecture-diagram architecture-diagram/skills/data-chart; do
+for skill_dir in gm-architecture/skills/gm-architecture gm-data-chart/skills/gm-data-chart; do
     if [ ! -d "$skill_dir/assets/examples" ]; then
         continue
     fi

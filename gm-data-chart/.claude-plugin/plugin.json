@@ -1,0 +1,41 @@
+{
+  "name": "gm-data-chart",
+  "version": "0.6.2",
+  "description": "Generate data visualization charts from natural language as single-file HTML, SVG, Mermaid, and exportable PNG/PDF.",
+  "author": {
+    "name": "zhengjianqiao",
+    "url": "https://github.com/ZeroZ-lab/gmdiagram"
+  },
+  "homepage": "https://github.com/ZeroZ-lab/gmdiagram",
+  "repository": "https://github.com/ZeroZ-lab/gmdiagram",
+  "license": "MIT",
+  "keywords": [
+    "chart",
+    "bar-chart",
+    "pie-chart",
+    "line-chart",
+    "area-chart",
+    "scatter-plot",
+    "radar-chart",
+    "funnel-chart",
+    "bubble-chart",
+    "data-table",
+    "data-visualization",
+    "svg",
+    "mermaid"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "GM Data Chart",
+    "shortDescription": "Generate polished data charts from natural language",
+    "longDescription": "Use GM Data Chart to generate bar charts, pie charts, line charts, area charts, scatter plots, radar charts, funnel charts, bubble charts, and data tables from natural language, with HTML, SVG, Mermaid, and exportable PNG/PDF outputs.",
+    "developerName": "zhengjianqiao",
+    "category": "Coding",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/ZeroZ-lab/gmdiagram",
+    "defaultPrompt": "Generate a data chart from my natural-language description"
+  }
+}

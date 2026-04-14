@@ -10,7 +10,8 @@ Most AI-generated diagrams are structurally correct but visually weak. `gmdiagra
 
 Current focus:
 
-- Generate diagrams and data charts from natural language through the `architecture-diagram` plugin
+- Generate diagrams from natural language through the `gm-architecture` plugin
+- Generate data charts from natural language through the `gm-data-chart` plugin
 - Produce single-file outputs that are easy to open, share, and export
 - Support multiple diagram types and visual styles without requiring a separate design tool
 
@@ -30,15 +31,17 @@ Current focus:
 # 1. Add the marketplace
 /plugin marketplace add ZeroZ-lab/gmdiagram
 
-# 2. Install the plugin
-/plugin install architecture-diagram@gmdiagram-marketplace
+# 2. Install the plugins
+/plugin install gm-architecture@gmdiagram-marketplace
+/plugin install gm-data-chart@gmdiagram-marketplace
 ```
 
 ### Codex
 
 For Codex, use the repo as a local plugin source. This repository now includes:
 
-- `architecture-diagram/.codex-plugin/plugin.json`
+- `gm-architecture/.codex-plugin/plugin.json`
+- `gm-data-chart/.codex-plugin/plugin.json`
 - `.agents/plugins/marketplace.json`
 
 If you are using this repo locally, point Codex at the repository root so it can discover the marketplace and plugin metadata.
@@ -53,17 +56,22 @@ Create a flowchart for a CI/CD pipeline with build, test, and deploy stages
 画一个微服务架构图，包含 API Gateway、用户服务、订单服务
 ```
 
-For full documentation including examples, visual style reference, and output format details, see the [Architecture Diagram Skill README](architecture-diagram/skills/architecture-diagram/README.md).
+For full documentation including examples, visual style reference, and output format details, see:
+- [GM Architecture Skill README](gm-architecture/skills/gm-architecture/README.md)
+- [GM Data Chart Skill README](gm-data-chart/skills/gm-data-chart/README.md)
 
 ## Repository Structure
 
 - `.claude-plugin/marketplace.json` — Marketplace definition
 - `.agents/plugins/marketplace.json` — Codex local marketplace definition
-- `architecture-diagram/` — Installable plugin
+- `gm-architecture/` — Architecture diagram plugin
   - `.claude-plugin/plugin.json` — Claude plugin manifest
   - `.codex-plugin/plugin.json` — Codex plugin manifest
-  - `skills/architecture-diagram/` — Diagram skill instructions, templates, schemas, export scripts
-  - `skills/data-chart/` — Chart skill instructions, schemas, render rules
+  - `skills/gm-architecture/` — Diagram skill instructions, templates, schemas, export scripts
+- `gm-data-chart/` — Data chart plugin
+  - `.claude-plugin/plugin.json` — Claude plugin manifest
+  - `.codex-plugin/plugin.json` — Codex plugin manifest
+  - `skills/gm-data-chart/` — Chart skill instructions, schemas, render rules
 - `docs/SPEC.md` — Product specification
 
 ## Version

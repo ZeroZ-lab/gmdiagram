@@ -1,5 +1,5 @@
 ---
-name: architecture-diagram
+name: gm-architecture
 description: >
   Generate professional architecture diagrams from system descriptions.
   Creates single-file HTML with inline SVG that can be opened in any browser.
@@ -17,7 +17,7 @@ description: >
   Supports 4 output formats: html, svg, mermaid, png/pdf (via export script).
 ---
 
-# gmdiagram — Architecture Diagram Skill
+# gmdiagram — GM Architecture Skill
 
 ## What This Skill Does
 

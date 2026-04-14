@@ -8,9 +8,19 @@
   },
   "plugins": [
     {
-      "name": "architecture-diagram",
-      "description": "Generate diagrams and data charts from natural language as HTML, SVG, Mermaid, and exportable PNG/PDF.",
-      "source": "./architecture-diagram",
+      "name": "gm-architecture",
+      "description": "Generate diagrams from natural language as HTML, SVG, Mermaid, and exportable PNG/PDF.",
+      "source": "./gm-architecture",
+      "version": "0.6.2",
+      "category": "development",
+      "author": {
+        "name": "zhengjianqiao"
+      }
+    },
+    {
+      "name": "gm-data-chart",
+      "description": "Generate data visualization charts from natural language as HTML, SVG, Mermaid, and exportable PNG/PDF.",
+      "source": "./gm-data-chart",
       "version": "0.6.2",
       "category": "development",
       "author": {

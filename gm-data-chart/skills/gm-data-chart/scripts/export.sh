@@ -1,0 +1,1 @@
+../../../gm-architecture/skills/gm-architecture/scripts/export.sh

@@ -4,7 +4,12 @@
 
 ## 一、产品定位
 
-`gmdiagram` 是一个 Claude Code 插件市场，通过 `architecture-diagram` 插件，将自然语言描述转化为专业级图表。输出单文件 HTML（inline SVG + embedded CSS），无需 JavaScript，可直接在浏览器打开、用于文章嵌入或截图。
+`gmdiagram` 是一个 Claude Code 插件市场，包含两个独立插件：
+
+- **gm-architecture**: 生成架构图、流程图、思维导图、ER 图、时序图等
+- **gm-data-chart**: 生成数据可视化图表（柱状图、饼图、折线图、散点图等）
+
+将自然语言描述转化为专业级图表。输出单文件 HTML（inline SVG + embedded CSS），无需 JavaScript，可直接在浏览器打开、用于文章嵌入或截图。
 
 ### 目标用户
 
@@ -128,12 +133,12 @@ gmdiagram/
 │   └── SPEC.md                            # 本文件 — 产品规格
 ├── tasks/
 │   └── migration.md                       # 迁移任务跟踪
-└── architecture-diagram/
+└── gm-architecture/
     ├── .claude-plugin/plugin.json     # Claude 插件清单
     ├── .codex-plugin/plugin.json      # Codex 插件清单
     ├── README.md                      # 插件概述（链接到 skill README）
     └── skills/
-        └── architecture-diagram/
+        └── gm-architecture/
             ├── SKILL.md               # 核心指令（Claude 读取）
             ├── README.md              # 完整用户文档
             ├── references/            # 技术参考文档

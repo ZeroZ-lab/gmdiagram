@@ -18,7 +18,7 @@ skip() { echo "  ${YELLOW}⊘${NC} $1 (skipped)"; }
 
 # Resolve BASE relative to repo root (works locally and in CI)
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-BASE="$REPO_ROOT/architecture-diagram/skills/architecture-diagram"
+BASE="$REPO_ROOT/gm-architecture/skills/gm-architecture"
 
 echo "====================================="
 echo "  gmdiagram Test Suite"
@@ -424,7 +424,7 @@ echo ""
 # ===========================================
 echo "=== 9. data-chart Skill — File Structure ==="
 
-CHART_BASE="$REPO_ROOT/architecture-diagram/skills/data-chart"
+CHART_BASE="$REPO_ROOT/gm-data-chart/skills/gm-data-chart"
 
 [ -f "$CHART_BASE/SKILL.md" ] && pass "data-chart/SKILL.md exists" || fail "data-chart/SKILL.md missing"
 [ -f "$CHART_BASE/assets/schema-bar.json" ] && pass "data-chart schema-bar.json exists" || fail "data-chart schema-bar.json missing"

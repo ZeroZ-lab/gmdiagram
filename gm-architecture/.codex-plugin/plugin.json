@@ -1,0 +1,37 @@
+{
+  "name": "gm-architecture",
+  "version": "0.6.2",
+  "description": "Generate diagrams from natural language as single-file HTML, SVG, Mermaid, and exportable PNG/PDF.",
+  "interface": {
+    "displayName": "GM Architecture"
+  },
+  "author": {
+    "name": "zhengjianqiao",
+    "url": "https://github.com/ZeroZ-lab/gmdiagram"
+  },
+  "homepage": "https://github.com/ZeroZ-lab/gmdiagram",
+  "repository": "https://github.com/ZeroZ-lab/gmdiagram",
+  "license": "MIT",
+  "keywords": [
+    "diagram",
+    "architecture",
+    "flowchart",
+    "mindmap",
+    "er-diagram",
+    "sequence-diagram",
+    "gantt",
+    "uml-class",
+    "network",
+    "svg",
+    "mermaid"
+  ],
+  "source": {
+    "source": "local",
+    "path": "./gm-architecture"
+  },
+  "policy": {
+    "installation": "AVAILABLE",
+    "authentication": "ON_INSTALL"
+  },
+  "category": "Coding"
+}

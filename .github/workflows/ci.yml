@@ -25,8 +25,10 @@ jobs:
           VERSIONS=$(grep -h '"version"' \
             .claude-plugin/marketplace.json \
             .agents/plugins/marketplace.json \
-            architecture-diagram/.claude-plugin/plugin.json \
-            architecture-diagram/.codex-plugin/plugin.json \
+            gm-architecture/.claude-plugin/plugin.json \
+            gm-architecture/.codex-plugin/plugin.json \
+            gm-data-chart/.claude-plugin/plugin.json \
+            gm-data-chart/.codex-plugin/plugin.json \
             | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
             | sort -u)
 

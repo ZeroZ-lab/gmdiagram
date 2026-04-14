@@ -1,5 +1,5 @@
 ---
-name: data-chart
+name: gm-data-chart
 description: >
   Generate data visualization charts from natural language descriptions.
   Creates single-file HTML with inline SVG that can be opened in any browser.
@@ -14,7 +14,7 @@ description: >
   Supports 4 output formats: html, svg, mermaid, png/pdf (via export script).
 ---
 
-# gmdiagram — Data Chart Skill
+# gmdiagram — GM Data Chart Skill
 
 ## What This Skill Does
 
@@ -22,7 +22,7 @@ Generate publication-quality data visualization charts as standalone files. The 
 - **HTML**: Single `.html` file with inline SVG and embedded CSS (default, no JavaScript)
 - **SVG**: Standalone `.svg` file
 - **Mermaid**: Text syntax (limited chart support, see Mermaid rules)
-- **PNG/PDF**: Via the export script at `../architecture-diagram/scripts/export.sh`
+- **PNG/PDF**: Via the export script at `../gm-architecture/skills/gm-architecture/scripts/export.sh`
 
 ## Output Directory Structure
 
@@ -209,7 +209,7 @@ Read the corresponding render reference and template, then generate SVG wrapped 
 - `references/axis-and-grid.md` — axis, grid, tick rendering
 - `references/color-palettes.md` — palette selection and color assignment
 
-**Template:** Use `../architecture-diagram/assets/template-{style}.html` (shared templates with chart CSS classes already added).
+**Template:** Use `../../assets/template-{style}.html` (shared templates with chart CSS classes already added).
 
 **Rendering approach — Hybrid Mode:**
 - Data marks (bars, arcs, lines, dots): pure SVG native elements (`<rect>`, `<path>`, `<circle>`, `<line>`)

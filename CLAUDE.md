@@ -2,7 +2,12 @@
 
 ## Project Overview
 
-`gmdiagram` is a Claude Code / Codex plugin marketplace that generates publication-quality diagrams and data charts from natural language. The main plugin is `architecture-diagram`, which produces single-file HTML with inline SVG and embedded CSS — no JavaScript required. The plugin includes two skills: `architecture-diagram` (diagrams) and `data-chart` (data visualization charts).
+`gmdiagram` is a Claude Code / Codex plugin marketplace that generates publication-quality diagrams and data charts from natural language. The marketplace includes two independent plugins:
+
+- **gm-architecture**: Generates architecture diagrams, flowcharts, mind maps, ER diagrams, sequence diagrams, Gantt charts, UML class diagrams, and network topology diagrams
+- **gm-data-chart**: Generates data visualization charts (bar, pie, line, area, scatter, radar, funnel, bubble, table)
+
+Both plugins produce single-file HTML with inline SVG and embedded CSS — no JavaScript required.
 
 - **Repository**: https://github.com/ZeroZ-lab/gmdiagram
 - **Author**: zhengjianqiao
@@ -15,30 +20,36 @@
 gmdiagram/
 ├── .claude-plugin/marketplace.json          # Claude Code marketplace definition
 ├── .agents/plugins/marketplace.json         # Codex marketplace definition
-├── architecture-diagram/                    # Installable plugin
+├── gm-architecture/                         # Plugin 1: Architecture diagrams
 │   ├── .claude-plugin/plugin.json           # Claude plugin manifest
 │   ├── .codex-plugin/plugin.json            # Codex plugin manifest
 │   ├── README.md                            # Plugin overview
 │   └── skills/
-│       ├── architecture-diagram/
-│       │   ├── SKILL.md                     # Diagram skill instructions
-│       │   ├── README.md                    # Full user documentation
-│       │   ├── references/                  # Technical reference docs
-│       │   ├── assets/
-│       │   │   ├── schema-*.json            # JSON schemas per diagram type
-│       │   │   ├── template-*.html          # HTML templates per visual style
-│       │   │   └── examples/                # Example diagrams
-│       │   └── scripts/
-│       │       ├── export.sh                # PNG/PDF export script
-│       │       └── package.json             # resvg-js dependency
-│       └── data-chart/
-│           ├── SKILL.md                     # Chart skill instructions
+│       └── gm-architecture/
+│           ├── SKILL.md                     # Skill instructions
+│           ├── README.md                    # Full user documentation
+│           ├── references/                  # Technical reference docs
+│           ├── assets/
+│           │   ├── schema-*.json            # JSON schemas per diagram type
+│           │   ├── template-*.html          # HTML templates per visual style
+│           │   └── examples/                # Example diagrams
+│           └── scripts/
+│               ├── export.sh                # PNG/PDF export script
+│               └── package.json             # resvg-js dependency
+├── gm-data-chart/                           # Plugin 2: Data visualization charts
+│   ├── .claude-plugin/plugin.json           # Claude plugin manifest
+│   ├── .codex-plugin/plugin.json            # Codex plugin manifest
+│   ├── README.md                            # Plugin overview
+│   └── skills/
+│       └── gm-data-chart/
+│           ├── SKILL.md                     # Skill instructions
 │           ├── references/                  # Chart render rules, palettes, axis rules
-│           └── assets/
-│               ├── schema-bar.json          # Bar chart JSON Schema
-│               ├── schema-pie.json          # Pie chart JSON Schema (Phase 2)
-│               ├── schema-line.json         # Line chart JSON Schema (Phase 3)
-│               └── examples/                # Example charts
+│           ├── assets/
+│           │   ├── schema-*.json            # Chart JSON schemas
+│           │   ├── template-*.html          # HTML templates (copied from gm-architecture)
+│           │   └── examples/                # Example charts
+│           └── scripts/
+│               └── export.sh -> ../../gm-architecture/skills/gm-architecture/scripts/export.sh
 ├── docs/SPEC.md                             # Product specification (Chinese)
 └── tasks/                                   # Task tracking and test outputs
 ```
@@ -105,13 +116,13 @@ Each style has a reference file (`references/style-{name}.md`) and an HTML templ
 
 ```bash
 # PNG export (requires Node.js 18+, auto-installs @resvg/resvg-js)
-./architecture-diagram/skills/architecture-diagram/scripts/export.sh input.html --format png
+./gm-architecture/skills/gm-architecture/scripts/export.sh input.html --format png
 
 # PDF export (requires: brew install librsvg)
-./architecture-diagram/skills/architecture-diagram/scripts/export.sh input.html --format pdf
+./gm-architecture/skills/gm-architecture/scripts/export.sh input.html --format pdf
 
 # Install export dependencies
-cd architecture-diagram/skills/architecture-diagram/scripts && npm install
+cd gm-architecture/skills/gm-architecture/scripts && npm install
 ```
 
 ## Version Management
@@ -129,9 +140,12 @@ Files to update on every version bump (keep all in sync):
 1. `CLAUDE.md` — update the version line at the top
 2. `README.md` — update the Version section
 3. `.claude-plugin/marketplace.json` — update `version` and plugin `version`
-4. `architecture-diagram/.claude-plugin/plugin.json` — update `version`
-5. `architecture-diagram/.codex-plugin/plugin.json` — update `version`
-6. `docs/SPEC.md` — update the version section
+4. `.agents/plugins/marketplace.json` — update `version`
+5. `gm-architecture/.claude-plugin/plugin.json` — update `version`
+6. `gm-architecture/.codex-plugin/plugin.json` — update `version`
+7. `gm-data-chart/.claude-plugin/plugin.json` — update `version`
+8. `gm-data-chart/.codex-plugin/plugin.json` — update `version`
+9. `docs/SPEC.md` — update the version section
 
 When creating a commit, include the version bump in the same commit as the changes.
 

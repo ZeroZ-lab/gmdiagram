@@ -9,4 +9,4 @@ tasks/*
 warm-cozy-full.png
 warm-cozy-preview.png
 .docs/*
-architecture-diagram/skills/architecture-diagram/scripts/node_modules/
+gm-architecture/skills/gm-architecture/scripts/node_modules/

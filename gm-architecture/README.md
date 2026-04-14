@@ -1,6 +1,6 @@
-# architecture-diagram plugin
+# gm-architecture plugin
 
-Installable plugin that exposes the `architecture-diagram` skill for both Claude Code and Codex.
+Installable plugin that exposes the `gm-architecture` skill for both Claude Code and Codex.
 
 Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
 
@@ -10,7 +10,7 @@ Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
 
 ```bash
 /plugin marketplace add ZeroZ-lab/gmdiagram
-/plugin install architecture-diagram@gmdiagram-marketplace
+/plugin install gm-architecture@gmdiagram-marketplace
 ```
 
 ### Codex
@@ -29,5 +29,5 @@ The plugin payload is shared across both environments:
 
 ## Documentation
 
-- [Skill README](skills/architecture-diagram/README.md) — Full feature documentation, examples, and usage guide
-- [SKILL.md](skills/architecture-diagram/SKILL.md) — Core instructions read by Claude when the skill is triggered
+- [Skill README](skills/gm-architecture/README.md) — Full feature documentation, examples, and usage guide
+- [SKILL.md](skills/gm-architecture/SKILL.md) — Core instructions read by Claude when the skill is triggered

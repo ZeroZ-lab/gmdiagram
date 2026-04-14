@@ -8,7 +8,7 @@ DATE_PATTERN="^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
 
 echo "=== Checking Metadata Field Completeness ==="
 
-for skill_dir in architecture-diagram/skills/architecture-diagram architecture-diagram/skills/data-chart; do
+for skill_dir in gm-architecture/skills/gm-architecture gm-data-chart/skills/gm-data-chart; do
     if [ ! -d "$skill_dir/assets/examples" ]; then
         continue
     fi

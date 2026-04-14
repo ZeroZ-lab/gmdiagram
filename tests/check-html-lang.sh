@@ -8,8 +8,8 @@ VALID_LANGS="^(en|zh-CN|zh-TW|ja|ko|de|fr|es)$"
 
 echo "=== Checking HTML Lang Attribute Compliance ==="
 
-for skill in architecture-diagram data-chart; do
-    skill_dir="architecture-diagram/skills/$skill"
+for skill in gm-architecture gm-data-chart; do
+    skill_dir="$skill/skills/$skill"
 
     if [ ! -d "$skill_dir/assets/examples" ]; then
         continue

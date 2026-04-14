@@ -19,18 +19,18 @@ Source repository: `https://github.com/ZeroZ-lab/gmdiagram`
 
 #### Claude Code
 
-Clone this repository, add it as a local Claude Code marketplace, then install the `architecture-diagram` plugin from that marketplace:
+Clone this repository, add it as a local Claude Code marketplace, then install the `gm-architecture` plugin from that marketplace:
 
 ```bash
 /plugin marketplace add ZeroZ-lab/gmdiagram
-/plugin install architecture-diagram@gmdiagram-marketplace
+/plugin install gm-architecture@gmdiagram-marketplace
 ```
 
 #### Codex
 
 Clone this repository locally and use the bundled Codex metadata:
 
-- Plugin manifest: `architecture-diagram/.codex-plugin/plugin.json`
+- Plugin manifest: `gm-architecture/.codex-plugin/plugin.json`
 - Marketplace entry: `.agents/plugins/marketplace.json`
 
 The Claude and Codex variants share the same `skills/`, `assets/`, and `scripts/` directories, so the behavior stays aligned across both environments.
@@ -181,14 +181,14 @@ Add icons to any component via the `"icon"` field:
 ## File Structure
 
 ```
-architecture-diagram/
+gm-architecture/
 ├── .claude-plugin/
 │   └── plugin.json                   # Claude plugin manifest
 ├── .codex-plugin/
 │   └── plugin.json                   # Codex plugin manifest
 ├── README.md                         # Plugin overview
 └── skills/
-    └── architecture-diagram/
+    └── gm-architecture/
         ├── SKILL.md                  # Core instructions + dispatcher
         ├── README.md                 # This file
         ├── references/
