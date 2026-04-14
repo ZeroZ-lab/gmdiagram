@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "gmdiagram-marketplace",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Local marketplace for the gmdiagram Claude Code plugin.",
   "owner": {
     "name": "zhengjianqiao"
@@ -9,9 +9,9 @@
   "plugins": [
     {
       "name": "architecture-diagram",
-      "description": "Generate diagrams from natural language as HTML, SVG, Mermaid, and exportable PNG/PDF.",
+      "description": "Generate diagrams and data charts from natural language as HTML, SVG, Mermaid, and exportable PNG/PDF.",
       "source": "./architecture-diagram",
-      "version": "0.3.1",
+      "version": "0.4.0",
       "category": "development",
       "author": {
         "name": "zhengjianqiao"
