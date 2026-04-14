@@ -25,12 +25,12 @@
       "examples": ["单位：万元", "Comparison across product lines"]
     },
     "style": {
-      "$ref": "#/$defs/styleEnum",
+      "$ref": "schema-shared.json#/$defs/styleEnum",
       "description": "Visual style preset. Each style has its own template and design rules.",
       "default": "dark-professional"
     },
     "format": {
-      "$ref": "#/$defs/formatEnum",
+      "$ref": "schema-shared.json#/$defs/formatEnum",
       "description": "Output format. HTML is the default (single-file with inline SVG and CSS). SVG outputs standalone SVG. Mermaid uses xychart-beta syntax (experimental).",
       "default": "html"
     },
@@ -67,164 +67,29 @@
       "additionalProperties": false,
       "properties": {
         "x": {
-          "$ref": "#/$defs/axisConfig",
+          "$ref": "schema-shared.json#/$defs/axisConfig",
           "description": "X-axis configuration (category axis)."
         },
         "y": {
-          "$ref": "#/$defs/axisConfig",
+          "$ref": "schema-shared.json#/$defs/axisConfig",
           "description": "Y-axis configuration (value axis)."
         }
       }
     },
     "legend": {
-      "$ref": "#/$defs/legendConfig",
+      "$ref": "schema-shared.json#/$defs/legendConfig",
       "description": "Legend configuration. Auto-generated from series names if not provided."
     },
     "colors": {
-      "$ref": "#/$defs/colorsOverride",
+      "$ref": "schema-shared.json#/$defs/colorsOverride",
       "description": "Optional color overrides for the style's environment colors (background, text, etc.). Does NOT affect data bar colors — use series[].color for that."
     },
     "metadata": {
-      "$ref": "#/$defs/metadata",
+      "$ref": "schema-shared.json#/$defs/metadata",
       "description": "Optional metadata. author field is for internal tracking only and MUST NOT be rendered into the output."
     }
   },
   "$defs": {
-    "styleEnum": {
-      "type": "string",
-      "enum": [
-        "dark-professional",
-        "hand-drawn",
-        "light-corporate",
-        "cyberpunk-neon",
-        "blueprint",
-        "warm-cozy",
-        "minimalist",
-        "terminal-retro",
-        "pastel-dream",
-        "notion",
-        "material",
-        "glassmorphism"
-      ],
-      "description": "Visual style preset names."
-    },
-    "formatEnum": {
-      "type": "string",
-      "enum": ["html", "svg", "mermaid"],
-      "description": "Output format."
-    },
-    "legendConfig": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Legend display configuration.",
-      "properties": {
-        "visible": {
-          "type": "boolean",
-          "description": "Whether to show the legend.",
-          "default": true
-        },
-        "position": {
-          "type": "string",
-          "enum": ["top", "bottom", "left", "right"],
-          "description": "Legend placement relative to the chart.",
-          "default": "top"
-        }
-      }
-    },
-    "colorsOverride": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Optional color overrides for style environment colors.",
-      "properties": {
-        "primary": {
-          "type": "string",
-          "pattern": "^#[0-9a-fA-F]{6}$",
-          "description": "Primary accent color."
-        },
-        "secondary": {
-          "type": "string",
-          "pattern": "^#[0-9a-fA-F]{6}$",
-          "description": "Secondary color."
-        },
-        "accent": {
-          "type": "string",
-          "pattern": "^#[0-9a-fA-F]{6}$",
-          "description": "Accent color."
-        },
-        "background": {
-          "type": "string",
-          "pattern": "^#[0-9a-fA-F]{6}$",
-          "description": "Page background color."
-        },
-        "text": {
-          "type": "string",
-          "pattern": "^#[0-9a-fA-F]{6}$",
-          "description": "Primary text color."
-        }
-      }
-    },
-    "metadata": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Optional metadata for tracking. author MUST NOT be rendered into output.",
-      "properties": {
-        "author": {
-          "type": "string",
-          "maxLength": 100,
-          "description": "Author name. For internal tracking only, never displayed in output."
-        },
-        "date": {
-          "type": "string",
-          "format": "date",
-          "description": "Creation date."
-        },
-        "version": {
-          "type": "string",
-          "maxLength": 20,
-          "description": "Document version."
-        }
-      }
-    },
-    "axisConfig": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Configuration for a single axis.",
-      "properties": {
-        "label": {
-          "type": "string",
-          "maxLength": 50,
-          "description": "Axis title text displayed along the axis.",
-          "examples": ["季度", "万元", "月份", "Users"]
-        },
-        "visible": {
-          "type": "boolean",
-          "description": "Whether to show the axis line and labels.",
-          "default": true
-        },
-        "gridLines": {
-          "type": "boolean",
-          "description": "Whether to show grid lines along this axis.",
-          "default": false
-        },
-        "minValue": {
-          "type": "number",
-          "description": "Optional manual minimum value for the axis. Overrides auto-calculated min."
-        },
-        "maxValue": {
-          "type": "number",
-          "description": "Optional manual maximum value for the axis. Overrides auto-calculated max."
-        },
-        "ticks": {
-          "type": "array",
-          "description": "Pre-computed tick values from the Nice Numbers algorithm (Step 1). Step 2 uses these directly for axis rendering.",
-          "items": {
-            "type": "number"
-          },
-          "minItems": 2,
-          "maxItems": 10
-        }
-      }
-    },
     "seriesItem": {
       "type": "object",
       "required": ["name", "data"],
@@ -232,7 +97,7 @@
       "description": "A data series containing named data points.",
       "properties": {
         "name": {
-          "type": "string",
+          "$ref": "schema-shared.json#/$defs/sanitizedString",
           "maxLength": 100,
           "description": "Series name displayed in the legend.",
           "examples": ["营收", "Users", "Revenue"]
@@ -246,30 +111,10 @@
           "type": "array",
           "description": "Data points in this series. Each has a label and numeric value.",
           "items": {
-            "$ref": "#/$defs/dataPoint"
+            "$ref": "schema-shared.json#/$defs/dataPoint"
           },
           "minItems": 2,
           "maxItems": 30
-        }
-      }
-    },
-    "dataPoint": {
-      "type": "object",
-      "required": ["label", "value"],
-      "additionalProperties": false,
-      "description": "A single data point with a category label and numeric value.",
-      "properties": {
-        "label": {
-          "type": "string",
-          "maxLength": 100,
-          "description": "Category label displayed on the axis.",
-          "examples": ["Q1", "January", "Product A"]
-        },
-        "value": {
-          "type": "number",
-          "minimum": -1000000000000000,
-          "maximum": 1000000000000000,
-          "description": "Numeric value. Supports negative values for comparison charts. Must be a finite number (no NaN or Infinity)."
         }
       }
     }

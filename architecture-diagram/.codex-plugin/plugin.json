@@ -1,6 +1,6 @@
 {
   "name": "architecture-diagram",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Generate diagrams and data charts from natural language as single-file HTML, SVG, Mermaid, and exportable PNG/PDF.",
   "author": {
     "name": "zhengjianqiao",
@@ -21,13 +21,19 @@
     "bar-chart",
     "pie-chart",
     "line-chart",
+    "area-chart",
+    "scatter-plot",
+    "radar-chart",
+    "funnel-chart",
+    "bubble-chart",
+    "data-table",
     "data-visualization"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Architecture Diagram",
     "shortDescription": "Generate polished diagrams and data charts from natural language",
-    "longDescription": "Use Architecture Diagram to generate architecture diagrams, flowcharts, mind maps, ER diagrams, sequence diagrams, and data charts (bar, pie, line) from natural language, with HTML, SVG, Mermaid, and exportable PNG/PDF outputs.",
+    "longDescription": "Use Architecture Diagram to generate architecture diagrams, flowcharts, mind maps, ER diagrams, sequence diagrams, and data charts (bar, pie, line, area, scatter, radar, funnel, bubble, table) from natural language, with HTML, SVG, Mermaid, and exportable PNG/PDF outputs.",
     "developerName": "zhengjianqiao",
     "category": "Coding",
     "capabilities": [

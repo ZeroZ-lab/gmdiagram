@@ -7,7 +7,7 @@
 - **Repository**: https://github.com/ZeroZ-lab/gmdiagram
 - **Author**: zhengjianqiao
 - **License**: MIT
-- **Versions**: Marketplace `0.4.0`, Plugin `0.4.0`
+- **Versions**: Marketplace `0.5.0`, Plugin `0.5.0`
 
 ## Repository Structure
 
@@ -68,7 +68,13 @@ ALL diagram generation follows exactly two steps. Never skip to output directly.
 |------|------------|-----------------|-----------------|
 | `bar` | `schema-bar.json` | `render-bar.md` | bar chart, column chart, 柱状图, 条形图 |
 | `pie` | `schema-pie.json` | `render-pie.md` | pie chart, donut chart, 饼图, 环形图 |
-| `line` | `schema-line.json` | `render-line.md` | line chart, area chart, 折线图, 面积图 |
+| `line` | `schema-line.json` | `render-line.md` | line chart, 折线图 |
+| `area` | `schema-area.json` | `render-area.md` | area chart, stacked area, 面积图, 堆叠面积图 |
+| `scatter` | `schema-scatter.json` | `render-scatter.md` | scatter plot, 散点图 |
+| `radar` | `schema-radar.json` | `render-radar.md` | radar chart, spider chart, 雷达图 |
+| `funnel` | `schema-funnel.json` | `render-funnel.md` | funnel chart, 漏斗图 |
+| `bubble` | `schema-bubble.json` | `render-bubble.md` | bubble chart, 气泡图 |
+| `table` | `schema-table.json` | `render-table.md` | data table, comparison table, 数据表, 对比表 |
 
 ### Visual Styles (6)
 

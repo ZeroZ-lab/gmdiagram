@@ -246,3 +246,58 @@ For each tick value (excluding minTick if it's on the axis line):
   </div>
 </foreignObject>
 ```
+
+---
+
+## X 轴 Nice Numbers（Scatter/Bubble）
+
+Scatter 和 Bubble 图表的 X 轴也是数值轴（不是类别轴），需要对 X 轴数据运行同样的 Nice Numbers 算法。
+
+### 步骤
+
+与 Y 轴完全相同，只是数据来源换成所有 `series[].data[].x`：
+
+```
+1. 确定数据范围
+   - values = 所有 series 中所有 data[].x
+   - dataMin = min(values)
+   - dataMax = max(values)
+   - 如果所有值 >= 0：minValue 从 0 开始
+   - 如果有负值：minValue = dataMin
+
+2-5. 同 Y 轴步骤
+```
+
+结果存入 `axis.x.ticks`。
+
+### 坐标映射公式
+
+```
+xMinTick = axis.x.ticks[0]
+xMaxTick = axis.x.ticks[axis.x.ticks.length - 1]
+xTickRange = xMaxTick - xMinTick
+
+valueToX(val) = plotX + ((val - xMinTick) / xTickRange) * plotWidth
+```
+
+### X 轴渲染
+
+X 轴刻度标签使用与 Y 轴相同的 foreignObject 模式，但水平排列在 X 轴下方：
+
+```svg
+<foreignObject x="{tickX - 25}" y="{plotY + plotHeight + 8}" width="50" height="20">
+  <div xmlns="http://www.w3.org/1999/xhtml" class="tick-label" style="text-align: center;">
+    {tickValue}
+  </div>
+</foreignObject>
+```
+
+其中 `tickX = valueToX(tickValue)`。
+
+### 垂直网格线
+
+当 `axis.x.gridLines = true` 时（scatter/bubble 默认为 true），对每个 X 轴 tick 画垂直虚线：
+
+```svg
+<line x1="{tickX}" y1="{plotY}" x2="{tickX}" y2="{plotY + plotHeight}" class="grid-line" />
+```
