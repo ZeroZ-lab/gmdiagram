@@ -17,10 +17,10 @@ Current focus:
 
 ## Features
 
-- **8 diagram types**: Architecture, Flowchart, Mind Map, ER Diagram, Sequence Diagram, Gantt, UML Class, Network
+- **9 diagram types**: Architecture, Flowchart, Mind Map, ER Diagram, Sequence Diagram, Gantt, UML Class, Network, Card (social sharing)
 - **9 chart types**: Bar, Pie/Donut, Line, Area, Scatter, Radar, Funnel, Bubble, Table (via `data-chart` skill)
 - **12 visual styles**: Dark Professional, Hand-Drawn Sketch, Light Corporate, Cyberpunk Neon, Blueprint, Warm Cozy, Minimalist, Terminal Retro, Pastel Dream, Notion, Material, Glassmorphism
-- **4 output formats**: HTML, SVG, Mermaid, PNG/PDF export
+- **4 output formats**: HTML, SVG, Mermaid, PNG/PDF export (Card supports HTML, SVG, PNG/PDF only)
 - **Single-file delivery**: inline SVG, embedded styling, no JavaScript required
 
 ## Quick Start
@@ -76,8 +76,8 @@ For full documentation including examples, visual style reference, and output fo
 
 ## Version
 
-- Marketplace: `0.5.0`
-- Plugin: `0.5.0`
+- Marketplace: `0.7.0`
+- Plugin: `0.7.0`
 
 ## License
 

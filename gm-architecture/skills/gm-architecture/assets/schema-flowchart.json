@@ -116,7 +116,8 @@
     },
     "font": {
       "type": "string",
-      "description": "Optional font override. Replaces the style's default font family. Use a Google Fonts name (e.g., 'Inter', 'Fira Code', 'Merriweather').",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 ._+\\-]{0,50}$",
+      "description": "Optional font override. Use a Google Fonts name. Alphanumeric, spaces, dots, hyphens, plus, underscores allowed.",
       "default": null
     },
     "colors": {

@@ -11,9 +11,11 @@ description: >
   mind map, mindmap, brainstorm, concept map,
   ER diagram, entity relationship, database schema, data model,
   sequence diagram, interaction diagram, message flow, API flow, protocol flow,
+  social card, knowledge card, comparison card, quote card, ranked list card,
+  知识卡片, 社交卡片, 分享图, 对比卡片, 引用卡片, 排行卡片,
   分层架构图, 系统架构图, 架构图, 流程图, 思维导图, ER图, 序列图, 时序图,
   or wants to visualize how a system works.
-  Supports 8 diagram types and 12 visual styles: dark-professional, hand-drawn, light-corporate, cyberpunk-neon, blueprint, warm-cozy, minimalist, terminal-retro, pastel-dream, notion, material, glassmorphism.
+  Supports 9 diagram types and 12 visual styles: dark-professional, hand-drawn, light-corporate, cyberpunk-neon, blueprint, warm-cozy, minimalist, terminal-retro, pastel-dream, notion, material, glassmorphism.
   Supports 4 output formats: html, svg, mermaid, png/pdf (via export script).
 ---
 
@@ -89,7 +91,7 @@ options:
   - label: "Mind Map"
     description: "Topic hierarchy, brainstorm, feature tree"
   - label: "Other"
-    description: "ER Diagram, Sequence, Gantt, UML Class, or Network"
+    description: "ER Diagram, Sequence, Gantt, UML Class, Network, or Card"
 ```
 
 If the user picks "Other", ask a follow-up:
@@ -104,6 +106,8 @@ options:
     description: "Message flow, API calls, protocol, interaction between actors"
   - label: "Gantt Chart"
     description: "Project timeline, milestones, task scheduling"
+  - label: "Card"
+    description: "Social sharing card — knowledge, comparison, quote, or ranked list"
   - label: "More"
     description: "UML Class Diagram or Network Topology"
 ```
@@ -399,6 +403,7 @@ When the diagram type is clear from context (or after the user selects it), use 
 | `gantt` | `references/diagram-gantt.md` | `assets/schema-gantt.json` |
 | `uml-class` | `references/diagram-uml-class.md` | `assets/schema-uml-class.json` |
 | `network` | `references/diagram-network.md` | `assets/schema-network.json` |
+| `card` | `references/diagram-card.md` | `assets/schema-card.json` |
 
 Read the diagram-type-registry at `references/diagram-type-registry.md` for detailed trigger keywords.
 

@@ -1,6 +1,6 @@
 {
   "name": "gm-data-chart",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Generate data visualization charts from natural language as single-file HTML, SVG, Mermaid, and exportable PNG/PDF.",
   "author": {
     "name": "zhengjianqiao",

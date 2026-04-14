@@ -14,6 +14,7 @@ All supported diagram types with their trigger keywords, schema files, and refer
 | `gantt` | `assets/schema-gantt.json` | `references/diagram-gantt.md` | `references/layout-gantt.md` | `references/components-gantt.md` | gantt, timeline, schedule, milestone, project plan, 甘特图, 时间线, 项目计划 |
 | `uml-class` | `assets/schema-uml-class.json` | `references/diagram-uml-class.md` | `references/layout-uml-class.md` | `references/components-uml-class.md` | UML, class diagram, OOP, inheritance, interface, 类图, UML图, 继承关系 |
 | `network` | `assets/schema-network.json` | `references/diagram-network.md` | `references/layout-network.md` | `references/components-network.md` | network, topology, infrastructure, subnet, VLAN, 网络拓扑, 网络架构, 服务器 |
+| `card` | `assets/schema-card.json` | `references/diagram-card.md` | `references/layout-card.md` | `references/components-card.md` | social card, knowledge card, comparison card, quote card, ranked list, 知识卡片, 社交卡片, 对比卡片, 引用卡片, 排行卡片 |
 
 ## Shared Resources
 

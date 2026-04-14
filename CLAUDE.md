@@ -12,7 +12,7 @@ Both plugins produce single-file HTML with inline SVG and embedded CSS — no Ja
 - **Repository**: https://github.com/ZeroZ-lab/gmdiagram
 - **Author**: zhengjianqiao
 - **License**: MIT
-- **Versions**: Marketplace `0.6.2`, Plugin `0.6.2`
+- **Versions**: Marketplace `0.7.0`, Plugin `0.7.0`
 
 ## Repository Structure
 
@@ -72,6 +72,10 @@ ALL diagram generation follows exactly two steps. Never skip to output directly.
 | `mindmap` | `schema-mindmap.json` | `diagram-mindmap.md` | brainstorm, hierarchy, 思维导图 |
 | `er` | `schema-er.json` | `diagram-er.md` | database, entity, schema, ER图 |
 | `sequence` | `schema-sequence.json` | `diagram-sequence.md` | API flow, message, interaction, 时序图 |
+| `gantt` | `schema-gantt.json` | `diagram-gantt.md` | timeline, schedule, milestone, 甘特图 |
+| `uml-class` | `schema-uml-class.json` | `diagram-uml-class.md` | UML, class diagram, OOP, 类图 |
+| `network` | `schema-network.json` | `diagram-network.md` | topology, subnet, 网络拓扑 |
+| `card` | `schema-card.json` | `diagram-card.md` | social card, knowledge card, 知识卡片, 对比卡片, 引用卡片, 排行卡片 |
 
 ### Supported Chart Types (data-chart skill)
 
@@ -87,9 +91,9 @@ ALL diagram generation follows exactly two steps. Never skip to output directly.
 | `bubble` | `schema-bubble.json` | `render-bubble.md` | bubble chart, 气泡图 |
 | `table` | `schema-table.json` | `render-table.md` | data table, comparison table, 数据表, 对比表 |
 
-### Visual Styles (6)
+### Visual Styles (12)
 
-`dark-professional` (default), `hand-drawn`, `light-corporate`, `cyberpunk-neon`, `blueprint`, `warm-cozy`, `minimalist`, `terminal-retro`, `pastel-dream`
+`dark-professional` (default), `hand-drawn`, `light-corporate`, `cyberpunk-neon`, `blueprint`, `warm-cozy`, `minimalist`, `terminal-retro`, `pastel-dream`, `notion`, `material`, `glassmorphism`
 
 Each style has a reference file (`references/style-{name}.md`) and an HTML template (`assets/template-{name}.html`).
 
