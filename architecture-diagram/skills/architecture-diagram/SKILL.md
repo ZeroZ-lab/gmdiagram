@@ -411,6 +411,48 @@ After generating the initial diagram, the user may request changes:
 - Change diagram type → re-extract JSON for new type, regenerate
 - Change output format → regenerate from existing JSON
 
+## File Naming Convention
+
+示例文件名必须使用 **kebab-case**（短横线连接的小写字母）。
+
+### 命名格式
+
+```
+{context}-{type}[-{variant}].{ext}
+```
+
+- **context**: 场景描述（如 chrome, saas, ecommerce, quarterly-revenue）
+- **type**: 图表类型（可选，如 architecture, flowchart, bar-chart）
+- **variant**: 变体标识（可选，如 cyberpunk, minimalist, dark）
+- **ext**: 文件扩展名（json 或 html）
+
+### 正确与错误示例
+
+| 命名风格 | 示例 | 状态 |
+|----------|------|------|
+| **kebab-case** ✅ | `chrome-architecture.json` | 正确 |
+| **kebab-case** ✅ | `quarterly-revenue.json` | 正确 |
+| **kebab-case** ✅ | `team-skills-radar.json` | 正确 |
+| camelCase ❌ | `chromeArchitecture.json` | 错误 |
+| PascalCase ❌ | `QuarterlyRevenue.json` | 错误 |
+| snake_case ❌ | `team_skills.json` | 错误 |
+| 空格 ❌ | `chrome architecture.json` | 错误 |
+
+### 规则
+
+1. **全部小写**: 文件名中不包含大写字母
+2. **单词分隔**: 使用连字符 `-` 分隔单词，不使用下划线或空格
+3. **无特殊字符**: 仅使用字母、数字和连字符
+4. **清晰语义**: 文件名应清晰表达示例内容
+
+### 批量命名示例
+
+对于同一系统的多个风格变体：
+- `architecture-system.json` (默认风格)
+- `architecture-system-cyberpunk.json`
+- `architecture-system-minimalist.json`
+- `architecture-system-terminal.json`
+
 ## Quality Checklist
 
 Before delivering, verify:
