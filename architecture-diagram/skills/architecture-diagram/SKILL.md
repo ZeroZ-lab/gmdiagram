@@ -330,6 +330,47 @@ Read the diagram-type reference file for generation instructions:
 
 4. **Wrap in HTML** (if format=html): Use the corresponding template file as the starting structure.
 
+   **HTML Language Attribute**
+
+   根据内容语言设置正确的 `<html lang="...">` 属性：
+
+   | 内容语言 | lang 属性值 | 使用场景 |
+   |----------|-------------|----------|
+   | 英文 | `en` | 标题、标签、描述均为英文 |
+   | 简体中文 | `zh-CN` | 标题、标签、描述包含简体中文 |
+   | 繁体中文 | `zh-TW` | 标题、标签、描述包含繁体中文 |
+   | 日文 | `ja` | 标题、标签、描述包含日文 |
+
+   **自动检测规则**
+
+   使用以下启发式规则判断内容语言：
+
+   1. **检查 title 字段**: 如果包含中文字符（`\u4e00-\u9fff`），使用 `zh-CN`
+   2. **检查 subtitle 字段**: 如果包含中文字符，使用 `zh-CN`
+   3. **检查主要 labels**: 如果超过 50% 的标签包含中文，使用 `zh-CN`
+   4. **默认**: 如果不确定或混合语言，使用 `en`
+
+   **示例**
+
+   *中文内容示例*:
+   ```html
+   <html lang="zh-CN">
+   <head><title>系统架构图</title></head>
+   ```
+
+   *英文内容示例*:
+   ```html
+   <html lang="en">
+   <head><title>Chrome Multi-Process Architecture</title></head>
+   ```
+
+   **重要性**
+
+   正确的 `lang` 属性有助于：
+   - 屏幕阅读器正确发音
+   - 浏览器正确渲染字体
+   - SEO 优化
+
 For other formats:
 - **SVG**: Follow `references/output-svg.md` — extract standalone SVG
 - **Mermaid**: Follow `references/output-mermaid.md` — transform JSON to Mermaid text
