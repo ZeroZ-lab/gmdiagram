@@ -41,5 +41,10 @@
     { "label": "Service", "type": "process" },
     { "label": "Auth", "type": "security" },
     { "label": "Database", "type": "data" }
-  ]
+  ],
+  "metadata": {
+    "author": "gmdiagram",
+    "date": "2026-04-14",
+    "version": "0.6.0"
+  }
 }

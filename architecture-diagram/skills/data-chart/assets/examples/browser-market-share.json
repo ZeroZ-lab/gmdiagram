@@ -12,5 +12,10 @@
     { "label": "Edge", "value": 4 },
     { "label": "其他", "value": 2 }
   ],
-  "legend": { "visible": true, "position": "right" }
+  "legend": { "visible": true, "position": "right" },
+  "metadata": {
+    "author": "gmdiagram",
+    "date": "2026-04-14",
+    "version": "0.6.0"
+  }
 }

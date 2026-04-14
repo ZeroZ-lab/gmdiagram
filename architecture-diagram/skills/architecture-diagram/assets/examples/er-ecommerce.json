@@ -79,5 +79,10 @@
     { "label": "Primary Key", "color": "#fbbf24" },
     { "label": "Foreign Key", "color": "#a78bfa" },
     { "label": "1:N Relationship", "color": "#88c0d0" }
-  ]
+  ],
+  "metadata": {
+    "author": "gmdiagram",
+    "date": "2026-04-14",
+    "version": "0.6.0"
+  }
 }

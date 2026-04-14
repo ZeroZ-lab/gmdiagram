@@ -34,5 +34,10 @@
     "x": { "label": "学习时间（小时/天）", "ticks": [0, 2, 4, 6, 8, 10], "gridLines": true },
     "y": { "label": "考试成绩", "ticks": [50, 60, 70, 80, 90, 100], "gridLines": true }
   },
-  "legend": { "visible": true, "position": "top" }
+  "legend": { "visible": true, "position": "top" },
+  "metadata": {
+    "author": "gmdiagram",
+    "date": "2026-04-14",
+    "version": "0.6.0"
+  }
 }

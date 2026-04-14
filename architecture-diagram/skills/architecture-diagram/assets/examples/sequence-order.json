@@ -20,5 +20,10 @@
     { "from": "order-svc", "to": "inventory-svc", "label": "Reserve items", "type": "async", "order": 7 },
     { "from": "order-svc", "to": "gateway", "label": "Order confirmed (201)", "type": "return", "order": 8 },
     { "from": "gateway", "to": "customer", "label": "Order confirmation", "type": "return", "order": 9 }
-  ]
+  ],
+  "metadata": {
+    "author": "gmdiagram",
+    "date": "2026-04-14",
+    "version": "0.6.0"
+  }
 }

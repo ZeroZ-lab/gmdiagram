@@ -58,8 +58,8 @@
     { "label": "Report", "type": "infra" }
   ],
   "metadata": {
-    "author": "Architecture Diagram Skill",
-    "date": "2026-04-13",
-    "version": "1.0"
+    "author": "gmdiagram",
+    "date": "2026-04-14",
+    "version": "0.6.0"
   }
 }

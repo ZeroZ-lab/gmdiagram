@@ -18,5 +18,10 @@
   "showRowNumbers": false,
   "stripeRows": true,
   "highlightMax": "revenue",
-  "legend": { "visible": false }
+  "legend": { "visible": false },
+  "metadata": {
+    "author": "gmdiagram",
+    "date": "2026-04-14",
+    "version": "0.6.0"
+  }
 }

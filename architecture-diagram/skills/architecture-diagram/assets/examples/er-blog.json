@@ -60,5 +60,10 @@
     { "from": "post", "to": "comment", "fromCard": "1", "toCard": "N", "label": "has" },
     { "from": "post", "to": "post-tag", "fromCard": "1", "toCard": "N" },
     { "from": "tag", "to": "post-tag", "fromCard": "1", "toCard": "N" }
-  ]
+  ],
+  "metadata": {
+    "author": "gmdiagram",
+    "date": "2026-04-14",
+    "version": "0.6.0"
+  }
 }
