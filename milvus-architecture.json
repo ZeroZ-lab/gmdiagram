@@ -1,0 +1,165 @@
+{
+  "title": "Milvus Distributed Vector Database Architecture",
+  "subtitle": "Scalable ANN search with separated storage and compute",
+  "diagramType": "architecture",
+  "style": "dark-professional",
+  "format": "html",
+  "direction": "TB",
+  "density": "normal",
+  "layers": [
+    {
+      "id": "access-layer",
+      "label": "Access Layer",
+      "type": "process",
+      "children": [
+        {
+          "id": "proxy",
+          "label": "Milvus Proxy",
+          "type": "process",
+          "description": "Load balancing, request routing, authentication"
+        }
+      ]
+    },
+    {
+      "id": "coordinator-layer",
+      "label": "Coordinator Layer",
+      "type": "module",
+      "count": "multiple",
+      "children": [
+        {
+          "id": "root-coord",
+          "label": "Root Coord",
+          "type": "module",
+          "description": "Metadata management, DDL operations"
+        },
+        {
+          "id": "data-coord",
+          "label": "Data Coord",
+          "type": "module",
+          "description": "Data management, segment allocation"
+        },
+        {
+          "id": "query-coord",
+          "label": "Query Coord",
+          "type": "module",
+          "description": "Query scheduling, load balancing"
+        },
+        {
+          "id": "index-coord",
+          "label": "Index Coord",
+          "type": "module",
+          "description": "Index management, build scheduling"
+        }
+      ]
+    },
+    {
+      "id": "worker-layer",
+      "label": "Worker Node Layer",
+      "type": "process",
+      "count": "multiple",
+      "children": [
+        {
+          "id": "query-node",
+          "label": "Query Node",
+          "type": "process",
+          "description": "Vector search, query execution"
+        },
+        {
+          "id": "data-node",
+          "label": "Data Node",
+          "type": "process",
+          "description": "Data insertion, persistence"
+        },
+        {
+          "id": "index-node",
+          "label": "Index Node",
+          "type": "process",
+          "description": "Index building, maintenance"
+        }
+      ]
+    },
+    {
+      "id": "storage-layer",
+      "label": "Storage Layer",
+      "type": "data",
+      "children": [
+        {
+          "id": "meta-store",
+          "label": "Meta Store",
+          "type": "data",
+          "tech": ["etcd"],
+          "description": "Metadata storage"
+        },
+        {
+          "id": "object-storage",
+          "label": "Object Storage",
+          "type": "data",
+          "tech": ["MinIO/S3"],
+          "description": "Vector data storage"
+        },
+        {
+          "id": "log-broker",
+          "label": "Log Broker",
+          "type": "channel",
+          "tech": ["Pulsar/Kafka"],
+          "description": "Log streaming"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "access-layer",
+      "to": "coordinator-layer",
+      "label": "gRPC",
+      "style": "solid"
+    },
+    {
+      "from": "access-layer",
+      "to": "worker-layer",
+      "label": "Search/Insert",
+      "style": "solid"
+    },
+    {
+      "from": "coordinator-layer",
+      "to": "worker-layer",
+      "label": "Schedule",
+      "style": "dashed"
+    },
+    {
+      "from": "coordinator-layer",
+      "to": "storage-layer",
+      "label": "Metadata",
+      "style": "solid"
+    },
+    {
+      "from": "worker-layer",
+      "to": "storage-layer",
+      "label": "Read/Write",
+      "style": "solid"
+    }
+  ],
+  "legend": [
+    {
+      "label": "Process",
+      "type": "process"
+    },
+    {
+      "label": "Module",
+      "type": "module"
+    },
+    {
+      "label": "Data Store",
+      "type": "data"
+    },
+    {
+      "label": "Message Channel",
+      "type": "channel"
+    }
+  ],
+  "metadata": {
+    "author": "gmdiagram",
+    "date": "2026-04-13",
+    "version": "1.0.0"
+  }
+}

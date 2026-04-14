@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Milvus Distributed Vector Database Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #020617;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .pulse-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #22d3ee;
+      box-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    h1 { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+    .subtitle { font-size: 13px; color: #64748b; margin-top: 4px; }
+    .diagram-container {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+    .diagram-container svg {
+      width: 100%;
+      min-width: 700px;
+      height: auto;
+      display: block;
+    }
+    .footer {
+      font-size: 11px;
+      color: #475569;
+      text-align: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    /* === foreignObject component classes (dark-professional) === */
+    .layer-card { width: 100%; border-radius: 8px; padding: 8px 0 12px; box-sizing: border-box; }
+    .layer-label { font-size: 14px; font-weight: 600; color: #f1f5f9; padding: 0 16px; font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; }
+    .modules { display: flex; gap: 20px; justify-content: center; padding: 8px 16px 0; flex-wrap: wrap; }
+    .module { min-width: 100px; height: 50px; border-radius: 6px; display: flex; align-items: center; justify-content: center; padding: 0 16px; box-sizing: border-box; }
+    .module-label { font-size: 12px; font-weight: 500; color: white; text-align: center; white-space: nowrap; font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; }
+    .module-desc { font-size: 9px; color: #94a3b8; text-align: center; margin-top: 2px; }
+    .tech-badges { display: flex; gap: 4px; justify-content: center; padding-top: 4px; }
+    .tech-badge { font-size: 8px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; background: rgba(255,255,255,0.08); border: 0.5px solid rgba(255,255,255,0.15); color: #94a3b8; font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; }
+
+    /* Module with badge — taller to fit badge row */
+    .module.has-badges { height: 58px; flex-direction: column; gap: 2px; }
+    .module.has-badges .module-label { height: 20px; }
+
+    /* Type-specific colors */
+    .type-process { background: rgba(8,51,68,0.4); border: 1.5px solid #22d3ee; }
+    .type-module { background: rgba(6,78,59,0.4); border: 1.5px solid #34d399; }
+    .type-data { background: rgba(76,29,149,0.4); border: 1.5px solid #a78bfa; }
+    .type-infra { background: rgba(120,53,15,0.3); border: 1.5px solid #fbbf24; }
+    .type-security { background: rgba(136,19,55,0.4); border: 1.5px solid #fb7185; border-style: dashed; }
+    .type-channel { background: rgba(251,146,60,0.3); border: 1.5px solid #fb923c; }
+    .type-external { background: rgba(30,41,59,0.5); border: 1.5px solid #94a3b8; }
+
+    /* Legend */
+    .legend-container { display: flex; gap: 100px; align-items: center; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+    .legend-text { font-size: 11px; color: #cbd5e1; font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="pulse-dot"></div>
+      <div>
+        <h1>Milvus Distributed Vector Database Architecture</h1>
+        <div class="subtitle">Scalable ANN search with separated storage and compute</div>
+      </div>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1000 740" xmlns="http://www.w3.org/2000/svg">
+        <!-- Defs -->
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(51, 65, 85, 0.3)" stroke-width="0.5"/>
+          </pattern>
+          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+          </marker>
+        </defs>
+
+        <!-- Grid background -->
+        <rect width="1000" height="740" fill="url(#grid)"/>
+
+        <!-- === CONNECTIONS (drawn first, behind components) === -->
+
+        <!-- Access Layer → Coordinator Layer (gRPC) -->
+        <line x1="500" y1="130" x2="500" y2="180"
+              stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <rect x="470" y="145" width="60" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="500" y="157" font-size="10" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">gRPC</text>
+
+        <!-- Access Layer → Worker Layer (Search/Insert) -->
+        <path d="M 200,130 L 20,130 L 20,335 L 200,335"
+              fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <rect x="25" y="222" width="90" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="70" y="234" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Search/Insert</text>
+
+        <!-- Coordinator Layer → Worker Layer (Schedule) -->
+        <path d="M 800,280 L 980,280 L 980,335 L 800,335"
+              fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowhead)"/>
+        <rect x="905" y="300" width="55" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="932" y="312" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Schedule</text>
+
+        <!-- Coordinator Layer → Storage Layer (Metadata) -->
+        <path d="M 500,280 L 500,490"
+              fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <rect x="510" y="377" width="60" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="540" y="389" font-size="9" fill="#a78bfa" font-family="JetBrains Mono, monospace" text-anchor="middle">Metadata</text>
+
+        <!-- Worker Layer → Storage Layer (Read/Write) -->
+        <path d="M 500,430 L 500,490"
+              fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <rect x="510" y="452" width="65" height="16" rx="3" fill="#020617" opacity="0.9"/>
+        <text x="542" y="464" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Read/Write</text>
+
+        <!-- === LAYER 1: Access Layer === -->
+        <g>
+          <rect x="40" y="30" width="920" height="100" rx="8" fill="#0f172a"/>
+          <rect x="40" y="30" width="920" height="100" rx="8"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+          <text x="60" y="52" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Access Layer</text>
+
+          <!-- Module: Milvus Proxy -->
+          <rect x="420" y="65" width="160" height="50" rx="6" fill="#0f172a"/>
+          <rect x="420" y="65" width="160" height="50" rx="6"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+          <text x="500" y="88" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Milvus Proxy</text>
+          <text x="500" y="102" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Load balancing, request routing</text>
+        </g>
+
+        <!-- === LAYER 2: Coordinator Layer (multiple) === -->
+        <g>
+          <rect x="40" y="180" width="920" height="100" rx="8" fill="#0f172a"/>
+          <rect x="40" y="180" width="920" height="100" rx="8"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1"/>
+          <text x="60" y="202" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Coordinator Layer</text>
+          <!-- "multiple" indicator: stacked card effect -->
+          <rect x="44" y="183" width="920" height="100" rx="8"
+                fill="none" stroke="#34d399" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- Module: Root Coord -->
+          <rect x="80" y="215" width="180" height="50" rx="6" fill="#0f172a"/>
+          <rect x="80" y="215" width="180" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="170" y="238" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Root Coord</text>
+          <text x="170" y="252" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Metadata mgmt, DDL ops</text>
+
+          <!-- Module: Data Coord -->
+          <rect x="290" y="215" width="180" height="50" rx="6" fill="#0f172a"/>
+          <rect x="290" y="215" width="180" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="380" y="238" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Data Coord</text>
+          <text x="380" y="252" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Data mgmt, allocation</text>
+
+          <!-- Module: Query Coord -->
+          <rect x="500" y="215" width="180" height="50" rx="6" fill="#0f172a"/>
+          <rect x="500" y="215" width="180" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="590" y="238" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Query Coord</text>
+          <text x="590" y="252" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Query scheduling, LB</text>
+
+          <!-- Module: Index Coord -->
+          <rect x="710" y="215" width="180" height="50" rx="6" fill="#0f172a"/>
+          <rect x="710" y="215" width="180" height="50" rx="6"
+                fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+          <text x="800" y="238" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Index Coord</text>
+          <text x="800" y="252" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Index mgmt, scheduling</text>
+        </g>
+
+        <!-- === LAYER 3: Worker Node Layer (multiple) === -->
+        <g>
+          <rect x="40" y="331" width="920" height="100" rx="8" fill="#0f172a"/>
+          <rect x="40" y="331" width="920" height="100" rx="8"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+          <text x="60" y="353" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Worker Node Layer</text>
+          <!-- "multiple" indicator: stacked card effect -->
+          <rect x="44" y="334" width="920" height="100" rx="8"
+                fill="none" stroke="#22d3ee" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- Module: Query Node -->
+          <rect x="200" y="366" width="180" height="50" rx="6" fill="#0f172a"/>
+          <rect x="200" y="366" width="180" height="50" rx="6"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+          <text x="290" y="389" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Query Node</text>
+          <text x="290" y="403" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Vector search, execution</text>
+
+          <!-- Module: Data Node -->
+          <rect x="410" y="366" width="180" height="50" rx="6" fill="#0f172a"/>
+          <rect x="410" y="366" width="180" height="50" rx="6"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+          <text x="500" y="389" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Data Node</text>
+          <text x="500" y="403" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Data insertion, persistence</text>
+
+          <!-- Module: Index Node -->
+          <rect x="620" y="366" width="180" height="50" rx="6" fill="#0f172a"/>
+          <rect x="620" y="366" width="180" height="50" rx="6"
+                fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+          <text x="710" y="389" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Index Node</text>
+          <text x="710" y="403" font-size="9" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Index building, maintenance</text>
+        </g>
+
+        <!-- === LAYER 4: Storage Layer === -->
+        <g>
+          <rect x="40" y="482" width="920" height="115" rx="8" fill="#0f172a"/>
+          <rect x="40" y="482" width="920" height="115" rx="8"
+                fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="60" y="504" font-size="14" font-weight="600" fill="white" font-family="JetBrains Mono, monospace">Storage Layer</text>
+
+          <!-- Module: Meta Store -->
+          <rect x="80" y="517" width="250" height="65" rx="6" fill="#0f172a"/>
+          <rect x="80" y="517" width="250" height="65" rx="6"
+                fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="205" y="545" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Meta Store</text>
+          <rect x="185" y="556" width="40" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="205" y="567" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">etcd</text>
+
+          <!-- Module: Object Storage -->
+          <rect x="375" y="517" width="250" height="65" rx="6" fill="#0f172a"/>
+          <rect x="375" y="517" width="250" height="65" rx="6"
+                fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="500" y="545" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Object Storage</text>
+          <rect x="475" y="556" width="50" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="500" y="567" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">MinIO/S3</text>
+
+          <!-- Module: Log Broker -->
+          <rect x="670" y="517" width="250" height="65" rx="6" fill="#0f172a"/>
+          <rect x="670" y="517" width="250" height="65" rx="6"
+                fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c" stroke-width="1.5"/>
+          <text x="795" y="545" font-size="12" font-weight="500" fill="white" font-family="JetBrains Mono, monospace" text-anchor="middle">Log Broker</text>
+          <rect x="765" y="556" width="60" height="16" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+          <text x="795" y="567" font-size="8" fill="#94a3b8" font-family="JetBrains Mono, monospace" text-anchor="middle">Pulsar/Kafka</text>
+        </g>
+
+        <!-- === LEGEND === -->
+        <g transform="translate(40, 632)">
+          <text x="0" y="0" font-size="11" font-weight="600" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Legend</text>
+
+          <rect x="0" y="14" width="14" height="14" rx="3" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+          <text x="20" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Process</text>
+
+          <rect x="110" y="14" width="14" height="14" rx="3" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1"/>
+          <text x="130" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Module</text>
+
+          <rect x="220" y="14" width="14" height="14" rx="3" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="240" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Data Store</text>
+
+          <rect x="350" y="14" width="14" height="14" rx="3" fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c" stroke-width="1"/>
+          <text x="370" y="25" font-size="11" fill="#cbd5e1" font-family="JetBrains Mono, monospace">Message Channel</text>
+        </g>
+
+      </svg>
+    </div>
+
+    <div class="footer">
+      Generated by gmdiagram &middot; 2026-04-13
+    </div>
+  </div>
+</body>
+</html>

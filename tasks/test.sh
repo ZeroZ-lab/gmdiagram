@@ -420,6 +420,359 @@ fi
 echo ""
 
 # ===========================================
+# Test 9: data-chart Skill — File Structure
+# ===========================================
+echo "=== 9. data-chart Skill — File Structure ==="
+
+CHART_BASE="$REPO_ROOT/architecture-diagram/skills/data-chart"
+
+[ -f "$CHART_BASE/SKILL.md" ] && pass "data-chart/SKILL.md exists" || fail "data-chart/SKILL.md missing"
+[ -f "$CHART_BASE/assets/schema-bar.json" ] && pass "data-chart schema-bar.json exists" || fail "data-chart schema-bar.json missing"
+[ -f "$CHART_BASE/references/axis-and-grid.md" ] && pass "data-chart axis-and-grid.md exists" || fail "data-chart axis-and-grid.md missing"
+[ -f "$CHART_BASE/references/color-palettes.md" ] && pass "data-chart color-palettes.md exists" || fail "data-chart color-palettes.md missing"
+[ -f "$CHART_BASE/references/render-bar.md" ] && pass "data-chart render-bar.md exists" || fail "data-chart render-bar.md missing"
+[ -f "$CHART_BASE/assets/examples/quarterly-revenue.json" ] && pass "data-chart example JSON exists" || fail "data-chart example JSON missing"
+[ -f "$CHART_BASE/assets/examples/quarterly-revenue.html" ] && pass "data-chart example HTML exists" || fail "data-chart example HTML missing"
+
+echo ""
+
+# ===========================================
+# Test 10: data-chart Schema Validation
+# ===========================================
+echo "=== 10. data-chart Schema Validation ==="
+
+BAR_SCHEMA="$CHART_BASE/assets/schema-bar.json"
+
+# Valid JSON
+if python3 -c "import json; json.load(open('$BAR_SCHEMA'))" 2>/dev/null; then
+  pass "schema-bar.json is valid JSON"
+else
+  fail "schema-bar.json is invalid JSON"
+fi
+
+# Has JSON Schema draft-07
+if python3 -c "import json; s=json.load(open('$BAR_SCHEMA')); assert s.get('\$schema','') == 'http://json-schema.org/draft-07/schema#'" 2>/dev/null; then
+  pass "schema-bar.json has JSON Schema draft-07"
+else
+  fail "schema-bar.json missing \$schema draft-07"
+fi
+
+# Requires diagramType and title and series
+if python3 -c "import json; s=json.load(open('$BAR_SCHEMA')); req=s.get('required',[]); assert 'diagramType' in req and 'title' in req and 'series' in req" 2>/dev/null; then
+  pass "schema-bar.json requires diagramType, title, series"
+else
+  fail "schema-bar.json missing required fields"
+fi
+
+# additionalProperties: false on root
+if python3 -c "import json; s=json.load(open('$BAR_SCHEMA')); assert s.get('additionalProperties') == False" 2>/dev/null; then
+  pass "schema-bar.json root has additionalProperties: false"
+else
+  fail "schema-bar.json root missing additionalProperties: false"
+fi
+
+# All $defs objects have additionalProperties: false
+ALL_AP_FALSE=$(python3 -c "
+import json
+s = json.load(open('$BAR_SCHEMA'))
+defs = s.get('\$defs', {})
+bad = []
+for name, defn in defs.items():
+    if defn.get('type') == 'object' and defn.get('additionalProperties') is not False:
+        bad.append(name)
+if bad:
+    print(','.join(bad))
+    exit(1)
+print('OK')
+" 2>/dev/null)
+if [ "$ALL_AP_FALSE" = "OK" ]; then
+  pass "schema-bar.json all \$defs objects have additionalProperties: false"
+else
+  fail "schema-bar.json \$defs missing additionalProperties: false in: $ALL_AP_FALSE"
+fi
+
+# Color fields have pattern
+COLOR_PATTERN_OK=$(python3 << 'PYEOF'
+import json
+s = json.load(open('$BAR_SCHEMA'))
+defs = s.get('$defs', {})
+# Check colorsOverride
+co = defs.get('colorsOverride', {}).get('properties', {})
+hex_pat = '^#[0-9a-fA-F]{6}$'
+for key in ['primary', 'secondary', 'accent', 'background', 'text']:
+    if key in co and co[key].get('pattern') != hex_pat:
+        print(f'colorsOverride.{key} missing pattern')
+        exit(1)
+# Check seriesItem.color
+si = defs.get('seriesItem', {}).get('properties', {})
+if 'color' in si and si['color'].get('pattern') != hex_pat:
+    print('seriesItem.color missing pattern')
+    exit(1)
+print('OK')
+PYEOF
+)
+if [ "$COLOR_PATTERN_OK" = "OK" ]; then
+  pass "schema-bar.json color fields have hex pattern"
+else
+  fail "schema-bar.json color fields missing hex pattern: $COLOR_PATTERN_OK"
+fi
+
+# maxLength on string fields
+MAXLENGTH_OK=$(python3 -c "
+import json
+s = json.load(open('$BAR_SCHEMA'))
+checks = [
+    ('title', s['properties']['title']),
+    ('subtitle', s['properties']['subtitle']),
+]
+defs = s.get('\$defs', {})
+checks += [
+    ('seriesItem.name', defs['seriesItem']['properties']['name']),
+    ('dataPoint.label', defs['dataPoint']['properties']['label']),
+    ('axisConfig.label', defs['axisConfig']['properties']['label']),
+]
+bad = []
+for name, field in checks:
+    if 'maxLength' not in field:
+        bad.append(name)
+if bad:
+    print(','.join(bad))
+    exit(1)
+print('OK')
+" 2>/dev/null)
+if [ "$MAXLENGTH_OK" = "OK" ]; then
+  pass "schema-bar.json string fields have maxLength"
+else
+  fail "schema-bar.json missing maxLength on: $MAXLENGTH_OK"
+fi
+
+# Array size constraints
+ARRAY_CONSTRAINTS_OK=$(python3 -c "
+import json
+s = json.load(open('$BAR_SCHEMA'))
+defs = s.get('\$defs', {})
+checks = [
+    ('series', s['properties']['series'], 1, 8),
+    ('seriesItem.data', defs['seriesItem']['properties']['data'], 2, 30),
+    ('axisConfig.ticks', defs['axisConfig']['properties']['ticks'], 2, 10),
+]
+bad = []
+for name, field, minE, maxE in checks:
+    if field.get('minItems') != minE:
+        bad.append(f'{name}.minItems')
+    if field.get('maxItems') != maxE:
+        bad.append(f'{name}.maxItems')
+if bad:
+    print(','.join(bad))
+    exit(1)
+print('OK')
+" 2>/dev/null)
+if [ "$ARRAY_CONSTRAINTS_OK" = "OK" ]; then
+  pass "schema-bar.json arrays have minItems/maxItems"
+else
+  fail "schema-bar.json array constraints missing: $ARRAY_CONSTRAINTS_OK"
+fi
+
+echo ""
+
+# ===========================================
+# Test 11: data-chart Example Validation
+# ===========================================
+echo "=== 11. data-chart Example Validation ==="
+
+EXAMPLE="$CHART_BASE/assets/examples/quarterly-revenue.json"
+
+# Valid JSON
+if python3 -c "import json; json.load(open('$EXAMPLE'))" 2>/dev/null; then
+  pass "quarterly-revenue.json is valid JSON"
+else
+  fail "quarterly-revenue.json is invalid JSON"
+fi
+
+# diagramType = bar
+if python3 -c "import json; e=json.load(open('$EXAMPLE')); assert e['diagramType'] == 'bar'" 2>/dev/null; then
+  pass "quarterly-revenue.json diagramType = bar"
+else
+  fail "quarterly-revenue.json wrong diagramType"
+fi
+
+# Has required fields
+if python3 -c "
+import json
+e = json.load(open('$EXAMPLE'))
+for f in ['diagramType', 'title', 'series']:
+    assert f in e, f'missing {f}'
+assert len(e['series']) >= 1
+assert len(e['series'][0]['data']) >= 2
+" 2>/dev/null; then
+  pass "quarterly-revenue.json has required fields and data"
+else
+  fail "quarterly-revenue.json missing required fields"
+fi
+
+# ticks match Nice Numbers for [120,150,180,200]
+if python3 -c "
+import json
+e = json.load(open('$EXAMPLE'))
+ticks = e.get('axis',{}).get('y',{}).get('ticks',[])
+assert ticks == [0, 50, 100, 150, 200], f'wrong ticks: {ticks}'
+" 2>/dev/null; then
+  pass "quarterly-revenue.json ticks = [0,50,100,150,200]"
+else
+  fail "quarterly-revenue.json ticks don't match Nice Numbers"
+fi
+
+# Validate against schema (structural check)
+SCHEMA_VALIDATE=$(python3 -c "
+import json
+
+schema = json.load(open('$BAR_SCHEMA'))
+data = json.load(open('$EXAMPLE'))
+
+# Check all required fields present
+for f in schema.get('required', []):
+    if f not in data:
+        print(f'missing required: {f}')
+        exit(1)
+
+# Check style enum
+valid_styles = schema['properties']['style']['enum']  # may be \$ref
+# Resolve style enum from \$defs if needed
+sp = schema['properties'].get('style', {})
+if '\$ref' in sp:
+    ref_name = sp['\$ref'].split('/')[-1]
+    valid_styles = schema['\$defs'][ref_name]['enum']
+elif 'enum' in sp:
+    valid_styles = sp['enum']
+else:
+    valid_styles = []
+
+if data.get('style') and data['style'] not in valid_styles:
+    print(f'invalid style: {data[\"style\"]}')
+    exit(1)
+
+# Check series data
+for s in data['series']:
+    if len(s['data']) < 2:
+        print('series data < 2 items')
+        exit(1)
+
+print('OK')
+" 2>/dev/null)
+if [ "$SCHEMA_VALIDATE" = "OK" ]; then
+  pass "quarterly-revenue.json validates against schema-bar.json"
+else
+  fail "quarterly-revenue.json schema validation: $SCHEMA_VALIDATE"
+fi
+
+echo ""
+
+# ===========================================
+# Test 12: data-chart Example HTML
+# ===========================================
+echo "=== 12. data-chart Example HTML ==="
+
+EXAMPLE_HTML="$CHART_BASE/assets/examples/quarterly-revenue.html"
+
+# Has DOCTYPE
+grep -q "<!DOCTYPE html>" "$EXAMPLE_HTML" && pass "HTML has DOCTYPE" || fail "HTML missing DOCTYPE"
+
+# Has <svg with xmlns
+grep -q '<svg.*xmlns="http://www.w3.org/2000/svg"' "$EXAMPLE_HTML" && pass "HTML has SVG with xmlns" || fail "HTML missing SVG xmlns"
+
+# Has foreignObject with xhtml namespace
+grep -q 'xmlns="http://www.w3.org/1999/xhtml"' "$EXAMPLE_HTML" && pass "HTML foreignObject has xhtml xmlns" || fail "HTML foreignObject missing xhtml xmlns"
+
+# Has chart CSS classes
+grep -q 'class="axis-line"' "$EXAMPLE_HTML" && pass "HTML has axis-line CSS class" || fail "HTML missing axis-line"
+grep -q 'class="grid-line"' "$EXAMPLE_HTML" && pass "HTML has grid-line CSS class" || fail "HTML missing grid-line"
+grep -q 'class="bar"' "$EXAMPLE_HTML" && pass "HTML has bar CSS class" || fail "HTML missing bar"
+grep -q 'class="tick-label"' "$EXAMPLE_HTML" && pass "HTML has tick-label CSS class" || fail "HTML missing tick-label"
+
+# Has bar fill color from Palette B
+grep -q 'fill="#6366f1"' "$EXAMPLE_HTML" && pass "HTML bar uses Palette B color (#6366f1)" || fail "HTML bar wrong fill color"
+
+# Has 4 bars
+BAR_COUNT=$(grep -c 'class="bar"' "$EXAMPLE_HTML")
+if [ "$BAR_COUNT" -eq 4 ]; then
+  pass "HTML has exactly 4 bars"
+else
+  fail "HTML has $BAR_COUNT bars, expected 4"
+fi
+
+# Has grid lines (should have 4 for ticks 50,100,150,200)
+GRID_COUNT=$(grep -c 'class="grid-line"' "$EXAMPLE_HTML")
+if [ "$GRID_COUNT" -ge 3 ]; then
+  pass "HTML has $GRID_COUNT grid lines"
+else
+  fail "HTML has only $GRID_COUNT grid lines, expected 4"
+fi
+
+# No JavaScript
+if grep -q '<script' "$EXAMPLE_HTML"; then
+  fail "HTML contains <script> tags (no JS allowed)"
+else
+  pass "HTML has no JavaScript"
+fi
+
+echo ""
+
+# ===========================================
+# Test 13: data-chart SKILL.md Content
+# ===========================================
+echo "=== 13. data-chart SKILL.md Content ==="
+
+CHART_SKILL="$CHART_BASE/SKILL.md"
+
+# Has YAML frontmatter
+head -1 "$CHART_SKILL" | grep -q "^---" && pass "data-chart SKILL.md has YAML frontmatter" || fail "data-chart SKILL.md missing YAML frontmatter"
+
+# Has name field
+grep -q "^name: data-chart" "$CHART_SKILL" && pass "data-chart SKILL.md has correct name" || fail "data-chart SKILL.md wrong/missing name"
+
+# Has chart trigger keywords
+grep -q "bar chart\|柱状图\|pie chart\|line chart" "$CHART_SKILL" && pass "data-chart SKILL.md has trigger keywords" || fail "data-chart SKILL.md missing trigger keywords"
+
+# References schema files
+grep -q "schema-bar.json" "$CHART_SKILL" && pass "data-chart SKILL.md references schema-bar.json" || fail "data-chart SKILL.md missing schema-bar.json reference"
+
+# References render references
+grep -q "render-bar.md" "$CHART_SKILL" && pass "data-chart SKILL.md references render-bar.md" || fail "data-chart SKILL.md missing render-bar.md reference"
+
+# Has Two-Step process
+grep -q "Two-Step Generation" "$CHART_SKILL" && pass "data-chart SKILL.md has Two-Step Generation" || fail "data-chart SKILL.md missing Two-Step Generation"
+
+# Has Quality Checklist
+grep -q "Quality Checklist" "$CHART_SKILL" && pass "data-chart SKILL.md has Quality Checklist" || fail "data-chart SKILL.md missing Quality Checklist"
+
+echo ""
+
+# ===========================================
+# Test 14: Template Chart CSS Classes
+# ===========================================
+echo "=== 14. Template Chart CSS Classes ==="
+
+for style in dark sketch light-corporate cyberpunk-neon blueprint warm-cozy minimalist terminal-retro pastel-dream notion material glassmorphism; do
+  case $style in
+    sketch) template="template-sketch" ;;
+    dark) template="template-dark" ;;
+    *) template="template-${style}" ;;
+  esac
+  tmpl="$BASE/assets/${template}.html"
+
+  # Has chart CSS section
+  grep -q "Chart classes" "$tmpl" && pass "${template}.html has chart CSS section" || fail "${template}.html missing chart CSS section"
+
+  # Has required chart CSS classes
+  grep -q '\.axis-line' "$tmpl" && pass "${template}.html has .axis-line" || fail "${template}.html missing .axis-line"
+  grep -q '\.grid-line' "$tmpl" && pass "${template}.html has .grid-line" || fail "${template}.html missing .grid-line"
+  grep -q '\.bar' "$tmpl" && pass "${template}.html has .bar" || fail "${template}.html missing .bar"
+  grep -q '\.tick-label' "$tmpl" && pass "${template}.html has .tick-label" || fail "${template}.html missing .tick-label"
+done
+
+echo ""
+
+# ===========================================
 # Summary
 # ===========================================
 echo "====================================="
