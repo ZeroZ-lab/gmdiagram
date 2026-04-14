@@ -24,6 +24,38 @@ Generate publication-quality data visualization charts as standalone files. The 
 - **Mermaid**: Text syntax (limited chart support, see Mermaid rules)
 - **PNG/PDF**: Via the export script at `../architecture-diagram/scripts/export.sh`
 
+## Output Directory Structure
+
+All example files must be output to the correct directory structure:
+
+```
+assets/examples/
+├── {example-name}.json      # JSON schema file
+├── {example-name}.html      # HTML rendered output (same name as JSON)
+└── images/                  # For preview screenshots only
+    └── {example-name}-preview.png
+```
+
+### Rules
+
+**Correct approach**:
+- HTML and JSON files go in the `examples/` root directory
+- Preview images go in the `examples/images/` subdirectory
+- Filenames must be consistent (only extensions differ)
+
+**Prohibited approach**:
+- Do NOT put HTML files in the `images/` directory
+- Do NOT generate any non-image files in the `images/` directory
+- Do NOT put JSON files in subdirectories (unless there's explicit categorization need)
+
+### Example
+
+For the `chrome-architecture` example:
+- `assets/examples/chrome-architecture.json`
+- `assets/examples/chrome-architecture.html`
+- `assets/examples/images/chrome-architecture-preview.png`
+- `assets/examples/images/chrome-architecture.html` (WRONG: HTML should not be in images/)
+
 ## Interactive Selection
 
 When the user's request does NOT already specify all three choices (chart type, style, output format), use the `AskUserQuestion` tool to let the user choose.
@@ -81,6 +113,31 @@ Infer from context when possible: technical content → dark, business → light
 ### Question 3 — Output Format
 
 Default is HTML. Only ask if the user mentions a specific use case (GitHub → Mermaid, print → SVG/PDF).
+
+### Metadata Version Field
+
+生成 JSON 时，metadata.version 必须遵循以下规则：
+
+- **格式**: 必须符合 SemVer (Semantic Versioning) 格式: `major.minor.patch`
+- **示例**: `"0.6.1"`, `"1.2.0"`, `"2.0.0"`
+- **禁止的占位符版本**: `"0.0.0"`, `"1.0"`, `"1.0.0"`
+
+**推荐的版本策略**:
+建议使用与插件版本一致的值，但不做强制要求。重要的是保持格式规范。
+
+**JSON 示例**:
+```json
+"metadata": {
+  "author": "gmdiagram",
+  "date": "2026-04-14",
+  "version": "0.6.1"
+}
+```
+
+**验证规则**:
+- 必须包含 3 个数字段，用点号分隔
+- 每段必须是纯数字
+- 不允许前导零（如 `"01.02.03"` 无效）
 
 ## Two-Step Generation Process
 

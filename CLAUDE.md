@@ -7,7 +7,7 @@
 - **Repository**: https://github.com/ZeroZ-lab/gmdiagram
 - **Author**: zhengjianqiao
 - **License**: MIT
-- **Versions**: Marketplace `0.6.1`, Plugin `0.6.1`
+- **Versions**: Marketplace `0.6.2`, Plugin `0.6.2`
 
 ## Repository Structure
 
